@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Entidades;
+package DTOs;
 
 import java.sql.Date;
 
@@ -10,30 +10,29 @@ import java.sql.Date;
  *
  * @author Arturo ITSON
  */
-public class ClienteEntidad {
-    
+public class ClienteBuscarDTO {
     
     private int idCliente;
     private String nombres;
     private String apellidoPaterno;
-    private String apelldioMaterno;
+    private String apellidoMaterno;
     private Date nacimiento;
     private int ciudad;
     private String contrasena;
     private String correo;
 
-    public ClienteEntidad() {
+    public ClienteBuscarDTO() {
     }
 
-    public ClienteEntidad(int idCliente, String nombres, String apellidoPaterno, String apelldioMaterno, String correo, Date nacimiento, String contrasena, int ciudad) {
+    public ClienteBuscarDTO(int idCliente, String nombres, String apellidoPaterno, String apellidoMaterno, Date nacimiento, int ciudad, String contrasena, String correo) {
         this.idCliente = idCliente;
         this.nombres = nombres;
         this.apellidoPaterno = apellidoPaterno;
-        this.apelldioMaterno = apelldioMaterno;
-        this.correo = correo;
+        this.apellidoMaterno = apellidoMaterno;
         this.nacimiento = nacimiento;
         this.ciudad = ciudad;
         this.contrasena = contrasena;
+        this.correo = correo;
     }
 
     
@@ -62,12 +61,12 @@ public class ClienteEntidad {
         this.apellidoPaterno = apellidoPaterno;
     }
 
-    public String getApelldioMaterno() {
-        return apelldioMaterno;
+    public String getApellidoMaterno() {
+        return apellidoMaterno;
     }
 
-    public void setApelldioMaterno(String apelldioMaterno) {
-        this.apelldioMaterno = apelldioMaterno;
+    public void setApellidoMaterno(String apellidoMaterno) {
+        this.apellidoMaterno = apellidoMaterno;
     }
 
     public Date getNacimiento() {
@@ -108,8 +107,8 @@ public class ClienteEntidad {
     
     @Override
     public String toString() {
-        return "ClienteDTO{" + "idCliente=" + idCliente + ", nombres=" + nombres + ", apellidoPaterno=" + apellidoPaterno + ", apelldioMaterno=" + apelldioMaterno + ", nacimiento=" + nacimiento + ", ciudad=" + ciudad + ", contrasena=" + contrasena + ", correo=" + correo + '}';
+        return "ClienteDTO{" + "idCliente=" + idCliente + ", nombres=" + nombres + ", apellidoPaterno=" + apellidoPaterno + ", apelldioMaterno=" + apellidoMaterno + ", nacimiento=" + nacimiento + ", ciudad=" + ciudad + ", contrasena=" + contrasena + ", correo=" + correo + '}';
     }
     
-     
+    
 }

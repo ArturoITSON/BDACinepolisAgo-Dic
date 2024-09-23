@@ -4,6 +4,7 @@
  */
 package Negocio;
 
+import DTOs.ClienteBuscarDTO;
 import DTOs.ClienteDTO;
 import DTOs.ClienteGuardarDTO;
 import Entidades.ClienteEntidad;
@@ -74,6 +75,19 @@ public class ClienteNegocio implements IClienteNegocio {
         return null;
         
         
+    }
+
+    @Override
+    public ClienteDTO buscarCliente(ClienteBuscarDTO cliente) throws NegocioException {
+        try {
+            ClienteEntidad clienteBuscado = clienteDAO.buscarCliente(cliente);
+            if (clienteBuscado == null) {
+                throw new NegocioException("Usuario o contraseña incorrectos");
+            }
+            return this.convertirAClienteDTO(clienteBuscado);
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error al buscar cliente");
+        }
     }
     
      
