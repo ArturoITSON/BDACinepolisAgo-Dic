@@ -9,6 +9,7 @@ import DTOs.ClienteGuardarDTO;
 import Entidades.ClienteEntidad;
 import Persistencia.IClienteDAO;
 import Persistencia.PersistenciaException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -59,6 +60,22 @@ public class ClienteNegocio implements IClienteNegocio {
                 cliente.getCorreo()
         );
     }
+
+    @Override
+    public List<String> obtenerCiudades() throws NegocioException {
+        
+        List<String> ciudades;
+        try {
+            ciudades = clienteDAO.obtenerCiudades();
+            return ciudades;
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+        
+        
+    }
+    
      
      
 }

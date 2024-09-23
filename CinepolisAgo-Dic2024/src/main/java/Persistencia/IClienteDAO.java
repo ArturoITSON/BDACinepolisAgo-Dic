@@ -6,6 +6,7 @@ package Persistencia;
 
 import DTOs.ClienteGuardarDTO;
 import Entidades.ClienteEntidad;
+import java.util.List;
 
 /**
  *
@@ -13,7 +14,9 @@ import Entidades.ClienteEntidad;
  */
 public interface IClienteDAO {
     
-    public ClienteEntidad buscarPorId(int id) throws PersistenciaException;
+    ClienteEntidad buscarPorId(int id) throws PersistenciaException;
     ClienteEntidad guardar(ClienteGuardarDTO cliente) throws PersistenciaException;
+    
+    List<String> obtenerCiudades() throws PersistenciaException;
 
 }

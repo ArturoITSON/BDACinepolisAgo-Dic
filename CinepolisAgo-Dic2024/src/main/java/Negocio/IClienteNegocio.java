@@ -6,6 +6,7 @@ package Negocio;
 
 import DTOs.ClienteDTO;
 import DTOs.ClienteGuardarDTO;
+import java.util.List;
 
 /**
  *
@@ -15,5 +16,6 @@ public interface IClienteNegocio {
  
     ClienteDTO guardar(ClienteGuardarDTO cliente) throws NegocioException;
 
+    List<String> obtenerCiudades() throws NegocioException;
     
 }

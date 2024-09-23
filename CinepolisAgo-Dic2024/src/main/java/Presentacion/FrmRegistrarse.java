@@ -8,8 +8,10 @@ import DTOs.ClienteGuardarDTO;
 import Negocio.ClienteNegocio;
 import Negocio.IClienteNegocio;
 import Negocio.NegocioException;
+import Persistencia.PersistenciaException;
 import java.awt.Image;
 import java.sql.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
@@ -32,16 +34,31 @@ public class FrmRegistrarse extends javax.swing.JFrame {
     /**
      * Creates new form frmRegistrarse
      */
-    public FrmRegistrarse(FrmInicio inicio, ClienteNegocio clienteNegocio) {
+    public FrmRegistrarse(FrmInicio inicio, ClienteNegocio clienteNegocio){
         initComponents();
+        
+        
+        setImagenLabel(jblCinepolisLogo, rutaCinepolisLogo);
+
         
         this.inicio = inicio;
         this.clienteNegocio = clienteNegocio;
         
-        setImagenLabel(jblCinepolisLogo, rutaCinepolisLogo);
-
+        
+        try {
+            cargarMetodosIniciales();
+        } catch (NegocioException ex) {
+            Logger.getLogger(FrmRegistrarse.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
     }
 
+    
+    private void cargarMetodosIniciales() throws NegocioException{
+        cargarCiudades();
+    
+    }
     
      /**
      * Metodo que coloca una imagen de el logo de cinepolis en la interfaz
@@ -59,6 +76,19 @@ public class FrmRegistrarse extends javax.swing.JFrame {
         
         this.repaint();
    
+    }
+    
+    
+    private void cargarCiudades() throws NegocioException {
+            
+        try {
+            List<String> ciudades = clienteNegocio.obtenerCiudades();
+            for (String ciudad : ciudades) {
+                cbCiudades.addItem(ciudad);
+            }
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(this, "Error al cargar las ciudades: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     
@@ -251,14 +281,11 @@ public class FrmRegistrarse extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(campoTextoContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(campoTextoCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(87, 87, 87)
-                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(76, 76, 76)
-                        .addComponent(btnRegistrarse, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(22, 22, 22))
+                .addGap(76, 76, 76)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRegistrarse, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(33, 33, 33))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(253, 253, 253)
@@ -283,12 +310,12 @@ public class FrmRegistrarse extends javax.swing.JFrame {
 
     private void btnRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarseActionPerformed
         // TODO add your handling code here:
-        
+                
         ClienteGuardarDTO clienteGuardarDTO = new ClienteGuardarDTO();
 
         clienteGuardarDTO.setApelldioMaterno(campoTextoApellidoMaterno.getText());
         clienteGuardarDTO.setApellidoPaterno(campoTextoApellidoPaterno.getText());
-        clienteGuardarDTO.setCiudad(1);
+        clienteGuardarDTO.setCiudad(cbCiudades.getSelectedIndex() + 1);
         clienteGuardarDTO.setContrasena(campoTextoContraseña.getText());
         clienteGuardarDTO.setCorreo(campoTextoCorreo.getText());
         clienteGuardarDTO.setNombres(campoTextoNombre.getText());
