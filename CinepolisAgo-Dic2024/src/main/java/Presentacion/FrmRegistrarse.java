@@ -116,10 +116,10 @@ public class FrmRegistrarse extends javax.swing.JFrame {
         btnRegistrarse = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         campoTextoCorreo = new javax.swing.JTextField();
-        campoTextoContraseña = new javax.swing.JTextField();
         lblContraseña = new javax.swing.JLabel();
         lblCorreo = new javax.swing.JLabel();
         datePickerNacimiento = new com.github.lgooddatepicker.components.DatePicker();
+        pwdContrasena = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Registrarse");
@@ -197,8 +197,6 @@ public class FrmRegistrarse extends javax.swing.JFrame {
             }
         });
 
-        campoTextoContraseña.setBackground(new java.awt.Color(136, 201, 239));
-
         lblContraseña.setText("Contraseña");
         lblContraseña.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
 
@@ -213,11 +211,6 @@ public class FrmRegistrarse extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(33, 33, 33)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(209, 209, 209)
-                        .addComponent(btnRegistrarse, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
@@ -227,7 +220,6 @@ public class FrmRegistrarse extends javax.swing.JFrame {
                                     .addComponent(datePickerNacimiento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(24, 24, 24)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(campoTextoContraseña)
                                     .addComponent(cbCiudades, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -246,7 +238,15 @@ public class FrmRegistrarse extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(campoTextoApellidoMaterno, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lblApellidoMaterno, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(168, 168, 168))))
+                        .addGap(168, 168, 168))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(pwdContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(209, 209, 209)
+                                .addComponent(btnRegistrarse, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(37, 37, 37)
@@ -278,9 +278,9 @@ public class FrmRegistrarse extends javax.swing.JFrame {
                     .addComponent(lblCorreo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblContraseña, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(campoTextoContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(campoTextoCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(campoTextoCorreo, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
+                    .addComponent(pwdContrasena))
                 .addGap(76, 76, 76)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRegistrarse, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -310,13 +310,13 @@ public class FrmRegistrarse extends javax.swing.JFrame {
 
     private void btnRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarseActionPerformed
         // TODO add your handling code here:
-                
+         
         ClienteGuardarDTO clienteGuardarDTO = new ClienteGuardarDTO();
 
         clienteGuardarDTO.setApelldioMaterno(campoTextoApellidoMaterno.getText());
         clienteGuardarDTO.setApellidoPaterno(campoTextoApellidoPaterno.getText());
         clienteGuardarDTO.setCiudad(cbCiudades.getSelectedIndex() + 1);
-        clienteGuardarDTO.setContrasena(campoTextoContraseña.getText());
+        clienteGuardarDTO.setContrasena(pwdContrasena.getText());
         clienteGuardarDTO.setCorreo(campoTextoCorreo.getText());
         clienteGuardarDTO.setNombres(campoTextoNombre.getText());
         clienteGuardarDTO.setNacimiento(Date.valueOf(datePickerNacimiento.getDate()));
@@ -354,7 +354,6 @@ public class FrmRegistrarse extends javax.swing.JFrame {
     private javax.swing.JButton btnRegistrarse;
     private javax.swing.JTextField campoTextoApellidoMaterno;
     private javax.swing.JTextField campoTextoApellidoPaterno;
-    private javax.swing.JTextField campoTextoContraseña;
     private javax.swing.JTextField campoTextoCorreo;
     private javax.swing.JTextField campoTextoNombre;
     private javax.swing.JComboBox<String> cbCiudades;
@@ -369,5 +368,6 @@ public class FrmRegistrarse extends javax.swing.JFrame {
     private javax.swing.JLabel lblCorreo;
     private javax.swing.JLabel lblNacimiento;
     private javax.swing.JLabel lblNombre1;
+    private javax.swing.JPasswordField pwdContrasena;
     // End of variables declaration//GEN-END:variables
 }
