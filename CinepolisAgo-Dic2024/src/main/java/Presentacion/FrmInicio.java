@@ -6,6 +6,7 @@ package Presentacion;
 
 import Negocio.ClienteNegocio;
 import Negocio.IClienteNegocio;
+import Negocio.IPeliculaNegocio;
 import java.awt.Image;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -20,14 +21,15 @@ public class FrmInicio extends javax.swing.JFrame {
     
     private String rutaCinepolisLogo = "src/main/java/utilerias/Imagenes/CinepolisLogo.png";
     private IClienteNegocio clienteNegocio;
-
+    private IPeliculaNegocio peliculaNegocio;
     
     /**
      * Creates new form Inicio
      */
-    public FrmInicio(IClienteNegocio clienteNegocio) {
+    public FrmInicio(IClienteNegocio clienteNegocio, IPeliculaNegocio peliculaNegocio) {
         initComponents();
         
+        this.peliculaNegocio = peliculaNegocio;
         this.clienteNegocio = clienteNegocio;
         
         setImagenLabel(jblCinepolisLogo, rutaCinepolisLogo);
@@ -151,7 +153,7 @@ public class FrmInicio extends javax.swing.JFrame {
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
         // TODO add your handling code here:
-        FrmIniciarSesion iniciarSesion = new FrmIniciarSesion((ClienteNegocio) clienteNegocio, this);
+        FrmIniciarSesion iniciarSesion = new FrmIniciarSesion((ClienteNegocio) clienteNegocio, this, peliculaNegocio);
         iniciarSesion.setVisible(true);
         this.setVisible(false);
 

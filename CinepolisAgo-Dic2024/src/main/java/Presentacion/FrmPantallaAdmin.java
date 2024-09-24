@@ -4,19 +4,57 @@
  */
 package Presentacion;
 
+import Negocio.IPeliculaNegocio;
+import Negocio.PeliculaNegocio;
+import java.awt.Image;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
 /**
  *
  * @author Arturo ITSON
  */
 public class FrmPantallaAdmin extends javax.swing.JFrame {
 
+    
+    private String rutaCinepolisLogo = "src/main/java/utilerias/Imagenes/CinepolisLogo.png";
+    IPeliculaNegocio PeliculaNegocio;
+    
+    FrmIniciarSesion iniciarSesion;
+    
     /**
      * Creates new form FrmPantallaAdmin
      */
-    public FrmPantallaAdmin() {
+    public FrmPantallaAdmin(FrmIniciarSesion iniciarSesion, IPeliculaNegocio peliculaNegocio) {
         initComponents();
+        
+        this.iniciarSesion = iniciarSesion;
+        this.PeliculaNegocio = peliculaNegocio;
+        setImagenLabel(jblCinepolisLogo, rutaCinepolisLogo);
     }
 
+    
+     /**
+     * Metodo que coloca una imagen de el logo de cinepolis en la interfaz
+     * @param nombreJlb el jlabel que sera reemplazado por una imagen
+     * @param ruta la direccion donde se encuentra la imagen
+     */
+    private void setImagenLabel(JLabel nombreJlb, String ruta){
+    
+       ImageIcon image = new ImageIcon(ruta);
+        
+       Icon icon = new ImageIcon(
+       image.getImage().getScaledInstance(nombreJlb.getWidth(), nombreJlb.getHeight(), Image.SCALE_DEFAULT));
+        
+       nombreJlb.setIcon(icon);
+        
+       this.repaint();
+   
+    }
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -26,59 +64,165 @@ public class FrmPantallaAdmin extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jblCinepolisLogo = new javax.swing.JLabel();
+        btnModificarPelicula = new javax.swing.JButton();
+        btnModificarFuncion = new javax.swing.JButton();
+        btnRegresar = new javax.swing.JButton();
+        btnModificarFuncion1 = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Pantalla Administrador");
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(134, 134, 134)
+                .addComponent(jblCinepolisLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(141, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(jblCinepolisLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(29, Short.MAX_VALUE))
+        );
+
+        btnModificarPelicula.setBackground(new java.awt.Color(8, 148, 249));
+        btnModificarPelicula.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnModificarPelicula.setForeground(new java.awt.Color(0, 0, 0));
+        btnModificarPelicula.setText("Modificar Pelicula");
+        btnModificarPelicula.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnModificarPelicula.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarPeliculaActionPerformed(evt);
+            }
+        });
+
+        btnModificarFuncion.setBackground(new java.awt.Color(8, 148, 249));
+        btnModificarFuncion.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnModificarFuncion.setForeground(new java.awt.Color(0, 0, 0));
+        btnModificarFuncion.setText("Modificar Funcion");
+        btnModificarFuncion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnModificarFuncion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarFuncionActionPerformed(evt);
+            }
+        });
+
+        btnRegresar.setBackground(new java.awt.Color(8, 148, 249));
+        btnRegresar.setForeground(new java.awt.Color(0, 0, 0));
+        btnRegresar.setText("Regresar");
+        btnRegresar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
+
+        btnModificarFuncion1.setBackground(new java.awt.Color(8, 148, 249));
+        btnModificarFuncion1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnModificarFuncion1.setForeground(new java.awt.Color(0, 0, 0));
+        btnModificarFuncion1.setText("Reportes");
+        btnModificarFuncion1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnModificarFuncion1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarFuncion1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(204, 204, 204)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnModificarFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnModificarPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnModificarFuncion1, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(52, 52, 52)
+                .addComponent(btnModificarPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(50, 50, 50)
+                .addComponent(btnModificarFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(45, 45, 45)
+                .addComponent(btnModificarFuncion1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
+                .addComponent(btnRegresar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(19, 19, 19))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmPantallaAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmPantallaAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmPantallaAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmPantallaAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void btnModificarPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarPeliculaActionPerformed
+        // TODO add your handling code here:
+        FrmModificarPelicula modificarPelicula = new FrmModificarPelicula(this, PeliculaNegocio);
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrmPantallaAdmin().setVisible(true);
-            }
-        });
-    }
+        modificarPelicula.setVisible(true);
+
+        this.setVisible(false);
+    }//GEN-LAST:event_btnModificarPeliculaActionPerformed
+
+    private void btnModificarFuncionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarFuncionActionPerformed
+        // TODO add your handling code here:
+//        FrmModificarFuncion modificarFuncion = new FrmModificarFuncion(funcionNegocio);
+//
+//        modificarFuncion.setVisible(true);
+//
+//        this.setVisible(false);
+
+    }//GEN-LAST:event_btnModificarFuncionActionPerformed
+
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        // TODO add your handling code here:);
+
+        iniciarSesion.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnRegresarActionPerformed
+
+    private void btnModificarFuncion1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarFuncion1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnModificarFuncion1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnModificarFuncion;
+    private javax.swing.JButton btnModificarFuncion1;
+    private javax.swing.JButton btnModificarPelicula;
+    private javax.swing.JButton btnRegresar;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel jblCinepolisLogo;
     // End of variables declaration//GEN-END:variables
 }

@@ -9,6 +9,7 @@ import DTOs.ClienteDTO;
 import Entidades.ClienteEntidad;
 import Negocio.ClienteNegocio;
 import Negocio.IClienteNegocio;
+import Negocio.IPeliculaNegocio;
 import Negocio.NegocioException;
 import java.awt.Image;
 import java.util.logging.Level;
@@ -29,16 +30,18 @@ public class FrmIniciarSesion extends javax.swing.JFrame {
 
     FrmInicio inicio;
     IClienteNegocio clienteNegocio;
+    IPeliculaNegocio peliculaNegocio;
     
     
     /**
      * Creates new form FrmIniciarSesion
      */
-    public FrmIniciarSesion(ClienteNegocio clienteNegocio, FrmInicio inicio) {
+    public FrmIniciarSesion(ClienteNegocio clienteNegocio, FrmInicio inicio, IPeliculaNegocio peliculaNegocio) {
         initComponents();
         
         
         this.clienteNegocio = clienteNegocio;
+        this.peliculaNegocio = peliculaNegocio;
         this.inicio = inicio;
         
         setImagenLabel(jblCinepolisLogo, rutaCinepolisLogo);
@@ -190,7 +193,7 @@ public class FrmIniciarSesion extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         if (campoTextoCorreo.getText().equals("admin")){
-                FrmPantallaAdmin admin = new FrmPantallaAdmin();
+                FrmPantallaAdmin admin = new FrmPantallaAdmin(this, peliculaNegocio);
                 admin.setVisible(true);
                 this.setVisible(false);
 
