@@ -13,20 +13,21 @@ import java.util.List;
 
 /**
  *
- * @author Arturo ITSON
+ * @author eduar
  */
-public class ClasificacionDAO implements IClasificacionDAO {
-
+public class PaisDAO implements IPaisDAO {
+    
     private IConexionBD conexionBD;
     private Connection conexionGeneral;
-
-    public ClasificacionDAO(IConexionBD conexionBD) {
+    
+    
+    public PaisDAO(IConexionBD conexionBD) {
         this.conexionBD = conexionBD;
     }
 
     @Override
-    public List<String> obtenerClasificaciones() throws PersistenciaException {
-        List<String> clasificaciones = new ArrayList<>();
+    public List<String> obtenerPaises() throws PersistenciaException {
+        List<String> paises = new ArrayList<>();
         Connection conexion = null;
         Statement comandoSQL = null;
         ResultSet resultado = null;
@@ -34,17 +35,17 @@ public class ClasificacionDAO implements IClasificacionDAO {
         try {
             conexion = this.conexionBD.crearConexion();
             // se modifica el select
-            String codigoSQL = "SELECT nombre FROM Clasificacion";
+            String codigoSQL = "SELECT nombre FROM Pais";
             comandoSQL = conexion.createStatement();
             resultado = comandoSQL.executeQuery(codigoSQL);
 
             while (resultado.next()) {
-                clasificaciones.add(resultado.getString("nombre"));
+                paises.add(resultado.getString("nombre"));
             }
-            return clasificaciones;
+            return paises;
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            throw new PersistenciaException("Ocurrió un error al leer la base de datos de clasificaciones, inténtelo de nuevo.");
+            throw new PersistenciaException("Ocurrió un error al leer la base de datos de paises, inténtelo de nuevo.");
         } finally {
             try {
                 if (resultado != null) {
@@ -61,5 +62,5 @@ public class ClasificacionDAO implements IClasificacionDAO {
             }
         }
     }
-
+    
 }
