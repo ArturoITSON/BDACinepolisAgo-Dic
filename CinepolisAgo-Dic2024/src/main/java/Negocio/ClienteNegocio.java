@@ -74,19 +74,6 @@ public class ClienteNegocio implements IClienteNegocio {
         );
     }
 
-    @Override
-    public List<String> obtenerCiudades() throws NegocioException {
-
-        List<String> ciudades;
-        try {
-            ciudades = clienteDAO.obtenerCiudades();
-            return ciudades;
-        } catch (PersistenciaException ex) {
-            Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-
-    }
 
     @Override
     public ClienteDTO buscarCliente(ClienteBuscarDTO cliente) throws NegocioException {

@@ -5,7 +5,9 @@
 package Presentacion;
 
 import DTOs.ClienteGuardarDTO;
+import Negocio.CiudadNegocio;
 import Negocio.ClienteNegocio;
+import Negocio.ICiudadNegocio;
 import Negocio.IClienteNegocio;
 import Negocio.NegocioException;
 import Persistencia.PersistenciaException;
@@ -27,14 +29,15 @@ public class FrmRegistrarse extends javax.swing.JFrame {
 
     
     private String rutaCinepolisLogo = "src/main/java/utilerias/Imagenes/CinepolisLogo.png";
-    FrmInicio inicio;
-    IClienteNegocio clienteNegocio;
+    private FrmInicio inicio;
+    private IClienteNegocio clienteNegocio;
+    private ICiudadNegocio ciudadNegocio;
     
     
     /**
      * Creates new form frmRegistrarse
      */
-    public FrmRegistrarse(FrmInicio inicio, ClienteNegocio clienteNegocio){
+    public FrmRegistrarse(FrmInicio inicio, ClienteNegocio clienteNegocio, CiudadNegocio ciudadNegocio){
         initComponents();
         
         
@@ -43,6 +46,7 @@ public class FrmRegistrarse extends javax.swing.JFrame {
         
         this.inicio = inicio;
         this.clienteNegocio = clienteNegocio;
+        this.ciudadNegocio = ciudadNegocio;
         
         
         try {
@@ -82,7 +86,7 @@ public class FrmRegistrarse extends javax.swing.JFrame {
     private void cargarCiudades() throws NegocioException {
             
         try {
-            List<String> ciudades = clienteNegocio.obtenerCiudades();
+            List<String> ciudades = ciudadNegocio.obtenerCiudades();
             for (String ciudad : ciudades) {
                 cbCiudades.addItem(ciudad);
             }

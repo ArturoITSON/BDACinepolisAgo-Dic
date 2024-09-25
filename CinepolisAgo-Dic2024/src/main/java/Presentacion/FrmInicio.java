@@ -37,9 +37,11 @@ public class FrmInicio extends javax.swing.JFrame {
         
         this.peliculaNegocio = peliculaNegocio;
         this.clienteNegocio = clienteNegocio;
+
         this.generoNegocio = generoNegocio;
         this.clasificacionNegocio = clasificacionNegocio;
         this.paisNegocio=paisNegocio;
+
         
         setImagenLabel(jblCinepolisLogo, rutaCinepolisLogo);
     }
@@ -170,7 +172,7 @@ public class FrmInicio extends javax.swing.JFrame {
 
     private void btnRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarseActionPerformed
         // TODO add your handling code here:
-        FrmRegistrarse registro = new FrmRegistrarse(this, (ClienteNegocio) this.clienteNegocio);
+        FrmRegistrarse registro = new FrmRegistrarse(this, (ClienteNegocio) this.clienteNegocio, (CiudadNegocio) this.ciudadNegocio);
         registro.setVisible(true);
         
     }//GEN-LAST:event_btnRegistrarseActionPerformed
