@@ -25,17 +25,13 @@ public class ClienteNegocio implements IClienteNegocio {
 
     IClienteDAO clienteDAO;
 
-
-    
     public ClienteNegocio(IClienteDAO clienteDao) {
         this.clienteDAO = clienteDao;
     }
-    
-    
-    
+
     @Override
     public ClienteDTO guardar(ClienteGuardarDTO cliente) throws NegocioException {
-        
+
         // Validar que el cliente tenga al menos 13 años
         LocalDate fechaNacimiento = cliente.getNacimiento().toLocalDate();
         LocalDate fechaActual = LocalDate.now();
@@ -46,6 +42,11 @@ public class ClienteNegocio implements IClienteNegocio {
         }
 
         try {
+            // Verificar si el correo ya está registrado
+            if (clienteDAO.existeCorreo(cliente.getCorreo())) {
+                throw new NegocioException("El correo electrónico ya está registrado. Utiliza uno diferente.");
+            }
+
             // Encriptar la contraseña
             String hashedPassword = BCrypt.hashpw(cliente.getContrasena(), BCrypt.gensalt());
             cliente.setContrasena(hashedPassword);
@@ -57,12 +58,10 @@ public class ClienteNegocio implements IClienteNegocio {
             Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
             throw new NegocioException(ex.getMessage());
         }
-   
+
     }
-    
-    
-    
-     private ClienteDTO convertirAClienteDTO(ClienteEntidad cliente) {
+
+    private ClienteDTO convertirAClienteDTO(ClienteEntidad cliente) {
         return new ClienteDTO(
                 cliente.getIdCliente(),
                 cliente.getNombres(),
@@ -77,7 +76,7 @@ public class ClienteNegocio implements IClienteNegocio {
 
     @Override
     public List<String> obtenerCiudades() throws NegocioException {
-        
+
         List<String> ciudades;
         try {
             ciudades = clienteDAO.obtenerCiudades();
@@ -86,8 +85,7 @@ public class ClienteNegocio implements IClienteNegocio {
             Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
-        
-        
+
     }
 
     @Override
@@ -108,8 +106,5 @@ public class ClienteNegocio implements IClienteNegocio {
             throw new NegocioException("Error al buscar cliente");
         }
     }
-    
-    
-    }
-    
-     
+
+}

@@ -20,5 +20,6 @@ public interface IClienteDAO {
     ClienteEntidad guardar(ClienteGuardarDTO cliente) throws PersistenciaException;
     
     List<String> obtenerCiudades() throws PersistenciaException;
-
+    
+    boolean existeCorreo(String correo) throws PersistenciaException;
 }

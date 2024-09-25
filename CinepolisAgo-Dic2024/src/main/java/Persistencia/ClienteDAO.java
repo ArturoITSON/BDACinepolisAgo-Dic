@@ -22,17 +22,14 @@ import java.util.List;
  */
 public class ClienteDAO implements IClienteDAO {
 
-    
     private IConexionBD conexionBD;
     private Connection conexionGeneral;
-    
-    
+
     public ClienteDAO(IConexionBD conexionBD) {
         this.conexionBD = conexionBD;
     }
-    
-    
-   @Override
+
+    @Override
     public ClienteEntidad buscarPorId(int id) throws PersistenciaException {
         try {
             ClienteEntidad cliente = null;
@@ -69,12 +66,11 @@ public class ClienteDAO implements IClienteDAO {
             System.out.println(ex.getMessage());
             throw new PersistenciaException("Ocurrió un error al leer la base de datos, inténtelo de nuevo y si el error persiste comuníquese con el encargado del sistema.");
         }
-    }    
-    
-    
+    }
+
     @Override
     public ClienteEntidad guardar(ClienteGuardarDTO cliente) throws PersistenciaException {
-        
+
         try {
             Connection conexion = this.conexionBD.crearConexion();
             String insertCliente = """
@@ -118,50 +114,48 @@ public class ClienteDAO implements IClienteDAO {
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             throw new PersistenciaException("Ocurrió un error al leer la base de datos, inténtelo de nuevo y si el error persiste comuníquese con el encargado del sistema.");
-        } 
-        
-    }
-    
-    
-    @Override
-    public ClienteEntidad buscarCliente(ClienteBuscarDTO cliente) throws PersistenciaException{
-    try {
-        Connection conexion = this.conexionBD.crearConexion();
+        }
 
-        // Consulta solo por correo, sin comparar la contraseña
-        String sentenciaSql = """
+    }
+
+    @Override
+    public ClienteEntidad buscarCliente(ClienteBuscarDTO cliente) throws PersistenciaException {
+        try {
+            Connection conexion = this.conexionBD.crearConexion();
+
+            // Consulta solo por correo, sin comparar la contraseña
+            String sentenciaSql = """
             SELECT id, nombres, apellido_paterno, apellido_materno, correo, 
                    fecha_nacimiento, contrasena, ciudad_id
             FROM Cliente WHERE correo = ?
         """;
 
-        PreparedStatement comandoSQL = conexion.prepareStatement(sentenciaSql);
-        comandoSQL.setString(1, cliente.getCorreo());
+            PreparedStatement comandoSQL = conexion.prepareStatement(sentenciaSql);
+            comandoSQL.setString(1, cliente.getCorreo());
 
-        ResultSet resultado = comandoSQL.executeQuery();
+            ResultSet resultado = comandoSQL.executeQuery();
 
-        if (resultado.next()) {
-            return new ClienteEntidad(
-                resultado.getInt("id"),
-                resultado.getString("nombres"),
-                resultado.getString("apellido_paterno"),
-                resultado.getString("apellido_materno"),
-                resultado.getString("correo"),
-                resultado.getDate("fecha_nacimiento"),
-                resultado.getString("contrasena"),
-                resultado.getInt("ciudad_id")
-            );
-        } else {
-            return null; // Retorna null si no encuentra el cliente
+            if (resultado.next()) {
+                return new ClienteEntidad(
+                        resultado.getInt("id"),
+                        resultado.getString("nombres"),
+                        resultado.getString("apellido_paterno"),
+                        resultado.getString("apellido_materno"),
+                        resultado.getString("correo"),
+                        resultado.getDate("fecha_nacimiento"),
+                        resultado.getString("contrasena"),
+                        resultado.getInt("ciudad_id")
+                );
+            } else {
+                return null; // Retorna null si no encuentra el cliente
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new PersistenciaException("Error al buscar cliente: " + ex.getMessage());
         }
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-        throw new PersistenciaException("Error al buscar cliente: " + ex.getMessage());
+
     }
-    
-    }    
-    
-    
+
     private ClienteEntidad clienteEntidad(ResultSet resultado) throws SQLException {
         int id = resultado.getInt("id");
         String nombre = resultado.getString("nombres");
@@ -171,49 +165,66 @@ public class ClienteDAO implements IClienteDAO {
         Date nacimiento = resultado.getDate("fecha_nacimiento");
         String contrasena = resultado.getString("contrasena");
         int ciudad = resultado.getInt("ciudad_id");
-        return new ClienteEntidad(id, nombre, paterno, materno,correo, nacimiento, contrasena, ciudad);
-    }    
-    
-    
-    
+        return new ClienteEntidad(id, nombre, paterno, materno, correo, nacimiento, contrasena, ciudad);
+    }
+
     @Override
     public List<String> obtenerCiudades() throws PersistenciaException {
-    List<String> ciudades = new ArrayList<>();
-    Connection conexion = null;
-    Statement comandoSQL = null;
-    ResultSet resultado = null;
+        List<String> ciudades = new ArrayList<>();
+        Connection conexion = null;
+        Statement comandoSQL = null;
+        ResultSet resultado = null;
 
-    try {
-        conexion = this.conexionBD.crearConexion();
-        String codigoSQL = "SELECT nombre FROM Ciudad";
-        comandoSQL = conexion.createStatement();
-        resultado = comandoSQL.executeQuery(codigoSQL);
-
-        while (resultado.next()) {
-            ciudades.add(resultado.getString("nombre"));
-        }
-        return ciudades;
-    } catch (SQLException ex) {
-        System.out.println(ex.getMessage());
-        throw new PersistenciaException("Ocurrió un error al leer la base de datos de ciudades, inténtelo de nuevo.");
-    } finally {
         try {
-            if (resultado != null) {
-                resultado.close();
+            conexion = this.conexionBD.crearConexion();
+            String codigoSQL = "SELECT nombre FROM Ciudad";
+            comandoSQL = conexion.createStatement();
+            resultado = comandoSQL.executeQuery(codigoSQL);
+
+            while (resultado.next()) {
+                ciudades.add(resultado.getString("nombre"));
             }
-            if (comandoSQL != null) {
-                comandoSQL.close();
+            return ciudades;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new PersistenciaException("Ocurrió un error al leer la base de datos de ciudades, inténtelo de nuevo.");
+        } finally {
+            try {
+                if (resultado != null) {
+                    resultado.close();
+                }
+                if (comandoSQL != null) {
+                    comandoSQL.close();
+                }
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (SQLException e) {
+                throw new PersistenciaException("Error al cerrar los recursos: " + e.getMessage());
             }
-            if (conexion != null) {
-                conexion.close();
-            }
-        } catch (SQLException e) {
-            throw new PersistenciaException("Error al cerrar los recursos: " + e.getMessage());
         }
     }
-}
-    
-    
-    
 
+    @Override
+    public boolean existeCorreo(String correo) throws PersistenciaException {
+        try {
+            Connection conexion = this.conexionBD.crearConexion();
+
+            String sql = "SELECT COUNT(*) FROM Cliente WHERE correo = ?";
+            PreparedStatement comandoSQL = conexion.prepareStatement(sql);
+            comandoSQL.setString(1, correo);
+
+            ResultSet resultado = comandoSQL.executeQuery();
+
+            if (resultado.next()) {
+                int count = resultado.getInt(1);
+                return count > 0;
+            }
+
+            return false;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new PersistenciaException("Error al verificar el correo: " + ex.getMessage());
+        }
+    }
 }
