@@ -7,6 +7,7 @@ package Negocio;
 import DTOs.PeliculaDTO;
 import DTOs.PeliculaFiltroTablaDTO;
 import DTOs.PeliculaGuardarDTO;
+import DTOs.PeliculaModificarDTO;
 import DTOs.PeliculaTablaDTO;
 import Entidades.PeliculaEntidad;
 import Persistencia.IPeliculaDAO;
@@ -62,6 +63,35 @@ public class PeliculaNegocio implements IPeliculaNegocio{
     }
       
     
+    @Override
+    public PeliculaDTO modificar(PeliculaModificarDTO pelicula) throws NegocioException {
+
+        try {
+            System.out.println(pelicula.toString() + "negocio");
+
+            PeliculaDTO peliculaModificar = this.convertirAPeliculaDTO(peliculaDAO.modificarPelicula(pelicula));
+            
+            return peliculaModificar;
+            
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
+            throw new NegocioException(ex.getMessage());
+        }
+    }
+    
+    
+    @Override
+    public PeliculaDTO eliminar(int idPelicula) throws NegocioException {
+        
+        try {
+            PeliculaDTO peliculaEliminar = this.convertirAPeliculaDTO(peliculaDAO.eliminarPelicula(idPelicula));
+            
+            return peliculaEliminar;
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
+            throw new NegocioException(ex.getMessage());
+        }
+    }
     
     private PeliculaDTO convertirAPeliculaDTO(PeliculaEntidad pelicula) {
         return new PeliculaDTO(

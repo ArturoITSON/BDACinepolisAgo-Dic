@@ -7,6 +7,7 @@ package Negocio;
 import DTOs.PeliculaDTO;
 import DTOs.PeliculaFiltroTablaDTO;
 import DTOs.PeliculaGuardarDTO;
+import DTOs.PeliculaModificarDTO;
 import DTOs.PeliculaTablaDTO;
 import java.util.List;
 
@@ -20,4 +21,8 @@ public interface IPeliculaNegocio {
     
     PeliculaDTO guardar(PeliculaGuardarDTO pelicula) throws NegocioException;
     
+    PeliculaDTO modificar(PeliculaModificarDTO pelicula) throws NegocioException;
+    
+    PeliculaDTO eliminar(int idPelicula) throws NegocioException;
+            
 }

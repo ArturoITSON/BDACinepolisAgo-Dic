@@ -6,6 +6,7 @@ package Persistencia;
 
 import DTOs.PeliculaFiltroTablaDTO;
 import DTOs.PeliculaGuardarDTO;
+import DTOs.PeliculaModificarDTO;
 import DTOs.PeliculaTablaDTO;
 import Entidades.PeliculaEntidad;
 import java.sql.Connection;
@@ -176,7 +177,87 @@ public class PeliculaDAO implements IPeliculaDAO{
     }
 
 
+    @Override
+    public PeliculaEntidad modificarPelicula(PeliculaModificarDTO pelicula) throws PersistenciaException {
+        
+        Connection conexion = null;
+        PreparedStatement preparedStatement = null;
+        
+        PeliculaEntidad peliculaEditada = new PeliculaEntidad();
+        peliculaEditada.setClasificacion_id(pelicula.getClasificacion_id());
+        peliculaEditada.setDuracion(pelicula.getDuracion());
+        peliculaEditada.setGenero_id(pelicula.getGenero_id());
+        peliculaEditada.setId(pelicula.getId());
+        peliculaEditada.setPais_id(pelicula.getPais_id());
+        peliculaEditada.setTitulo(pelicula.getTitulo());
+        
+        
+        try {
+            conexion = conexionBD.crearConexion();
+            String sentenciaSql = "UPDATE Pelicula SET titulo = ?, clasificacion_id = ?, duracion = ?, genero_id = ?, pais_id = ? WHERE id = ?";
+            preparedStatement = conexion.prepareStatement(sentenciaSql);
+            preparedStatement.setString(1, peliculaEditada.getTitulo());
+            preparedStatement.setInt(2, peliculaEditada.getClasificacion_id());
+            preparedStatement.setInt(3, peliculaEditada.getDuracion());
+            preparedStatement.setInt(4, peliculaEditada.getGenero_id());
+            preparedStatement.setInt(5, peliculaEditada.getPais_id());
+            preparedStatement.setInt(6, peliculaEditada.getId());
+
+            
+            
+            preparedStatement.executeUpdate();
+            System.out.println(peliculaEditada.toString() + "dao");
+            return peliculaEditada;
+            
+        } catch (SQLException ex) {
+            throw new PersistenciaException("Error al editar la pelicula: " + ex.getMessage());
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (SQLException e) {
+                throw new PersistenciaException("Error al cerrar los recursos: " + e.getMessage());
+            }
+        }
+    }
     
+    
+    @Override
+    public PeliculaEntidad eliminarPelicula(int idPelicula) throws PersistenciaException {
+        
+        Connection conexion = null;
+        PreparedStatement preparedStatement = null;
+        PeliculaEntidad peliculaEliminada = this.buscarPorId(idPelicula);
+        
+            try {
+            conexion = conexionBD.crearConexion();
+            String sentenciaSql = "DELETE FROM Pelicula WHERE id = ?";
+            preparedStatement = conexion.prepareStatement(sentenciaSql);
+            preparedStatement.setInt(1, peliculaEliminada.getId());
+
+            preparedStatement.executeUpdate();
+            
+            return peliculaEliminada;
+            
+        } catch (SQLException ex) {
+            throw new PersistenciaException("Error al eliminar la pelicula: " + ex.getMessage());
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (SQLException e) {
+                throw new PersistenciaException("Error al cerrar los recursos: " + e.getMessage());
+            }
+        }
+    }
     
     
     private PeliculaEntidad peliculaEntidad(ResultSet resultado) throws SQLException {

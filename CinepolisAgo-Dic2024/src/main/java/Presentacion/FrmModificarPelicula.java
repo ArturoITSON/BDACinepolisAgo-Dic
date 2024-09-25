@@ -5,6 +5,7 @@
 package Presentacion;
 
 import DTOs.PeliculaFiltroTablaDTO;
+import DTOs.PeliculaModificarDTO;
 import DTOs.PeliculaTablaDTO;
 import Negocio.IClasificacionNegocio;
 import Negocio.IClienteNegocio;
@@ -36,7 +37,7 @@ public class FrmModificarPelicula extends javax.swing.JFrame {
     IPaisNegocio paisNegocio;
     
     private int pagina = 1;
-    private final int LIMITE = 20;
+    private final int LIMITE = 2; // dafault 20
     
     /**
      * Creates new form FrmModificarPelicula
@@ -60,6 +61,8 @@ public class FrmModificarPelicula extends javax.swing.JFrame {
         this.cargarConfiguracionInicialPantalla();
         this.cargarConfiguracionInicialTablaClientes();
         this.cargarTablaPeliculas();
+        
+        btnPaginaAnterior.setEnabled(false);
     }
     
     
@@ -112,15 +115,125 @@ public class FrmModificarPelicula extends javax.swing.JFrame {
         }
     }
 
+    
+    private String getTituloSeleccionadoTablaPeliculas() {
+        int indiceFilaSeleccionada = this.tblPeliculas.getSelectedRow();
+        if (indiceFilaSeleccionada != -1) {
+            DefaultTableModel modelo = (DefaultTableModel) this.tblPeliculas.getModel();
+            int indiceColumnaTitulo = 1;
+            String TitloPeliculaSeleccionado = (String) modelo.getValueAt(indiceFilaSeleccionada,
+                    indiceColumnaTitulo);
+            return TitloPeliculaSeleccionado;
+        } else {
+            return null;
+        }
+    }
+        
+    private int getPaisSeleccionadoTablaPeliculas() {
+        int indiceFilaSeleccionada = this.tblPeliculas.getSelectedRow();
+        if (indiceFilaSeleccionada != -1) {
+            DefaultTableModel modelo = (DefaultTableModel) this.tblPeliculas.getModel();
+            int indiceColumnaPais = 2;
+            int paisSeleccionado = (int) modelo.getValueAt(indiceFilaSeleccionada,
+                    indiceColumnaPais);
+            return paisSeleccionado;
+        } else {
+            return 0;
+        }
+    }
+            
+            
+    private int getGeneroSeleccionadoTablaPeliculas() {
+        int indiceFilaSeleccionada = this.tblPeliculas.getSelectedRow();
+        if (indiceFilaSeleccionada != -1) {
+            DefaultTableModel modelo = (DefaultTableModel) this.tblPeliculas.getModel();
+            int indiceColumnaGenero = 3;
+            int generoSeleccionado = (int) modelo.getValueAt(indiceFilaSeleccionada,
+                    indiceColumnaGenero);
+            return generoSeleccionado;
+        } else {
+            return 0;
+        }
+    }
+                
+                
+    private int getClasificacionSeleccionadoTablaPeliculas() {
+        int indiceFilaSeleccionada = this.tblPeliculas.getSelectedRow();
+        if (indiceFilaSeleccionada != -1) {
+            DefaultTableModel modelo = (DefaultTableModel) this.tblPeliculas.getModel();
+            int indiceColumnaClasificacion = 4;
+            int clasificacionSeleccionado = (int) modelo.getValueAt(indiceFilaSeleccionada,
+                    indiceColumnaClasificacion);
+            return clasificacionSeleccionado;
+        } else {
+            return 0;
+        }
+    }
+                    
+                    
+    private int getDuracionSeleccionadoTablaPeliculas() {
+        int indiceFilaSeleccionada = this.tblPeliculas.getSelectedRow();
+        if (indiceFilaSeleccionada != -1) {
+            DefaultTableModel modelo = (DefaultTableModel) this.tblPeliculas.getModel();
+            int indiceColumnaDuracion = 5;
+            int duracionSeleccionado = (int) modelo.getValueAt(indiceFilaSeleccionada,
+                    indiceColumnaDuracion);
+            return duracionSeleccionado;
+        } else {
+            return 0;
+        }
+    }
+                        
+
     private void editar() {
         int id = this.getIdSeleccionadoTablaPeliculas();
+        System.out.println("El id para editar es " + id);
+        
+        PeliculaModificarDTO pelicula = new PeliculaModificarDTO();
+        JOptionPane.showMessageDialog(this, this.getTituloSeleccionadoTablaPeliculas());
 
-        this.cargarTablaPeliculas();
+        try{
+        pelicula.setId(id);
+
+        pelicula.setTitulo(this.getTituloSeleccionadoTablaPeliculas());
+        pelicula.setClasificacion_id(this.getClasificacionSeleccionadoTablaPeliculas());
+        pelicula.setDuracion(this.getDuracionSeleccionadoTablaPeliculas());
+        pelicula.setGenero_id(this.getGeneroSeleccionadoTablaPeliculas());
+        pelicula.setPais_id(this.getPaisSeleccionadoTablaPeliculas());
+
+        System.out.println(pelicula.toString());    
+            
+        peliculaNegocio.modificar(pelicula);
+        JOptionPane.showMessageDialog(this, "pelicula editada");
+        }
+
+        catch(NegocioException ex){
+            JOptionPane.showMessageDialog(this, "No se pudo editar");
+        }
+        
+        finally{
+            this.cargarTablaPeliculas();
+        }
     }
 
     private void eliminar() {
         int id = this.getIdSeleccionadoTablaPeliculas();
-
+        
+        System.out.println("El id para eliminar es " + id);
+        try{
+        peliculaNegocio.eliminar(id);
+        JOptionPane.showMessageDialog(this, "pelicula con id " + id + " ha sido eliminado");
+        }
+        
+        catch(NegocioException ex){
+            JOptionPane.showMessageDialog(this, "No se pudo eliminar la pelicula");
+        }
+        finally{
+            this.cargarTablaPeliculas();
+        }
+        
+        
+        
         this.cargarTablaPeliculas();
     }
 
@@ -162,6 +275,7 @@ public class FrmModificarPelicula extends javax.swing.JFrame {
             this.BorrarRegistrosTablaPeliculas();
             this.pagina--;
             this.establecerTituloPaginacion();
+            btnPaginaSiguiente.setEnabled(false);
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Información", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -354,6 +468,7 @@ public class FrmModificarPelicula extends javax.swing.JFrame {
             this.pagina = 1;
             return;
         }
+        btnPaginaSiguiente.setEnabled(true);
         this.establecerTituloPaginacion();
         this.cargarTablaPeliculas();
     }//GEN-LAST:event_btnPaginaAnteriorActionPerformed
@@ -362,6 +477,7 @@ public class FrmModificarPelicula extends javax.swing.JFrame {
         this.pagina++;
         this.establecerTituloPaginacion();
         this.cargarTablaPeliculas();
+        btnPaginaAnterior.setEnabled(true);
     }//GEN-LAST:event_btnPaginaSiguienteActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
