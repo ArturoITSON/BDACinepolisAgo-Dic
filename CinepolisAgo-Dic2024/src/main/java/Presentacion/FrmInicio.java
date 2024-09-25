@@ -5,7 +5,10 @@
 package Presentacion;
 
 import Negocio.ClienteNegocio;
+import Negocio.IClasificacionNegocio;
 import Negocio.IClienteNegocio;
+import Negocio.IGeneroNegocio;
+import Negocio.IPaisNegocio;
 import Negocio.IPeliculaNegocio;
 import java.awt.Image;
 import javax.swing.Icon;
@@ -22,15 +25,21 @@ public class FrmInicio extends javax.swing.JFrame {
     private String rutaCinepolisLogo = "src/main/java/utilerias/Imagenes/CinepolisLogo.png";
     private IClienteNegocio clienteNegocio;
     private IPeliculaNegocio peliculaNegocio;
+    private IGeneroNegocio generoNegocio;
+    private IClasificacionNegocio clasificacionNegocio;
+    private IPaisNegocio paisNegocio;
     
     /**
      * Creates new form Inicio
      */
-    public FrmInicio(IClienteNegocio clienteNegocio, IPeliculaNegocio peliculaNegocio) {
+    public FrmInicio(IClienteNegocio clienteNegocio, IPeliculaNegocio peliculaNegocio, IGeneroNegocio generoNegocio, IClasificacionNegocio clasificacionNegocio, IPaisNegocio paisNegocio) {
         initComponents();
         
         this.peliculaNegocio = peliculaNegocio;
         this.clienteNegocio = clienteNegocio;
+        this.generoNegocio = generoNegocio;
+        this.clasificacionNegocio = clasificacionNegocio;
+        this.paisNegocio=paisNegocio;
         
         setImagenLabel(jblCinepolisLogo, rutaCinepolisLogo);
     }
@@ -153,7 +162,7 @@ public class FrmInicio extends javax.swing.JFrame {
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
         // TODO add your handling code here:
-        FrmIniciarSesion iniciarSesion = new FrmIniciarSesion((ClienteNegocio) clienteNegocio, this, peliculaNegocio);
+        FrmIniciarSesion iniciarSesion = new FrmIniciarSesion((ClienteNegocio) clienteNegocio, this, peliculaNegocio, generoNegocio, clasificacionNegocio, paisNegocio);
         iniciarSesion.setVisible(true);
         this.setVisible(false);
 

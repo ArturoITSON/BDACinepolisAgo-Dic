@@ -4,15 +4,27 @@
  */
 package Main;
 
+import Negocio.ClasificacionNegocio;
 import Negocio.ClienteNegocio;
+import Negocio.GeneroNegocio;
+import Negocio.IClasificacionNegocio;
 import Negocio.IClienteNegocio;
+import Negocio.IGeneroNegocio;
+import Negocio.IPaisNegocio;
 import Negocio.IPeliculaNegocio;
+import Negocio.PaisNegocio;
 import Negocio.PeliculaNegocio;
+import Persistencia.ClasificacionDAO;
 import Persistencia.ClienteDAO;
 import Persistencia.ConexionBD;
+import Persistencia.GeneroDAO;
+import Persistencia.IClasificacionDAO;
 import Persistencia.IClienteDAO;
 import Persistencia.IConexionBD;
+import Persistencia.IGeneroDAO;
+import Persistencia.IPaisDAO;
 import Persistencia.IPeliculaDAO;
+import Persistencia.PaisDAO;
 import Persistencia.PeliculaDAO;
 import Presentacion.FrmInicio;
 
@@ -28,11 +40,17 @@ public class Main {
         
         IClienteDAO clienteDAO = new ClienteDAO(conexion);
         IPeliculaDAO peliculaDAO = new PeliculaDAO(conexion);
+        IGeneroDAO generoDAO = new GeneroDAO(conexion);
+        IClasificacionDAO clasificacionDAO = new ClasificacionDAO(conexion);
+        IPaisDAO paisDAO = new PaisDAO(conexion);
         
         IClienteNegocio clienteNegocio = new ClienteNegocio(clienteDAO);
         IPeliculaNegocio peliculaNegocio = new PeliculaNegocio(peliculaDAO);
+        IGeneroNegocio generoNegocio = new GeneroNegocio(generoDAO);
+        IClasificacionNegocio clasificacionNegocio = new ClasificacionNegocio(clasificacionDAO);
+        IPaisNegocio paisNegocio = new PaisNegocio(paisDAO);
         
-        FrmInicio inicio = new FrmInicio(clienteNegocio, peliculaNegocio);
+        FrmInicio inicio = new FrmInicio(clienteNegocio, peliculaNegocio, generoNegocio, clasificacionNegocio, paisNegocio);
         inicio.setVisible(true);
     
     }

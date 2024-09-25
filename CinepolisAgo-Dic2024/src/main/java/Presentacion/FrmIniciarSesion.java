@@ -8,7 +8,10 @@ import DTOs.ClienteBuscarDTO;
 import DTOs.ClienteDTO;
 import Entidades.ClienteEntidad;
 import Negocio.ClienteNegocio;
+import Negocio.IClasificacionNegocio;
 import Negocio.IClienteNegocio;
+import Negocio.IGeneroNegocio;
+import Negocio.IPaisNegocio;
 import Negocio.IPeliculaNegocio;
 import Negocio.NegocioException;
 import java.awt.Image;
@@ -31,17 +34,23 @@ public class FrmIniciarSesion extends javax.swing.JFrame {
     FrmInicio inicio;
     IClienteNegocio clienteNegocio;
     IPeliculaNegocio peliculaNegocio;
+    IGeneroNegocio generoNegocio;
+    IClasificacionNegocio clasificacionNegocio;
+    IPaisNegocio paisNegocio;
     
     
     /**
      * Creates new form FrmIniciarSesion
      */
-    public FrmIniciarSesion(ClienteNegocio clienteNegocio, FrmInicio inicio, IPeliculaNegocio peliculaNegocio) {
+    public FrmIniciarSesion(ClienteNegocio clienteNegocio, FrmInicio inicio, IPeliculaNegocio peliculaNegocio, IGeneroNegocio generoNegocio, IClasificacionNegocio clasificacionNegocio, IPaisNegocio paisNegocio) {
         initComponents();
         
         
         this.clienteNegocio = clienteNegocio;
         this.peliculaNegocio = peliculaNegocio;
+        this.generoNegocio = generoNegocio;
+        this.clasificacionNegocio = clasificacionNegocio;
+        this.paisNegocio=paisNegocio;
         this.inicio = inicio;
         
         setImagenLabel(jblCinepolisLogo, rutaCinepolisLogo);
@@ -195,7 +204,7 @@ public class FrmIniciarSesion extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         if (campoTextoCorreo.getText().equals("admin")){
-                FrmPantallaAdmin admin = new FrmPantallaAdmin(this, peliculaNegocio);
+                FrmPantallaAdmin admin = new FrmPantallaAdmin(this, peliculaNegocio, (ClienteNegocio) clienteNegocio, generoNegocio, clasificacionNegocio, paisNegocio);
                 admin.setVisible(true);
                 this.setVisible(false);
 
