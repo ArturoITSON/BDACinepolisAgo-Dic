@@ -1,18 +1,18 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
-package Persistencia;
+ */
+package Negocio;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.util.List;
 
 /**
  *
  * @author Arturo ITSON
  */
-public interface IConexionBD {
+public interface IClasificacionNegocio {
     
-    
-    Connection crearConexion() throws SQLException;
+    List<String> obtenerClasificaciones() throws NegocioException;
 
+    
 }
