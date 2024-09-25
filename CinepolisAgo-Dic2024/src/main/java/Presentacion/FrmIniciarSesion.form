@@ -35,10 +35,11 @@
                       <EmptySpace min="-2" pref="142" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="lblCorreo1" alignment="0" max="32767" attributes="0"/>
-                          <Group type="103" alignment="0" groupAlignment="1" attributes="0">
-                              <Component id="campoTextoCorreo" alignment="1" min="-2" pref="420" max="-2" attributes="0"/>
-                              <Component id="campoTextoContraseña" alignment="1" min="-2" pref="420" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="campoTextoCorreo" min="-2" pref="420" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
+                          <Component id="pwdContrasena" alignment="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -63,9 +64,9 @@
               <Component id="campoTextoCorreo" min="-2" pref="60" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
               <Component id="lblCorreo1" min="-2" pref="30" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="campoTextoContraseña" min="-2" pref="60" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="pwdContrasena" min="-2" pref="49" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnIniciarSesion" alignment="3" min="-2" pref="51" max="-2" attributes="0"/>
                   <Component id="btnVolver" alignment="3" min="-2" pref="51" max="-2" attributes="0"/>
@@ -170,10 +171,13 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JTextField" name="campoTextoContrase&#xf1;a">
+    <Component class="javax.swing.JPasswordField" name="pwdContrasena">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ef" green="c9" red="88" type="rgb"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
         </Property>
       </Properties>
     </Component>

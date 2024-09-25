@@ -1,1 +1,4 @@
 /CinepolisAgo-Dic2024/target/
+com.mycompany_CinepolisAgo-Dic2024_jar_1.0-SNAPSHOT/src/main/java/Persistencia/ConexionBD.java
+com.mycompany_CinepolisAgo-Dic2024_jar_1.0-SNAPSHOT/src/main/java/Persistencia/IConexionBD.java
+com.mycompany_CinepolisAgo-Dic2024_jar_1.0-SNAPSHOT/src/main/java/Persistencia/IConexionBD.java

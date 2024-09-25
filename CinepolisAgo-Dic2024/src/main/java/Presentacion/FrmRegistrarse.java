@@ -116,10 +116,10 @@ public class FrmRegistrarse extends javax.swing.JFrame {
         btnRegistrarse = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         campoTextoCorreo = new javax.swing.JTextField();
-        campoTextoContraseña = new javax.swing.JTextField();
         lblContraseña = new javax.swing.JLabel();
         lblCorreo = new javax.swing.JLabel();
         datePickerNacimiento = new com.github.lgooddatepicker.components.DatePicker();
+        pwdContrasena = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Registrarse");
@@ -152,6 +152,8 @@ public class FrmRegistrarse extends javax.swing.JFrame {
                 campoTextoApellidoPaternoActionPerformed(evt);
             }
         });
+
+        cbCiudades.setBackground(new java.awt.Color(136, 201, 239));
 
         lblApellidoMaterno.setText("Apellido Materno");
         lblApellidoMaterno.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
@@ -197,13 +199,14 @@ public class FrmRegistrarse extends javax.swing.JFrame {
             }
         });
 
-        campoTextoContraseña.setBackground(new java.awt.Color(136, 201, 239));
-
         lblContraseña.setText("Contraseña");
         lblContraseña.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
 
         lblCorreo.setText("Correo Electronico");
         lblCorreo.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+
+        pwdContrasena.setBackground(new java.awt.Color(136, 201, 239));
+        pwdContrasena.setForeground(new java.awt.Color(0, 0, 0));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -227,13 +230,13 @@ public class FrmRegistrarse extends javax.swing.JFrame {
                                     .addComponent(datePickerNacimiento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(24, 24, 24)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(campoTextoContraseña)
                                     .addComponent(cbCiudades, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(lblContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(lblCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(0, 0, Short.MAX_VALUE))))
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(pwdContrasena)))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(campoTextoNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -273,15 +276,15 @@ public class FrmRegistrarse extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(datePickerNacimiento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cbCiudades, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblCorreo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblContraseña, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(campoTextoContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(campoTextoCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(76, 76, 76)
+                    .addComponent(campoTextoCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pwdContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(109, 109, 109)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRegistrarse, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -316,7 +319,7 @@ public class FrmRegistrarse extends javax.swing.JFrame {
         clienteGuardarDTO.setApelldioMaterno(campoTextoApellidoMaterno.getText());
         clienteGuardarDTO.setApellidoPaterno(campoTextoApellidoPaterno.getText());
         clienteGuardarDTO.setCiudad(cbCiudades.getSelectedIndex() + 1);
-        clienteGuardarDTO.setContrasena(campoTextoContraseña.getText());
+        clienteGuardarDTO.setContrasena(pwdContrasena.getText());
         clienteGuardarDTO.setCorreo(campoTextoCorreo.getText());
         clienteGuardarDTO.setNombres(campoTextoNombre.getText());
         clienteGuardarDTO.setNacimiento(Date.valueOf(datePickerNacimiento.getDate()));
@@ -354,7 +357,6 @@ public class FrmRegistrarse extends javax.swing.JFrame {
     private javax.swing.JButton btnRegistrarse;
     private javax.swing.JTextField campoTextoApellidoMaterno;
     private javax.swing.JTextField campoTextoApellidoPaterno;
-    private javax.swing.JTextField campoTextoContraseña;
     private javax.swing.JTextField campoTextoCorreo;
     private javax.swing.JTextField campoTextoNombre;
     private javax.swing.JComboBox<String> cbCiudades;
@@ -369,5 +371,6 @@ public class FrmRegistrarse extends javax.swing.JFrame {
     private javax.swing.JLabel lblCorreo;
     private javax.swing.JLabel lblNacimiento;
     private javax.swing.JLabel lblNombre1;
+    private javax.swing.JPasswordField pwdContrasena;
     // End of variables declaration//GEN-END:variables
 }

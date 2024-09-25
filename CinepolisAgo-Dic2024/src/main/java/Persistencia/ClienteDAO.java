@@ -125,67 +125,39 @@ public class ClienteDAO implements IClienteDAO {
     
     @Override
     public ClienteEntidad buscarCliente(ClienteBuscarDTO cliente) throws PersistenciaException{
-    
-        ClienteEntidad cliEnti = new ClienteEntidad();
-        
-        cliEnti.setCorreo(cliente.getCorreo());
-        cliEnti.setContrasena(cliente.getContrasena());
-        
-        try{
-        
-        // Establecer la conexion a la base de datos
+    try {
         Connection conexion = this.conexionBD.crearConexion();
-        
-        
-        // Sentencia SQL para seleccionar un alumno por su id
+
+        // Consulta solo por correo, sin comparar la contraseña
         String sentenciaSql = """
-                              SELECT id,
-                              nombres, 
-                              apellido_paterno,
-                              apellido_materno, 
-                              correo, 
-                              fecha_nacimiento,
-                              contrasena,
-                              ciudad_id
-                              FROM Cliente WHERE correo =  (?) AND contrasena = (?) """;
-        
+            SELECT id, nombres, apellido_paterno, apellido_materno, correo, 
+                   fecha_nacimiento, contrasena, ciudad_id
+            FROM Cliente WHERE correo = ?
+        """;
+
         PreparedStatement comandoSQL = conexion.prepareStatement(sentenciaSql);
-        
-        comandoSQL.setString(1, cliEnti.getCorreo());
-        comandoSQL.setString(2, cliEnti.getContrasena());
-        
+        comandoSQL.setString(1, cliente.getCorreo());
+
         ResultSet resultado = comandoSQL.executeQuery();
-        
-        resultado.next();
-        System.out.println("ss");
-        
-        
-        
-        ClienteEntidad ClienteConsultado = new ClienteEntidad(
-            resultado.getInt(1),
-            resultado.getString(2),
-            resultado.getString(3),
-            resultado.getString(4),
-            resultado.getString(5),
-            resultado.getDate(6),
-            resultado.getString(7),
-            resultado.getInt(8)
- 
-        );
-            
-            System.out.println(ClienteConsultado.getNombres() + "12");
-            return ClienteConsultado;
-            
+
+        if (resultado.next()) {
+            return new ClienteEntidad(
+                resultado.getInt("id"),
+                resultado.getString("nombres"),
+                resultado.getString("apellido_paterno"),
+                resultado.getString("apellido_materno"),
+                resultado.getString("correo"),
+                resultado.getDate("fecha_nacimiento"),
+                resultado.getString("contrasena"),
+                resultado.getInt("ciudad_id")
+            );
+        } else {
+            return null; // Retorna null si no encuentra el cliente
         }
-
-         catch(SQLException ex){
-             throw new PersistenciaException(ex.getMessage());
-             //Capturar y manejar cualquier excepcion SQL que ocurra
-//             System.out.println("Ocurrio un errorS " + ex.getMessage());
-//             System.out.println("aqui dao");
-         }
-
-        
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        throw new PersistenciaException("Error al buscar cliente: " + ex.getMessage());
+    }
     
     }    
     

@@ -65,7 +65,6 @@
                                   </Group>
                                   <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="campoTextoContraseña" max="32767" attributes="0"/>
                                       <Component id="cbCiudades" alignment="0" max="32767" attributes="0"/>
                                       <Group type="102" attributes="0">
                                           <Group type="103" groupAlignment="0" attributes="0">
@@ -74,6 +73,7 @@
                                           </Group>
                                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                       </Group>
+                                      <Component id="pwdContrasena" alignment="0" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
@@ -129,17 +129,17 @@
                       <Component id="datePickerNacimiento" max="32767" attributes="0"/>
                       <Component id="cbCiudades" pref="41" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="19" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="lblCorreo" alignment="1" min="-2" pref="35" max="-2" attributes="0"/>
                       <Component id="lblContraseña" alignment="1" min="-2" pref="35" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="campoTextoContraseña" alignment="3" min="-2" pref="42" max="-2" attributes="0"/>
                       <Component id="campoTextoCorreo" alignment="3" min="-2" pref="42" max="-2" attributes="0"/>
+                      <Component id="pwdContrasena" alignment="3" min="-2" pref="42" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="76" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="109" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="btnRegistrarse" alignment="3" min="-2" pref="51" max="-2" attributes="0"/>
                       <Component id="btnCancelar" alignment="3" min="-2" pref="51" max="-2" attributes="0"/>
@@ -205,6 +205,9 @@
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="0"/>
+            </Property>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ef" green="c9" red="88" type="rgb"/>
             </Property>
           </Properties>
           <AuxValues>
@@ -302,13 +305,6 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="campoTextoCorreoActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JTextField" name="campoTextoContrase&#xf1;a">
-          <Properties>
-            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="ef" green="c9" red="88" type="rgb"/>
-            </Property>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JLabel" name="lblContrase&#xf1;a">
           <Properties>
             <Property name="text" type="java.lang.String" value="Contrase&#xf1;a"/>
@@ -326,6 +322,16 @@
           </Properties>
         </Component>
         <Component class="com.github.lgooddatepicker.components.DatePicker" name="datePickerNacimiento">
+        </Component>
+        <Component class="javax.swing.JPasswordField" name="pwdContrasena">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ef" green="c9" red="88" type="rgb"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="0" green="0" red="0" type="rgb"/>
+            </Property>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>
