@@ -18,8 +18,6 @@ public interface IClienteDAO {
     ClienteEntidad buscarPorId(int id) throws PersistenciaException;
     ClienteEntidad buscarCliente(ClienteBuscarDTO cliente) throws PersistenciaException;
     ClienteEntidad guardar(ClienteGuardarDTO cliente) throws PersistenciaException;
-    
-    List<String> obtenerCiudades() throws PersistenciaException;
-    
+        
     boolean existeCorreo(String correo) throws PersistenciaException;
 }

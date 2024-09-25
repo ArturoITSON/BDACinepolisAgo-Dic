@@ -16,8 +16,6 @@ import java.util.List;
 public interface IClienteNegocio {
  
     ClienteDTO guardar(ClienteGuardarDTO cliente) throws NegocioException;
-
-    List<String> obtenerCiudades() throws NegocioException;
     
     ClienteDTO buscarCliente(ClienteBuscarDTO cliente) throws NegocioException;
 

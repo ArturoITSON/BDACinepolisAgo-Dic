@@ -4,7 +4,9 @@
  */
 package Presentacion;
 
+import Negocio.CiudadNegocio;
 import Negocio.ClienteNegocio;
+import Negocio.ICiudadNegocio;
 import Negocio.IClienteNegocio;
 import Negocio.IPeliculaNegocio;
 import java.awt.Image;
@@ -22,15 +24,17 @@ public class FrmInicio extends javax.swing.JFrame {
     private String rutaCinepolisLogo = "src/main/java/utilerias/Imagenes/CinepolisLogo.png";
     private IClienteNegocio clienteNegocio;
     private IPeliculaNegocio peliculaNegocio;
+    private ICiudadNegocio ciudadNegocio;
     
     /**
      * Creates new form Inicio
      */
-    public FrmInicio(IClienteNegocio clienteNegocio, IPeliculaNegocio peliculaNegocio) {
+    public FrmInicio(IClienteNegocio clienteNegocio, IPeliculaNegocio peliculaNegocio, ICiudadNegocio ciudadNegocio) {
         initComponents();
         
         this.peliculaNegocio = peliculaNegocio;
         this.clienteNegocio = clienteNegocio;
+        this.ciudadNegocio = ciudadNegocio;
         
         setImagenLabel(jblCinepolisLogo, rutaCinepolisLogo);
     }
@@ -161,7 +165,7 @@ public class FrmInicio extends javax.swing.JFrame {
 
     private void btnRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarseActionPerformed
         // TODO add your handling code here:
-        FrmRegistrarse registro = new FrmRegistrarse(this, (ClienteNegocio) this.clienteNegocio);
+        FrmRegistrarse registro = new FrmRegistrarse(this, (ClienteNegocio) this.clienteNegocio, (CiudadNegocio) this.ciudadNegocio);
         registro.setVisible(true);
         
     }//GEN-LAST:event_btnRegistrarseActionPerformed

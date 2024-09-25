@@ -4,12 +4,16 @@
  */
 package Main;
 
+import Negocio.CiudadNegocio;
 import Negocio.ClienteNegocio;
+import Negocio.ICiudadNegocio;
 import Negocio.IClienteNegocio;
 import Negocio.IPeliculaNegocio;
 import Negocio.PeliculaNegocio;
+import Persistencia.CiudadDAO;
 import Persistencia.ClienteDAO;
 import Persistencia.ConexionBD;
+import Persistencia.ICiudadDAO;
 import Persistencia.IClienteDAO;
 import Persistencia.IConexionBD;
 import Persistencia.IPeliculaDAO;
@@ -28,11 +32,13 @@ public class Main {
         
         IClienteDAO clienteDAO = new ClienteDAO(conexion);
         IPeliculaDAO peliculaDAO = new PeliculaDAO(conexion);
+        ICiudadDAO ciudadDAO = new CiudadDAO(conexion);
         
         IClienteNegocio clienteNegocio = new ClienteNegocio(clienteDAO);
-        IPeliculaNegocio peliculaNegocio = new PeliculaNegocio(peliculaDAO);
+        IPeliculaNegocio peliculaNegocio = new PeliculaNegocio(peliculaDAO);       
+        ICiudadNegocio ciudadNegocio = new CiudadNegocio(ciudadDAO);
         
-        FrmInicio inicio = new FrmInicio(clienteNegocio, peliculaNegocio);
+        FrmInicio inicio = new FrmInicio(clienteNegocio, peliculaNegocio, ciudadNegocio);
         inicio.setVisible(true);
     
     }
