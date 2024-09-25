@@ -4,6 +4,11 @@
  */
 package Presentacion;
 
+import Negocio.ClienteNegocio;
+import Negocio.IClasificacionNegocio;
+import Negocio.IClienteNegocio;
+import Negocio.IGeneroNegocio;
+import Negocio.IPaisNegocio;
 import Negocio.IPeliculaNegocio;
 import Negocio.PeliculaNegocio;
 import java.awt.Image;
@@ -22,16 +27,29 @@ public class FrmPantallaAdmin extends javax.swing.JFrame {
     IPeliculaNegocio PeliculaNegocio;
     
     FrmIniciarSesion iniciarSesion;
+    IClienteNegocio clienteNegocio;
+    IPeliculaNegocio peliculaNegocio;
+    IGeneroNegocio generoNegocio;
+    IClasificacionNegocio clasificacionNegocio;
+    IPaisNegocio paisNegocio;
     
     /**
      * Creates new form FrmPantallaAdmin
+     * @param iniciarSesion
+     * @param peliculaNegocio
+     * @param generoNegocio
+     * @param clasificacionNegocio
      */
-    public FrmPantallaAdmin(FrmIniciarSesion iniciarSesion, IPeliculaNegocio peliculaNegocio) {
+    public FrmPantallaAdmin(FrmIniciarSesion iniciarSesion, IPeliculaNegocio peliculaNegocio, IClienteNegocio clienteNegocio, IGeneroNegocio generoNegocio, IClasificacionNegocio clasificacionNegocio, IPaisNegocio paisNegocio) {
         initComponents();
         
         this.iniciarSesion = iniciarSesion;
         this.PeliculaNegocio = peliculaNegocio;
+        this.generoNegocio = generoNegocio;
+        this.clasificacionNegocio = clasificacionNegocio;
+        this.paisNegocio=paisNegocio;
         setImagenLabel(jblCinepolisLogo, rutaCinepolisLogo);
+        this.peliculaNegocio = peliculaNegocio;
     }
 
     
@@ -187,7 +205,7 @@ public class FrmPantallaAdmin extends javax.swing.JFrame {
 
     private void btnModificarPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarPeliculaActionPerformed
         // TODO add your handling code here:
-        FrmModificarPelicula modificarPelicula = new FrmModificarPelicula(this, PeliculaNegocio);
+        FrmModificarPelicula modificarPelicula = new FrmModificarPelicula(this, PeliculaNegocio, clienteNegocio, generoNegocio, clasificacionNegocio, paisNegocio);
 
         modificarPelicula.setVisible(true);
 

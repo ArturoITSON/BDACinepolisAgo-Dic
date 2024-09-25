@@ -6,12 +6,17 @@ package Presentacion;
 
 import DTOs.PeliculaDTO;
 import DTOs.PeliculaGuardarDTO;
+import Negocio.IClasificacionNegocio;
+import Negocio.IClienteNegocio;
+import Negocio.IGeneroNegocio;
+import Negocio.IPaisNegocio;
 import Negocio.IPeliculaNegocio;
 import Negocio.NegocioException;
 import java.awt.Image;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -28,15 +33,35 @@ public class FrmNuevaPelicula extends javax.swing.JFrame {
 
     FrmModificarPelicula modificarPeli;
     IPeliculaNegocio peliculaNegocio;
+    IGeneroNegocio generoNegocio;
+    IPaisNegocio paisNegocio;
+    IClasificacionNegocio clasificacionNegocio;
+    IClienteNegocio clienteNegocio;
     
     /**
      * Creates new form FrmNuevaPelicula
      */
-    public FrmNuevaPelicula(FrmModificarPelicula modificarPeli, IPeliculaNegocio peliculaNegocio) {
+    public FrmNuevaPelicula(FrmModificarPelicula modificarPeli, IPeliculaNegocio peliculaNegocio, IClienteNegocio clienteNegocio, IGeneroNegocio generoNegocio, IClasificacionNegocio clasificacionNegocio, IPaisNegocio paisNegocio) {
         initComponents();
         
         this.peliculaNegocio = peliculaNegocio;
         this.modificarPeli = modificarPeli;
+        this.clienteNegocio=clienteNegocio;
+        this.generoNegocio=generoNegocio;
+        this.clasificacionNegocio=clasificacionNegocio;
+        this.paisNegocio = paisNegocio;
+        
+        try {
+            cargarMetodosIniciales();
+        } catch (NegocioException ex) {
+            Logger.getLogger(FrmRegistrarse.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void cargarMetodosIniciales() throws NegocioException{
+        cargarClasificaciones();
+        cargarGeneros();
+        cargarPaises();
     }
 
     
@@ -56,6 +81,42 @@ public class FrmNuevaPelicula extends javax.swing.JFrame {
         
         this.repaint();
    
+    }
+    
+    private void cargarGeneros() throws NegocioException {
+            
+        try {
+            List<String> generos = generoNegocio.obtenerGeneros();
+            for (String genero : generos) {
+                cbcGenero.addItem(genero);
+            }
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(this, "Error al cargar los generos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void cargarPaises() throws NegocioException {
+            
+        try {
+            List<String> paises = paisNegocio.obtenerPaises();
+            for (String pais : paises) {
+                cbcPais.addItem(pais);
+            }
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(this, "Error al cargar los paises: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void cargarClasificaciones() throws NegocioException {
+            
+        try {
+            List<String> clasificaciones = clasificacionNegocio.obtenerClasificaciones();
+            for (String clasificacion : clasificaciones) {
+                cbcClasificacion.addItem(clasificacion);
+            }
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(this, "Error al cargar las clasificaciones: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     
@@ -101,18 +162,12 @@ public class FrmNuevaPelicula extends javax.swing.JFrame {
         campoTextoTitulo.setBackground(new java.awt.Color(136, 201, 239));
 
         cbcPais.setBackground(new java.awt.Color(136, 201, 239));
-        cbcPais.setForeground(new java.awt.Color(0, 0, 0));
-        cbcPais.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         campoTextoSinopsis.setBackground(new java.awt.Color(136, 201, 239));
 
         cbcClasificacion.setBackground(new java.awt.Color(136, 201, 239));
-        cbcClasificacion.setForeground(new java.awt.Color(0, 0, 0));
-        cbcClasificacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         cbcGenero.setBackground(new java.awt.Color(136, 201, 239));
-        cbcGenero.setForeground(new java.awt.Color(0, 0, 0));
-        cbcGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         campoTextoDuracion.setBackground(new java.awt.Color(136, 201, 239));
 
@@ -134,7 +189,6 @@ public class FrmNuevaPelicula extends javax.swing.JFrame {
 
         btnRegresar.setBackground(new java.awt.Color(8, 148, 249));
         btnRegresar.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        btnRegresar.setForeground(new java.awt.Color(0, 0, 0));
         btnRegresar.setText("Regresar");
         btnRegresar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRegresar.addActionListener(new java.awt.event.ActionListener() {
@@ -145,7 +199,6 @@ public class FrmNuevaPelicula extends javax.swing.JFrame {
 
         btnGuardar.setBackground(new java.awt.Color(51, 255, 51));
         btnGuardar.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        btnGuardar.setForeground(new java.awt.Color(0, 0, 0));
         btnGuardar.setText("Guardar");
         btnGuardar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
@@ -155,39 +208,30 @@ public class FrmNuevaPelicula extends javax.swing.JFrame {
         });
 
         lblTitulo.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
-        lblTitulo.setForeground(new java.awt.Color(0, 0, 0));
         lblTitulo.setText("Titulo");
 
         lblSinopsis.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
-        lblSinopsis.setForeground(new java.awt.Color(0, 0, 0));
         lblSinopsis.setText("Sinopsis");
 
         lblGenero.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
-        lblGenero.setForeground(new java.awt.Color(0, 0, 0));
         lblGenero.setText("Genero");
 
         lblPais.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
-        lblPais.setForeground(new java.awt.Color(0, 0, 0));
         lblPais.setText("Pais");
 
         lblClasificacion.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
-        lblClasificacion.setForeground(new java.awt.Color(0, 0, 0));
         lblClasificacion.setText("Clasificacion");
 
         lblDuracion.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
-        lblDuracion.setForeground(new java.awt.Color(0, 0, 0));
         lblDuracion.setText("Duracion");
 
         lblLinkTrailer.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
-        lblLinkTrailer.setForeground(new java.awt.Color(0, 0, 0));
         lblLinkTrailer.setText("Link Trailer");
 
         lblLinkImagen.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
-        lblLinkImagen.setForeground(new java.awt.Color(0, 0, 0));
         lblLinkImagen.setText("Link Imagen");
 
         lblSinopsis1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-        lblSinopsis1.setForeground(new java.awt.Color(0, 0, 0));
         lblSinopsis1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblSinopsis1.setText("Agregar Pelicula");
 
@@ -324,9 +368,9 @@ public class FrmNuevaPelicula extends javax.swing.JFrame {
         String sinopsis = campoTextoSinopsis.getText();
         String linkTrailer = campoTextoLinkTrailer.getText();
         String linkImagen = campoTextoLinkImagen.getText();
-        int genero = 1;
-        int clasificacion = 1;
-        int pais = 1;
+        int genero = cbcGenero.getSelectedIndex() + 1;
+        int clasificacion = cbcClasificacion.getSelectedIndex() + 1;
+        int pais = cbcPais.getSelectedIndex() + 1;
         
         
         PeliculaGuardarDTO pelicula = new PeliculaGuardarDTO();

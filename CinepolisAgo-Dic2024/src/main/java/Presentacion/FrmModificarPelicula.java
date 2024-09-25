@@ -6,6 +6,10 @@ package Presentacion;
 
 import DTOs.PeliculaFiltroTablaDTO;
 import DTOs.PeliculaTablaDTO;
+import Negocio.IClasificacionNegocio;
+import Negocio.IClienteNegocio;
+import Negocio.IGeneroNegocio;
+import Negocio.IPaisNegocio;
 import Negocio.IPeliculaNegocio;
 import Negocio.NegocioException;
 import java.awt.event.ActionEvent;
@@ -26,6 +30,10 @@ public class FrmModificarPelicula extends javax.swing.JFrame {
 
     FrmPantallaAdmin admin;
     IPeliculaNegocio peliculaNegocio;
+    IClienteNegocio clienteNegocio;
+    IGeneroNegocio generoNegocio;
+    IClasificacionNegocio clasificacionNegocio;
+    IPaisNegocio paisNegocio;
     
     private int pagina = 1;
     private final int LIMITE = 20;
@@ -33,11 +41,16 @@ public class FrmModificarPelicula extends javax.swing.JFrame {
     /**
      * Creates new form FrmModificarPelicula
      */
-    public FrmModificarPelicula(FrmPantallaAdmin admin, IPeliculaNegocio peliculaNegocio) {
+    public FrmModificarPelicula(FrmPantallaAdmin admin, IPeliculaNegocio peliculaNegocio, IClienteNegocio clienteNegocio, IGeneroNegocio generoNegocio, IClasificacionNegocio clasificacionNegocio, IPaisNegocio paisNegocio) {
         initComponents();
         
         this.admin = admin;
         this.peliculaNegocio = peliculaNegocio;
+        this.clienteNegocio = clienteNegocio;
+        this.generoNegocio = generoNegocio;
+        this.clasificacionNegocio = clasificacionNegocio;
+        this.paisNegocio = paisNegocio;
+        
         this.metodosIniciales();
     }
 
@@ -322,12 +335,12 @@ public class FrmModificarPelicula extends javax.swing.JFrame {
     private void btnNuevaPeliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaPeliActionPerformed
         // TODO add your handling code here:
         try{
-        FrmNuevaPelicula nuevaPeli = new FrmNuevaPelicula(this, peliculaNegocio);
+        FrmNuevaPelicula nuevaPeli = new FrmNuevaPelicula(this, peliculaNegocio, clienteNegocio, generoNegocio, clasificacionNegocio, paisNegocio);
         nuevaPeli.setVisible(true);
         }
         
         catch(Exception ex){
-        
+            System.out.println("conchudo");
         }
         
         finally{
