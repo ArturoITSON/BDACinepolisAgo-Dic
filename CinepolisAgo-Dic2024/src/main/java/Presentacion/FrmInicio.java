@@ -4,7 +4,9 @@
  */
 package Presentacion;
 
+import Negocio.CiudadNegocio;
 import Negocio.ClienteNegocio;
+import Negocio.ICiudadNegocio;
 import Negocio.IClasificacionNegocio;
 import Negocio.IClienteNegocio;
 import Negocio.IGeneroNegocio;
@@ -27,17 +29,18 @@ public class FrmInicio extends javax.swing.JFrame {
     private IPeliculaNegocio peliculaNegocio;
     private IGeneroNegocio generoNegocio;
     private IClasificacionNegocio clasificacionNegocio;
+    private ICiudadNegocio ciudadNegocio;
     private IPaisNegocio paisNegocio;
     
     /**
      * Creates new form Inicio
      */
-    public FrmInicio(IClienteNegocio clienteNegocio, IPeliculaNegocio peliculaNegocio, IGeneroNegocio generoNegocio, IClasificacionNegocio clasificacionNegocio, IPaisNegocio paisNegocio) {
+    public FrmInicio(IClienteNegocio clienteNegocio, IPeliculaNegocio peliculaNegocio, IGeneroNegocio generoNegocio, IClasificacionNegocio clasificacionNegocio, IPaisNegocio paisNegocio, ICiudadNegocio ciudadNegocio) {
         initComponents();
         
         this.peliculaNegocio = peliculaNegocio;
         this.clienteNegocio = clienteNegocio;
-
+        this.ciudadNegocio = ciudadNegocio;
         this.generoNegocio = generoNegocio;
         this.clasificacionNegocio = clasificacionNegocio;
         this.paisNegocio=paisNegocio;
