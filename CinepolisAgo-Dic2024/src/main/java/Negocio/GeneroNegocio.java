@@ -4,7 +4,7 @@
  */
 package Negocio;
 
-import Persistencia.IClasificacionDAO;
+import Persistencia.IGeneroDAO;
 import Persistencia.PersistenciaException;
 import java.util.List;
 import java.util.logging.Level;
@@ -12,25 +12,25 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Arturo ITSON
+ * @author eduar
  */
-public class ClasificacionNegocio implements IClasificacionNegocio{
-    
-    IClasificacionDAO clasificacionDAO;
+public class GeneroNegocio implements IGeneroNegocio {
+
+    IGeneroDAO generoDAO;
 
     
-    public ClasificacionNegocio(IClasificacionDAO clasificacionDAO) {
-        this.clasificacionDAO = clasificacionDAO;
+    public GeneroNegocio(IGeneroDAO generoDAO) {
+        this.generoDAO = generoDAO;
     }
     
     
     @Override
-    public List<String> obtenerClasificaciones() throws NegocioException {
+    public List<String> obtenerGeneros() throws NegocioException {
         
-        List<String> clasificaciones;
+        List<String> generos;
         try {
-            clasificaciones = clasificacionDAO.obtenerClasificaciones();
-            return clasificaciones;
+            generos = generoDAO.obtenerGeneros();
+            return generos;
         } catch (PersistenciaException ex) {
             Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
         }
