@@ -4,6 +4,7 @@
  */
 package Negocio;
 
+import DTOs.SalaDTO;
 import Persistencia.ISalaDAO;
 import Persistencia.PersistenciaException;
 import java.util.List;
@@ -50,5 +51,19 @@ public class SalaNegocio implements ISalaNegocio{
         }
         return null;
     }
+
+    @Override
+    public List<SalaDTO> obtenerIdSalasPorSucursal(int idSucursal) throws NegocioException {
+        
+        List<SalaDTO> salas;
+        try {
+            salas = salaDAO.obtenerIdSalasPorSucursal(idSucursal);
+            return salas;
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;    }
+    
+    
     
 }
