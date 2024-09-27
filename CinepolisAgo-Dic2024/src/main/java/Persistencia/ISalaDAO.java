@@ -4,6 +4,7 @@
  */
 package Persistencia;
 
+import DTOs.SalaDTO;
 import java.util.List;
 
 /**
@@ -16,5 +17,6 @@ public interface ISalaDAO {
     
     List<String> obtenerSalasPorSucursal(int idSucursal) throws PersistenciaException;
     
+    List<SalaDTO> obtenerIdSalasPorSucursal(int idSucursal) throws PersistenciaException;
     
 }
