@@ -37,4 +37,18 @@ public class SalaNegocio implements ISalaNegocio{
         return null;
     }
     
+    
+    @Override
+    public List<String> obtenerSalasPorSucursal(int idSucursal) throws NegocioException {
+        
+        List<String> salas;
+        try {
+            salas = salaDAO.obtenerSalasPorSucursal(idSucursal);
+            return salas;
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
 }

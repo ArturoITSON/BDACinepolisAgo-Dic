@@ -12,6 +12,7 @@ import Negocio.IGeneroNegocio;
 import Negocio.IPaisNegocio;
 import Negocio.IPeliculaNegocio;
 import Negocio.ISalaNegocio;
+import Negocio.ISucursalNegocio;
 import Negocio.PeliculaNegocio;
 import java.awt.Image;
 import javax.swing.Icon;
@@ -36,6 +37,7 @@ public class FrmPantallaAdmin extends javax.swing.JFrame {
     IPaisNegocio paisNegocio;
     IFuncionNegocio funcionNegocio;
     ISalaNegocio salaNegocio;
+    ISucursalNegocio sucursalNegocio;
     
     /**
      * Creates new form FrmPantallaAdmin
@@ -45,7 +47,7 @@ public class FrmPantallaAdmin extends javax.swing.JFrame {
      * @param clasificacionNegocio
      */
     public FrmPantallaAdmin(FrmIniciarSesion iniciarSesion, IPeliculaNegocio peliculaNegocio, IClienteNegocio clienteNegocio, IGeneroNegocio generoNegocio, IClasificacionNegocio clasificacionNegocio, IPaisNegocio paisNegocio,
-                            IFuncionNegocio funcionNegocio, ISalaNegocio salaNegocio) {
+                            IFuncionNegocio funcionNegocio, ISalaNegocio salaNegocio, ISucursalNegocio sucursalNegocio) {
         initComponents();
         
         this.iniciarSesion = iniciarSesion;
@@ -55,6 +57,7 @@ public class FrmPantallaAdmin extends javax.swing.JFrame {
         this.paisNegocio=paisNegocio;
         this.funcionNegocio = funcionNegocio;
         this.salaNegocio = salaNegocio;
+        this.sucursalNegocio = sucursalNegocio;
         
         setImagenLabel(jblCinepolisLogo, rutaCinepolisLogo);
         this.peliculaNegocio = peliculaNegocio;
@@ -235,7 +238,7 @@ public class FrmPantallaAdmin extends javax.swing.JFrame {
 
     private void btnModificarFuncionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarFuncionActionPerformed
         // TODO add your handling code here:
-        FrmModificarFuncion modificarFuncion = new FrmModificarFuncion(this, funcionNegocio, peliculaNegocio, salaNegocio);
+        FrmModificarFuncion modificarFuncion = new FrmModificarFuncion(this, funcionNegocio, peliculaNegocio, salaNegocio, sucursalNegocio);
 
         modificarFuncion.setVisible(true);
 

@@ -14,5 +14,7 @@ public interface ISalaDAO {
     
     List<String> obtenerSalas() throws PersistenciaException;
     
+    List<String> obtenerSalasPorSucursal(int idSucursal) throws PersistenciaException;
+    
     
 }

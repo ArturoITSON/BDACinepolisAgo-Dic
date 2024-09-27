@@ -10,10 +10,8 @@ import java.util.List;
  *
  * @author Arturo ITSON
  */
-public interface ISalaNegocio {
+public interface ISucursalNegocio {
     
-    List<String> obtenerSalas() throws NegocioException;
-    
-    List<String> obtenerSalasPorSucursal(int idSucursal) throws NegocioException;
+    List<String> obtenerSucursales() throws NegocioException;
     
 }

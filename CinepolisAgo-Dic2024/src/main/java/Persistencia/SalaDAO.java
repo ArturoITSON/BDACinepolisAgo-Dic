@@ -5,6 +5,7 @@
 package Persistencia;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -42,6 +43,48 @@ public class SalaDAO implements ISalaDAO {
         while (resultado.next()) {
             salas.add(resultado.getString("nombre"));
         }
+        return salas;
+    } catch (SQLException ex) {
+        System.out.println(ex.getMessage());
+        throw new PersistenciaException("Ocurrió un error al leer la base de datos de salas, inténtelo de nuevo.");
+    } finally {
+        try {
+            if (resultado != null) {
+                resultado.close();
+            }
+            if (comandoSQL != null) {
+                comandoSQL.close();
+            }
+            if (conexion != null) {
+                conexion.close();
+            }
+        } catch (SQLException e) {
+            throw new PersistenciaException("Error al cerrar los recursos: " + e.getMessage());
+        }
+     }
+    }
+    
+    
+    
+    @Override
+    public List<String> obtenerSalasPorSucursal(int idSucursal) throws PersistenciaException {
+    List<String> salas = new ArrayList<>();
+    Connection conexion = null;
+    Statement comandoSQL = null;
+    ResultSet resultado = null;
+
+    try {
+        conexion = this.conexionBD.crearConexion();
+        String codigoSQL = "SELECT nombre FROM Sala WHERE sucursal_id = ?";
+        
+        PreparedStatement preparedStatement = conexion.prepareStatement(codigoSQL);
+        preparedStatement.setInt(1, idSucursal);
+        
+        resultado = preparedStatement.executeQuery();
+            while (resultado.next()) {
+                salas.add(resultado.getString("nombre"));
+            }
+
         return salas;
     } catch (SQLException ex) {
         System.out.println(ex.getMessage());

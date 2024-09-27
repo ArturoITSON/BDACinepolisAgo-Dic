@@ -8,10 +8,12 @@ import DTOs.FuncionGuardarDTO;
 import Negocio.IFuncionNegocio;
 import Negocio.IPeliculaNegocio;
 import Negocio.ISalaNegocio;
+import Negocio.ISucursalNegocio;
 import Negocio.NegocioException;
 import Negocio.PeliculaNegocio;
 import com.github.lgooddatepicker.components.DatePicker;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,17 +29,19 @@ public class FrmNuevaFuncion extends javax.swing.JFrame {
     FrmModificarFuncion modificarFuncion;
     IPeliculaNegocio peliculaNegocio;
     ISalaNegocio salaNegocio;
+    ISucursalNegocio sucursalNegocio;
     
     /**
      * Creates new form FrmAgregarFuncion
      */
-    public FrmNuevaFuncion(FrmModificarFuncion modificarFuncion, IFuncionNegocio funcionNegocio, IPeliculaNegocio peliculaNegocio, ISalaNegocio salaNegocio) {
+    public FrmNuevaFuncion(FrmModificarFuncion modificarFuncion, IFuncionNegocio funcionNegocio, IPeliculaNegocio peliculaNegocio, ISalaNegocio salaNegocio, ISucursalNegocio sucursalNegocio) {
         initComponents();
         
         this.funcionNegocio = funcionNegocio;
         this.modificarFuncion = modificarFuncion;
         this.peliculaNegocio = peliculaNegocio;
         this.salaNegocio = salaNegocio;
+        this.sucursalNegocio = sucursalNegocio;
         
         try {
             cargarPeliculas();
@@ -45,12 +49,13 @@ public class FrmNuevaFuncion extends javax.swing.JFrame {
             Logger.getLogger(FrmNuevaFuncion.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        
         try {
-            cargarSalas();
+            cargarSucursales();
         } catch (NegocioException ex) {
             Logger.getLogger(FrmNuevaFuncion.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+                
     }
 
     
@@ -66,19 +71,21 @@ public class FrmNuevaFuncion extends javax.swing.JFrame {
         }
     }
     
+
     
-    private void cargarSalas() throws NegocioException {
+    
+    
+    private void cargarSucursales() throws NegocioException {
             
         try {
-            List<String> salas = salaNegocio.obtenerSalas();
-            for (String sala : salas) {
-                cbcSala.addItem(sala);
+            List<String> sucursales = sucursalNegocio.obtenerSucursales();
+            for (String sucursal : sucursales) {
+                cbcSucursal.addItem(sucursal);
             }
         } catch (NegocioException ex) {
-            JOptionPane.showMessageDialog(this, "Error al cargar las salas: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al cargar las sucursales: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }
-    
+    }    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -105,6 +112,9 @@ public class FrmNuevaFuncion extends javax.swing.JFrame {
         timePickerHoraInicio = new com.github.lgooddatepicker.components.TimePicker();
         btnCalcularHoraFinal = new javax.swing.JButton();
         cbcDias = new javax.swing.JComboBox<>();
+        cbcSucursal = new javax.swing.JComboBox<>();
+        lblSucursal = new javax.swing.JLabel();
+        btnCargarSalas = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -193,6 +203,18 @@ public class FrmNuevaFuncion extends javax.swing.JFrame {
 
         cbcDias.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo" }));
 
+        cbcSucursal.setBackground(new java.awt.Color(136, 201, 239));
+
+        lblSucursal.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+        lblSucursal.setText("Sucursal");
+
+        btnCargarSalas.setText("Cargar Salas");
+        btnCargarSalas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCargarSalasActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -204,30 +226,32 @@ public class FrmNuevaFuncion extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cbcPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoTextoPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(campoTextoPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbcSucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblSucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(30, 30, 30)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(timePickerHoraInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblHoraInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblSala, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbcSala, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(cbcSala, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbcDias, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblDia, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(btnRegresar)
                     .addComponent(lblPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblHoraFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblDia, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnGuardar))
-                        .addGap(148, 148, 148))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(cbcDias, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(campoTextoDuracionFinal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE))
+                        .addComponent(campoTextoDuracionFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnCalcularHoraFinal)
-                        .addGap(26, 26, 26))))
+                        .addGap(26, 26, 26))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblHoraFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnGuardar)
+                            .addComponent(btnCargarSalas))
+                        .addGap(148, 148, 148))))
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -247,17 +271,24 @@ public class FrmNuevaFuncion extends javax.swing.JFrame {
                         .addComponent(campoTextoDuracionFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnCalcularHoraFinal)))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblSala, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblDia, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cbcDias, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(cbcSala, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(campoTextoPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(148, 148, 148)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblDia, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(campoTextoPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbcDias, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblSucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblSala, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbcSala, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbcSucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCargarSalas))
+                .addGap(57, 57, 57)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRegresar)
                     .addComponent(btnGuardar))
@@ -337,9 +368,42 @@ public class FrmNuevaFuncion extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnCalcularHoraFinalActionPerformed
 
+    private void btnCargarSalasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarSalasActionPerformed
+        // TODO add your handling code here:
+        
+        List<String> salas = new ArrayList<>();   
+        cbcSala.removeAllItems();
+        
+        try {
+            if (salas.isEmpty()){
+                salas = salaNegocio.obtenerSalasPorSucursal(cbcSucursal.getSelectedIndex() + 1);
+                for (String sala : salas) {
+                cbcSala.addItem(sala);
+                }
+            }
+                else{
+                    salas.clear();
+                    
+                try {
+                    salas = salaNegocio.obtenerSalasPorSucursal(cbcSucursal.getSelectedIndex() + 1);
+                } catch (NegocioException ex) {
+                    Logger.getLogger(FrmNuevaFuncion.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                        for (String sala : salas) {
+                        cbcSala.addItem(sala);
+                   }
+            }
+            }
+             catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(this, "Error al cargar las salas: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }//GEN-LAST:event_btnCargarSalasActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCalcularHoraFinal;
+    private javax.swing.JButton btnCargarSalas;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JTextField campoTextoDuracionFinal;
@@ -347,6 +411,7 @@ public class FrmNuevaFuncion extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cbcDias;
     private javax.swing.JComboBox<String> cbcPelicula;
     private javax.swing.JComboBox<String> cbcSala;
+    private javax.swing.JComboBox<String> cbcSucursal;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblDia;
     private javax.swing.JLabel lblFuncion;
@@ -355,6 +420,7 @@ public class FrmNuevaFuncion extends javax.swing.JFrame {
     private javax.swing.JLabel lblPelicula;
     private javax.swing.JLabel lblPrecio;
     private javax.swing.JLabel lblSala;
+    private javax.swing.JLabel lblSucursal;
     private com.github.lgooddatepicker.components.TimePicker timePickerHoraInicio;
     // End of variables declaration//GEN-END:variables
 }
