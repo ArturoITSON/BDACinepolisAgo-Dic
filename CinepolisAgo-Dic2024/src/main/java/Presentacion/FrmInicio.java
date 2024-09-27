@@ -14,6 +14,7 @@ import Negocio.IGeneroNegocio;
 import Negocio.IPaisNegocio;
 import Negocio.IPeliculaNegocio;
 import Negocio.ISalaNegocio;
+import Negocio.ISucursalNegocio;
 import java.awt.Image;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -35,12 +36,13 @@ public class FrmInicio extends javax.swing.JFrame {
     private IPaisNegocio paisNegocio;
     private IFuncionNegocio funcionNegocio;
     private ISalaNegocio salaNegocio;
+    private ISucursalNegocio sucursalNegocio;
     
     /**
      * Creates new form Inicio
      */
     public FrmInicio(IClienteNegocio clienteNegocio, IPeliculaNegocio peliculaNegocio, IGeneroNegocio generoNegocio, IClasificacionNegocio clasificacionNegocio, IPaisNegocio paisNegocio, ICiudadNegocio ciudadNegocio,
-                     IFuncionNegocio funcionNegocio, ISalaNegocio salaNegocio) {
+                     IFuncionNegocio funcionNegocio, ISalaNegocio salaNegocio, ISucursalNegocio sucursalNegocio) {
         initComponents();
         
         this.peliculaNegocio = peliculaNegocio;
@@ -51,6 +53,7 @@ public class FrmInicio extends javax.swing.JFrame {
         this.paisNegocio=paisNegocio;
         this.funcionNegocio = funcionNegocio;
         this.salaNegocio = salaNegocio;
+        this.sucursalNegocio = sucursalNegocio;
 
         
         setImagenLabel(jblCinepolisLogo, rutaCinepolisLogo);
@@ -175,7 +178,7 @@ public class FrmInicio extends javax.swing.JFrame {
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
         // TODO add your handling code here:
         FrmIniciarSesion iniciarSesion = new FrmIniciarSesion((ClienteNegocio) clienteNegocio, this, peliculaNegocio, generoNegocio, clasificacionNegocio, paisNegocio, funcionNegocio
-                                                                , salaNegocio);
+                                                                , salaNegocio, sucursalNegocio);
         iniciarSesion.setVisible(true);
         this.setVisible(false);
 

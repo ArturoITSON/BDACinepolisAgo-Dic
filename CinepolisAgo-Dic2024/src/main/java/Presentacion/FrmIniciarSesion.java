@@ -15,6 +15,7 @@ import Negocio.IGeneroNegocio;
 import Negocio.IPaisNegocio;
 import Negocio.IPeliculaNegocio;
 import Negocio.ISalaNegocio;
+import Negocio.ISucursalNegocio;
 import Negocio.NegocioException;
 import java.awt.Image;
 import java.util.logging.Level;
@@ -41,13 +42,14 @@ public class FrmIniciarSesion extends javax.swing.JFrame {
     IPaisNegocio paisNegocio;
     IFuncionNegocio funcionNegocio;
     ISalaNegocio salaNegocio;
+    ISucursalNegocio sucursalNegocio;
     
     
     /**
      * Creates new form FrmIniciarSesion
      */
     public FrmIniciarSesion(ClienteNegocio clienteNegocio, FrmInicio inicio, IPeliculaNegocio peliculaNegocio, IGeneroNegocio generoNegocio, IClasificacionNegocio clasificacionNegocio, IPaisNegocio paisNegocio,
-                            IFuncionNegocio funcionNegocio, ISalaNegocio salaNegocio) {
+                            IFuncionNegocio funcionNegocio, ISalaNegocio salaNegocio, ISucursalNegocio sucursalNegocio) {
         initComponents();
         
         
@@ -59,6 +61,7 @@ public class FrmIniciarSesion extends javax.swing.JFrame {
         this.inicio = inicio;
         this.funcionNegocio = funcionNegocio;
         this.salaNegocio = salaNegocio;
+        this.sucursalNegocio = sucursalNegocio;
         
         setImagenLabel(jblCinepolisLogo, rutaCinepolisLogo);
         
@@ -212,7 +215,7 @@ public class FrmIniciarSesion extends javax.swing.JFrame {
 
         if (campoTextoCorreo.getText().equals("admin")){
                 FrmPantallaAdmin admin = new FrmPantallaAdmin(this, peliculaNegocio, (ClienteNegocio) clienteNegocio, generoNegocio, clasificacionNegocio, paisNegocio, funcionNegocio,
-                                                              salaNegocio);
+                                                              salaNegocio, sucursalNegocio);
                 admin.setVisible(true);
                 this.setVisible(false);
 

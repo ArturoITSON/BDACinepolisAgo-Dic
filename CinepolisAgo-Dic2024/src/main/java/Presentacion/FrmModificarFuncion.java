@@ -9,6 +9,7 @@ import DTOs.FuncionTablaDTO;
 import Negocio.IFuncionNegocio;
 import Negocio.IPeliculaNegocio;
 import Negocio.ISalaNegocio;
+import Negocio.ISucursalNegocio;
 import Negocio.NegocioException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,18 +33,21 @@ public class FrmModificarFuncion extends javax.swing.JFrame {
     IPeliculaNegocio peliculaNegocio;
     FrmPantallaAdmin admin;
     ISalaNegocio salaNegocio;
+    ISucursalNegocio sucursalNegocio;
     
 
     /**
      * Creates new form FrmEditarFuncion
      */
-    public FrmModificarFuncion(FrmPantallaAdmin admin, IFuncionNegocio funcionNegocio, IPeliculaNegocio peliculaNegocio, ISalaNegocio salaNegocio) {
+    public FrmModificarFuncion(FrmPantallaAdmin admin, IFuncionNegocio funcionNegocio, IPeliculaNegocio peliculaNegocio, ISalaNegocio salaNegocio,
+                                ISucursalNegocio sucursalNegocio) {
         initComponents();
         
         this.funcionNegocio = funcionNegocio;
         this.peliculaNegocio = peliculaNegocio;
         this.admin = admin;
         this.salaNegocio = salaNegocio;
+        this.sucursalNegocio = sucursalNegocio;
         
         this.metodosIniciales();
         
@@ -330,7 +334,7 @@ public class FrmModificarFuncion extends javax.swing.JFrame {
 
     private void btnNuevaFuncionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaFuncionActionPerformed
 
-        FrmNuevaFuncion nuevaFuncion = new FrmNuevaFuncion(this, funcionNegocio, peliculaNegocio, salaNegocio);
+        FrmNuevaFuncion nuevaFuncion = new FrmNuevaFuncion(this, funcionNegocio, peliculaNegocio, salaNegocio, sucursalNegocio);
         nuevaFuncion.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnNuevaFuncionActionPerformed
