@@ -58,6 +58,7 @@ public class FrmPantallaAdmin extends javax.swing.JFrame {
         
         setImagenLabel(jblCinepolisLogo, rutaCinepolisLogo);
         this.peliculaNegocio = peliculaNegocio;
+        this.clienteNegocio=clienteNegocio;
     }
 
     
@@ -96,7 +97,8 @@ public class FrmPantallaAdmin extends javax.swing.JFrame {
         btnModificarPelicula = new javax.swing.JButton();
         btnModificarFuncion = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
-        btnModificarFuncion1 = new javax.swing.JButton();
+        btnReportes = new javax.swing.JButton();
+        btnModificarCliente = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Pantalla Administrador");
@@ -122,7 +124,6 @@ public class FrmPantallaAdmin extends javax.swing.JFrame {
 
         btnModificarPelicula.setBackground(new java.awt.Color(8, 148, 249));
         btnModificarPelicula.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        btnModificarPelicula.setForeground(new java.awt.Color(0, 0, 0));
         btnModificarPelicula.setText("Modificar Pelicula");
         btnModificarPelicula.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnModificarPelicula.addActionListener(new java.awt.event.ActionListener() {
@@ -133,7 +134,6 @@ public class FrmPantallaAdmin extends javax.swing.JFrame {
 
         btnModificarFuncion.setBackground(new java.awt.Color(8, 148, 249));
         btnModificarFuncion.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        btnModificarFuncion.setForeground(new java.awt.Color(0, 0, 0));
         btnModificarFuncion.setText("Modificar Funcion");
         btnModificarFuncion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnModificarFuncion.addActionListener(new java.awt.event.ActionListener() {
@@ -143,7 +143,6 @@ public class FrmPantallaAdmin extends javax.swing.JFrame {
         });
 
         btnRegresar.setBackground(new java.awt.Color(8, 148, 249));
-        btnRegresar.setForeground(new java.awt.Color(0, 0, 0));
         btnRegresar.setText("Regresar");
         btnRegresar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRegresar.addActionListener(new java.awt.event.ActionListener() {
@@ -152,14 +151,23 @@ public class FrmPantallaAdmin extends javax.swing.JFrame {
             }
         });
 
-        btnModificarFuncion1.setBackground(new java.awt.Color(8, 148, 249));
-        btnModificarFuncion1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        btnModificarFuncion1.setForeground(new java.awt.Color(0, 0, 0));
-        btnModificarFuncion1.setText("Reportes");
-        btnModificarFuncion1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnModificarFuncion1.addActionListener(new java.awt.event.ActionListener() {
+        btnReportes.setBackground(new java.awt.Color(8, 148, 249));
+        btnReportes.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnReportes.setText("Reportes");
+        btnReportes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnReportes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnModificarFuncion1ActionPerformed(evt);
+                btnReportesActionPerformed(evt);
+            }
+        });
+
+        btnModificarCliente.setBackground(new java.awt.Color(8, 148, 249));
+        btnModificarCliente.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnModificarCliente.setText("Modificar Cliente");
+        btnModificarCliente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnModificarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarClienteActionPerformed(evt);
             }
         });
 
@@ -171,27 +179,32 @@ public class FrmPantallaAdmin extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(204, 204, 204)
+                        .addGap(26, 26, 26)
+                        .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(66, 66, 66)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnModificarFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnModificarPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnModificarFuncion1, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btnModificarPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(62, 62, 62)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnModificarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(52, 52, 52)
-                .addComponent(btnModificarPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50)
-                .addComponent(btnModificarFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45)
-                .addComponent(btnModificarFuncion1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
+                .addGap(59, 59, 59)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnModificarPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnModificarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(58, 58, 58)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnModificarFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(112, 112, 112)
                 .addComponent(btnRegresar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(19, 19, 19))
         );
@@ -237,16 +250,26 @@ public class FrmPantallaAdmin extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
-    private void btnModificarFuncion1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarFuncion1ActionPerformed
+    private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnModificarFuncion1ActionPerformed
+    }//GEN-LAST:event_btnReportesActionPerformed
+
+    private void btnModificarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarClienteActionPerformed
+        // TODO add your handling code here:
+        FrmEditarCliente editarCliente = new FrmEditarCliente(this, clienteNegocio);
+
+        editarCliente.setVisible(true);
+
+        this.setVisible(false);
+    }//GEN-LAST:event_btnModificarClienteActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnModificarCliente;
     private javax.swing.JButton btnModificarFuncion;
-    private javax.swing.JButton btnModificarFuncion1;
     private javax.swing.JButton btnModificarPelicula;
     private javax.swing.JButton btnRegresar;
+    private javax.swing.JButton btnReportes;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel jblCinepolisLogo;

@@ -6,7 +6,10 @@ package Negocio;
 
 import DTOs.ClienteBuscarDTO;
 import DTOs.ClienteDTO;
+import DTOs.ClienteFiltroTablaDTO;
 import DTOs.ClienteGuardarDTO;
+import DTOs.ClienteModificarDTO;
+import DTOs.ClienteTablaDTO;
 import Entidades.ClienteEntidad;
 import Persistencia.IClienteDAO;
 import Persistencia.PersistenciaException;
@@ -16,6 +19,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.mindrot.jbcrypt.BCrypt;
+import utilerias.Utilidades;
 
 /**
  *
@@ -91,6 +95,58 @@ public class ClienteNegocio implements IClienteNegocio {
             }
         } catch (PersistenciaException e) {
             throw new NegocioException("Error al buscar cliente");
+        }
+    }
+    
+    @Override
+    public List<ClienteTablaDTO> buscarClientesTabla(ClienteFiltroTablaDTO filtro) throws NegocioException {
+        
+        try{
+        int offset = this.obtenerOFFSETMySQL(filtro.getLimit(), filtro.getOffset());
+        filtro.setOffset(offset);
+        
+        List<ClienteTablaDTO> clientesLista = this.clienteDAO.buscarClientesTabla(filtro);
+            if (clientesLista == null) {
+                throw new NegocioException("No se encontraron registros con los filtros");
+            }
+            return clientesLista;
+        } catch (PersistenciaException ex) {
+            System.out.println(ex.getMessage());
+            throw new NegocioException(ex.getMessage());
+        }
+    }
+    
+    private int obtenerOFFSETMySQL(int limit, int pagina) {
+        return new Utilidades().RegresarOFFSETMySQL(limit, pagina);
+    }
+    
+    @Override
+    public ClienteDTO modificar(ClienteModificarDTO cliente) throws NegocioException {
+
+        try {
+            System.out.println(cliente.toString() + "negocio");
+
+            ClienteDTO clienteModificar = this.convertirAClienteDTO(clienteDAO.modificarCliente(cliente));
+
+            return clienteModificar;
+
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
+            throw new NegocioException(ex.getMessage());
+        }
+    }
+
+
+    @Override
+    public ClienteDTO eliminar(int idCliente) throws NegocioException {
+
+        try {
+            ClienteDTO clienteEliminar = this.convertirAClienteDTO(clienteDAO.eliminarCliente(idCliente));
+
+            return clienteEliminar;
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
+            throw new NegocioException(ex.getMessage());
         }
     }
 
