@@ -454,7 +454,7 @@ public class FrmModificarPelicula extends javax.swing.JFrame {
         }
         
         catch(Exception ex){
-            System.out.println("conchudo");
+            System.out.println("noup");
         }
         
         finally{

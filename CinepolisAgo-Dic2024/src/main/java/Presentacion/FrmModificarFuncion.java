@@ -4,27 +4,177 @@
  */
 package Presentacion;
 
+import DTOs.FuncionFiltroTablaDTO;
+import DTOs.FuncionTablaDTO;
+import Negocio.IFuncionNegocio;
+import Negocio.IPeliculaNegocio;
+import Negocio.ISalaNegocio;
+import Negocio.NegocioException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+import utilerias.JButtonCellEditor;
+import utilerias.JButtonRenderer;
+
 /**
  *
  * @author eduar
  */
-public class FrmEditarFuncion extends javax.swing.JFrame {
+public class FrmModificarFuncion extends javax.swing.JFrame {
 
     private int pagina = 1;
-    private final int LIMITE = 20;
+    private final int LIMITE = 5;
+    
+    IFuncionNegocio funcionNegocio;
+    IPeliculaNegocio peliculaNegocio;
+    FrmPantallaAdmin admin;
+    ISalaNegocio salaNegocio;
+    
 
     /**
      * Creates new form FrmEditarFuncion
      */
-    public FrmEditarFuncion() {
+    public FrmModificarFuncion(FrmPantallaAdmin admin, IFuncionNegocio funcionNegocio, IPeliculaNegocio peliculaNegocio, ISalaNegocio salaNegocio) {
         initComponents();
+        
+        this.funcionNegocio = funcionNegocio;
+        this.peliculaNegocio = peliculaNegocio;
+        this.admin = admin;
+        this.salaNegocio = salaNegocio;
+        
+        this.metodosIniciales();
+        
+        
     }
 
+
+    private void metodosIniciales() {
+        this.cargarConfiguracionInicialPantalla();
+        this.cargarConfiguracionInicialTablaFunciones();
+        this.cargarTablaFunciones();
+        
+        btnPaginaAnterior.setEnabled(false);
+    }
+    
+    
+    
+        private void cargarConfiguracionInicialPantalla() {
+      //  this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }
+    
+    
+    
+   private void cargarConfiguracionInicialTablaFunciones() {
+       
+       TableColumnModel modeloColumnas = this.tblFunciones.getColumnModel();
+        ActionListener onEliminarClickListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Metodo para eliminar
+                eliminar();
+            }
+        };
+        int indiceColumnaEliminar = 7;
+        modeloColumnas = this.tblFunciones.getColumnModel();
+        modeloColumnas.getColumn(indiceColumnaEliminar)
+                .setCellRenderer(new JButtonRenderer("Eliminar"));
+        modeloColumnas.getColumn(indiceColumnaEliminar)
+                .setCellEditor(new JButtonCellEditor("Eliminar", onEliminarClickListener));
+    }
+
+    private int getIdSeleccionadoTablaFunciones() {
+        int indiceFilaSeleccionada = this.tblFunciones.getSelectedRow();
+        if (indiceFilaSeleccionada != -1) {
+            DefaultTableModel modelo = (DefaultTableModel) this.tblFunciones.getModel();
+            int indiceColumnaId = 0;
+            int idFuncionSeleccionada = (int) modelo.getValueAt(indiceFilaSeleccionada,
+                    indiceColumnaId);
+            return idFuncionSeleccionada;
+        } else {
+            return 0;
+        }
+    }
+
+    
+
+    private void eliminar() {
+        int id = this.getIdSeleccionadoTablaFunciones();
+        
+        System.out.println("El id para eliminar es " + id);
+        try{
+        funcionNegocio.eliminar(id);
+        JOptionPane.showMessageDialog(this, "funcion con id " + id + " ha sido eliminado");
+        }
+        
+        catch(NegocioException ex){
+            JOptionPane.showMessageDialog(this, "No se pudo eliminar la funcion");
+        }
+        finally{
+            this.cargarTablaFunciones();
+        }
+        
+        
+        
+        this.cargarTablaFunciones();
+    }
+
+    private void BorrarRegistrosTablaPeliculas() {
+        DefaultTableModel modeloTabla = (DefaultTableModel) this.tblFunciones.getModel();
+        if (modeloTabla.getRowCount() > 0) {
+            for (int row = modeloTabla.getRowCount() - 1; row > -1; row--) {
+                modeloTabla.removeRow(row);
+            }
+        }
+    }
+
+    private void AgregarRegistrosTablaCliente(List<FuncionTablaDTO> clientesLista) {
+        if (clientesLista == null) {
+            return;
+        }
+
+        DefaultTableModel modeloTabla = (DefaultTableModel) this.tblFunciones.getModel();
+        clientesLista.forEach(row -> {
+            Object[] fila = new Object[7];
+            fila[0] = row.getId();
+            fila[1] = row.getPelicula_id();
+            fila[2] = row.getEmpezaFuncion().toString();
+            fila[3] = row.getTerminoFuncion().toString();
+            fila[4] = row.getPrecio();
+            fila[5] = row.getSala_id();
+            fila[6] = row.getDiaFuncion();
+
+            modeloTabla.addRow(fila);
+        });
+    }
+
+    private void cargarTablaFunciones() {
+        try {
+            FuncionFiltroTablaDTO filtro = this.obtenerFiltrosTabla();
+            List<FuncionTablaDTO> clientesLista = this.funcionNegocio.buscarFuncionesTabla(filtro);
+            this.BorrarRegistrosTablaPeliculas();
+            this.AgregarRegistrosTablaCliente(clientesLista);
+        } catch (NegocioException ex) {
+            this.BorrarRegistrosTablaPeliculas();
+            this.pagina--;
+            this.establecerTituloPaginacion();
+            btnPaginaSiguiente.setEnabled(false);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Información", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private FuncionFiltroTablaDTO obtenerFiltrosTabla() {
+        return new FuncionFiltroTablaDTO(this.LIMITE, this.pagina, campoTextoFiltro.getText());
+    }
 
     private void establecerTituloPaginacion() {
         lblNumeroPagina.setText("Página " + this.pagina);
     }
-
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -47,6 +197,7 @@ public class FrmEditarFuncion extends javax.swing.JFrame {
         btnPaginaSiguiente = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("ModificarFuncion");
 
         tblFunciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -167,27 +318,45 @@ public class FrmEditarFuncion extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
+        admin.setVisible(true);
+        this.dispose();
 
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnNuevaFuncionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaFuncionActionPerformed
 
+        FrmNuevaFuncion nuevaFuncion = new FrmNuevaFuncion(this, funcionNegocio, peliculaNegocio, salaNegocio);
+        nuevaFuncion.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_btnNuevaFuncionActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
 
+        this.cargarTablaFunciones();
+
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnPaginaAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaginaAnteriorActionPerformed
-
+        this.pagina--;
+        if (this.pagina == 0) {
+            this.pagina = 1;
+            return;
+        }
+        btnPaginaSiguiente.setEnabled(true);
+        this.establecerTituloPaginacion();
+        this.cargarTablaFunciones();
     }//GEN-LAST:event_btnPaginaAnteriorActionPerformed
 
     private void btnPaginaSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaginaSiguienteActionPerformed
-
+        this.pagina++;
+        this.establecerTituloPaginacion();
+        this.cargarTablaFunciones();
+        btnPaginaAnterior.setEnabled(true);
     }//GEN-LAST:event_btnPaginaSiguienteActionPerformed
 
 

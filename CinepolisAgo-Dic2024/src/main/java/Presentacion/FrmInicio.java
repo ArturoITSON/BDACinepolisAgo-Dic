@@ -9,9 +9,11 @@ import Negocio.ClienteNegocio;
 import Negocio.ICiudadNegocio;
 import Negocio.IClasificacionNegocio;
 import Negocio.IClienteNegocio;
+import Negocio.IFuncionNegocio;
 import Negocio.IGeneroNegocio;
 import Negocio.IPaisNegocio;
 import Negocio.IPeliculaNegocio;
+import Negocio.ISalaNegocio;
 import java.awt.Image;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -31,11 +33,14 @@ public class FrmInicio extends javax.swing.JFrame {
     private IClasificacionNegocio clasificacionNegocio;
     private ICiudadNegocio ciudadNegocio;
     private IPaisNegocio paisNegocio;
+    private IFuncionNegocio funcionNegocio;
+    private ISalaNegocio salaNegocio;
     
     /**
      * Creates new form Inicio
      */
-    public FrmInicio(IClienteNegocio clienteNegocio, IPeliculaNegocio peliculaNegocio, IGeneroNegocio generoNegocio, IClasificacionNegocio clasificacionNegocio, IPaisNegocio paisNegocio, ICiudadNegocio ciudadNegocio) {
+    public FrmInicio(IClienteNegocio clienteNegocio, IPeliculaNegocio peliculaNegocio, IGeneroNegocio generoNegocio, IClasificacionNegocio clasificacionNegocio, IPaisNegocio paisNegocio, ICiudadNegocio ciudadNegocio,
+                     IFuncionNegocio funcionNegocio, ISalaNegocio salaNegocio) {
         initComponents();
         
         this.peliculaNegocio = peliculaNegocio;
@@ -44,6 +49,8 @@ public class FrmInicio extends javax.swing.JFrame {
         this.generoNegocio = generoNegocio;
         this.clasificacionNegocio = clasificacionNegocio;
         this.paisNegocio=paisNegocio;
+        this.funcionNegocio = funcionNegocio;
+        this.salaNegocio = salaNegocio;
 
         
         setImagenLabel(jblCinepolisLogo, rutaCinepolisLogo);
@@ -167,7 +174,8 @@ public class FrmInicio extends javax.swing.JFrame {
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
         // TODO add your handling code here:
-        FrmIniciarSesion iniciarSesion = new FrmIniciarSesion((ClienteNegocio) clienteNegocio, this, peliculaNegocio, generoNegocio, clasificacionNegocio, paisNegocio);
+        FrmIniciarSesion iniciarSesion = new FrmIniciarSesion((ClienteNegocio) clienteNegocio, this, peliculaNegocio, generoNegocio, clasificacionNegocio, paisNegocio, funcionNegocio
+                                                                , salaNegocio);
         iniciarSesion.setVisible(true);
         this.setVisible(false);
 

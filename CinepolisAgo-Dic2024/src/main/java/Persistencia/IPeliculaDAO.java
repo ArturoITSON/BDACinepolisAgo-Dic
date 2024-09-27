@@ -27,4 +27,6 @@ public interface IPeliculaDAO {
     
     PeliculaEntidad eliminarPelicula(int idPelicula) throws PersistenciaException;
     
+    List<String> obtenerPeliculas() throws PersistenciaException;
+    
 }

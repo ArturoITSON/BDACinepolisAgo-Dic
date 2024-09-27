@@ -8,30 +8,38 @@ package Main;
 import Negocio.CiudadNegocio;
 import Negocio.ClasificacionNegocio;
 import Negocio.ClienteNegocio;
+import Negocio.FuncionNegocio;
 import Negocio.GeneroNegocio;
 import Negocio.ICiudadNegocio;
 import Negocio.IClasificacionNegocio;
 import Negocio.IClienteNegocio;
+import Negocio.IFuncionNegocio;
 import Negocio.IGeneroNegocio;
 import Negocio.IPaisNegocio;
 import Negocio.IPeliculaNegocio;
+import Negocio.ISalaNegocio;
 import Negocio.PaisNegocio;
 import Negocio.PeliculaNegocio;
+import Negocio.SalaNegocio;
 import Persistencia.CiudadDAO;
 import Persistencia.ClasificacionDAO;
 import Persistencia.ClienteDAO;
 import Persistencia.ConexionBD;
+import Persistencia.FuncionDAO;
 import Persistencia.GeneroDAO;
 import Persistencia.ICiudadDAO;
 import Persistencia.IClasificacionDAO;
 
 import Persistencia.IClienteDAO;
 import Persistencia.IConexionBD;
+import Persistencia.IFuncionDAO;
 import Persistencia.IGeneroDAO;
 import Persistencia.IPaisDAO;
 import Persistencia.IPeliculaDAO;
+import Persistencia.ISalaDAO;
 import Persistencia.PaisDAO;
 import Persistencia.PeliculaDAO;
+import Persistencia.SalaDAO;
 import Presentacion.FrmInicio;
 
 /**
@@ -50,6 +58,8 @@ public class Main {
         IClasificacionDAO clasificacionDAO = new ClasificacionDAO(conexion);
         IPaisDAO paisDAO = new PaisDAO(conexion);
         ICiudadDAO ciudadDAO = new CiudadDAO(conexion);
+        IFuncionDAO funcionDAO = new FuncionDAO(conexion);
+        ISalaDAO SalaDAO = new SalaDAO(conexion);
         
         IClienteNegocio clienteNegocio = new ClienteNegocio(clienteDAO);
         IPeliculaNegocio peliculaNegocio = new PeliculaNegocio(peliculaDAO);
@@ -57,8 +67,11 @@ public class Main {
         IClasificacionNegocio clasificacionNegocio = new ClasificacionNegocio(clasificacionDAO);
         IPaisNegocio paisNegocio = new PaisNegocio(paisDAO);
         ICiudadNegocio ciudadNegocio = new CiudadNegocio(ciudadDAO);
+        IFuncionNegocio funcionNegocio = new FuncionNegocio(funcionDAO);
+        ISalaNegocio salaNegocio = new SalaNegocio(SalaDAO);
+                
         
-        FrmInicio inicio = new FrmInicio(clienteNegocio, peliculaNegocio, generoNegocio, clasificacionNegocio, paisNegocio, ciudadNegocio);
+        FrmInicio inicio = new FrmInicio(clienteNegocio, peliculaNegocio, generoNegocio, clasificacionNegocio, paisNegocio, ciudadNegocio, funcionNegocio, salaNegocio);
         inicio.setVisible(true);
     
     }

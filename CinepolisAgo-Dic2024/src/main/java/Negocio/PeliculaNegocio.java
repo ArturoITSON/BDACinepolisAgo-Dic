@@ -93,6 +93,37 @@ public class PeliculaNegocio implements IPeliculaNegocio{
         }
     }
     
+    @Override
+    public List<String> obtenerPeliculas() throws NegocioException {
+        
+        List<String> peliculas;
+        try {
+            peliculas = peliculaDAO.obtenerPeliculas();
+            return peliculas;
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    
+    @Override
+    public PeliculaDTO buscarPorId(int id) throws NegocioException {
+        
+        try{
+             return this.convertirAPeliculaDTO(peliculaDAO.buscarPorId(id));
+ 
+        }
+        
+        catch(PersistenciaException ex){
+            Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
+    }
+    
+    
+    
     private PeliculaDTO convertirAPeliculaDTO(PeliculaEntidad pelicula) {
         return new PeliculaDTO(
                 pelicula.getId(),
@@ -111,6 +142,8 @@ public class PeliculaNegocio implements IPeliculaNegocio{
     private int obtenerOFFSETMySQL(int limit, int pagina) {
         return new Utilidades().RegresarOFFSETMySQL(limit, pagina);
     }
+
+
         
         
     }

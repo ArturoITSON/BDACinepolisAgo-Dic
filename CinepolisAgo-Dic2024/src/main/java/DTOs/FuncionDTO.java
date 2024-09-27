@@ -4,14 +4,19 @@
  */
 package DTOs;
 
+import java.sql.Time;
+
+
 /**
  *
  * @author Arturo ITSON
  */
 public class FuncionDTO {
     
-        private int id;
+    private int id;
     private float precio;
+    private Time empezaFuncion;
+    private Time terminoFuncion;
     private String diaFuncion;
     private int pelicula_id;
     private int sala_id;
@@ -20,11 +25,12 @@ public class FuncionDTO {
     
     public FuncionDTO() {
     }
- 
-    
-    public FuncionDTO(int id, float precio, String diaFuncion, int pelicula_id, int sala_id) {
+
+    public FuncionDTO(int id, float precio, Time empezaFuncion, Time terminoFuncion, String diaFuncion, int pelicula_id, int sala_id) {
         this.id = id;
         this.precio = precio;
+        this.empezaFuncion = empezaFuncion;
+        this.terminoFuncion = terminoFuncion;
         this.diaFuncion = diaFuncion;
         this.pelicula_id = pelicula_id;
         this.sala_id = sala_id;
@@ -46,6 +52,22 @@ public class FuncionDTO {
 
     public void setPrecio(float precio) {
         this.precio = precio;
+    }
+
+    public Time getEmpezaFuncion() {
+        return empezaFuncion;
+    }
+
+    public void setEmpezaFuncion(Time empezaFuncion) {
+        this.empezaFuncion = empezaFuncion;
+    }
+
+    public Time getTerminoFuncion() {
+        return terminoFuncion;
+    }
+
+    public void setTerminoFuncion(Time terminoFuncion) {
+        this.terminoFuncion = terminoFuncion;
     }
 
     public String getDiaFuncion() {
@@ -72,10 +94,15 @@ public class FuncionDTO {
         this.sala_id = sala_id;
     }
 
+    
+    
     @Override
     public String toString() {
-        return "FuncionDTO{" + "id=" + id + ", precio=" + precio + ", diaFuncion=" + diaFuncion + ", pelicula_id=" + pelicula_id + ", sala_id=" + sala_id + '}';
+        return "FuncionDTO{" + "id=" + id + ", precio=" + precio + ", empezaFuncion=" + empezaFuncion + ", terminoFuncion=" + terminoFuncion + ", diaFuncion=" + diaFuncion + ", pelicula_id=" + pelicula_id + ", sala_id=" + sala_id + '}';
     }
+ 
+    
+
 
 
     

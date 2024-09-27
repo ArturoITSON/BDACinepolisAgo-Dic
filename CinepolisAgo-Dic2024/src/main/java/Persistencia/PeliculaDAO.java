@@ -260,6 +260,46 @@ public class PeliculaDAO implements IPeliculaDAO{
     }
     
     
+    @Override
+    public List<String> obtenerPeliculas() throws PersistenciaException {
+    List<String> peliculas = new ArrayList<>();
+    Connection conexion = null;
+    Statement comandoSQL = null;
+    ResultSet resultado = null;
+
+    try {
+        conexion = this.conexionBD.crearConexion();
+        String codigoSQL = "SELECT titulo FROM Pelicula";
+        comandoSQL = conexion.createStatement();
+        resultado = comandoSQL.executeQuery(codigoSQL);
+
+        while (resultado.next()) {
+            peliculas.add(resultado.getString("titulo"));
+        }
+        return peliculas;
+    } catch (SQLException ex) {
+        System.out.println(ex.getMessage());
+        throw new PersistenciaException("Ocurrió un error al leer la base de datos de peliculas, inténtelo de nuevo.");
+    } finally {
+        try {
+            if (resultado != null) {
+                resultado.close();
+            }
+            if (comandoSQL != null) {
+                comandoSQL.close();
+            }
+            if (conexion != null) {
+                conexion.close();
+            }
+        } catch (SQLException e) {
+            throw new PersistenciaException("Error al cerrar los recursos: " + e.getMessage());
+        }
+     }
+    }
+    
+    
+    
+    
     private PeliculaEntidad peliculaEntidad(ResultSet resultado) throws SQLException {
         int id = resultado.getInt("id");
         String titulo = resultado.getString("titulo");

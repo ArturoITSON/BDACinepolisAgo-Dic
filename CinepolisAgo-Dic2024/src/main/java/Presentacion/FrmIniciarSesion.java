@@ -10,9 +10,11 @@ import Entidades.ClienteEntidad;
 import Negocio.ClienteNegocio;
 import Negocio.IClasificacionNegocio;
 import Negocio.IClienteNegocio;
+import Negocio.IFuncionNegocio;
 import Negocio.IGeneroNegocio;
 import Negocio.IPaisNegocio;
 import Negocio.IPeliculaNegocio;
+import Negocio.ISalaNegocio;
 import Negocio.NegocioException;
 import java.awt.Image;
 import java.util.logging.Level;
@@ -37,12 +39,15 @@ public class FrmIniciarSesion extends javax.swing.JFrame {
     IGeneroNegocio generoNegocio;
     IClasificacionNegocio clasificacionNegocio;
     IPaisNegocio paisNegocio;
+    IFuncionNegocio funcionNegocio;
+    ISalaNegocio salaNegocio;
     
     
     /**
      * Creates new form FrmIniciarSesion
      */
-    public FrmIniciarSesion(ClienteNegocio clienteNegocio, FrmInicio inicio, IPeliculaNegocio peliculaNegocio, IGeneroNegocio generoNegocio, IClasificacionNegocio clasificacionNegocio, IPaisNegocio paisNegocio) {
+    public FrmIniciarSesion(ClienteNegocio clienteNegocio, FrmInicio inicio, IPeliculaNegocio peliculaNegocio, IGeneroNegocio generoNegocio, IClasificacionNegocio clasificacionNegocio, IPaisNegocio paisNegocio,
+                            IFuncionNegocio funcionNegocio, ISalaNegocio salaNegocio) {
         initComponents();
         
         
@@ -52,6 +57,8 @@ public class FrmIniciarSesion extends javax.swing.JFrame {
         this.clasificacionNegocio = clasificacionNegocio;
         this.paisNegocio=paisNegocio;
         this.inicio = inicio;
+        this.funcionNegocio = funcionNegocio;
+        this.salaNegocio = salaNegocio;
         
         setImagenLabel(jblCinepolisLogo, rutaCinepolisLogo);
         
@@ -204,7 +211,8 @@ public class FrmIniciarSesion extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         if (campoTextoCorreo.getText().equals("admin")){
-                FrmPantallaAdmin admin = new FrmPantallaAdmin(this, peliculaNegocio, (ClienteNegocio) clienteNegocio, generoNegocio, clasificacionNegocio, paisNegocio);
+                FrmPantallaAdmin admin = new FrmPantallaAdmin(this, peliculaNegocio, (ClienteNegocio) clienteNegocio, generoNegocio, clasificacionNegocio, paisNegocio, funcionNegocio,
+                                                              salaNegocio);
                 admin.setVisible(true);
                 this.setVisible(false);
 

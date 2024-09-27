@@ -34,26 +34,35 @@
                       </Group>
                       <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="timePickerHoraInicio" min="-2" pref="169" max="-2" attributes="0"/>
                           <Component id="lblHoraInicio" alignment="0" min="-2" pref="141" max="-2" attributes="0"/>
                           <Component id="lblSala" alignment="0" min="-2" pref="141" max="-2" attributes="0"/>
-                          <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="cbcSala" alignment="0" pref="169" max="32767" attributes="0"/>
-                              <Component id="campoTextoHoraInicio" alignment="0" max="32767" attributes="0"/>
-                          </Group>
+                          <Component id="cbcSala" alignment="0" min="-2" pref="169" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Component id="btnRegresar" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="lblPelicula" alignment="0" min="-2" pref="141" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="lblHoraFinal" alignment="0" min="-2" pref="141" max="-2" attributes="0"/>
-                  <Component id="lblDia" alignment="0" min="-2" pref="141" max="-2" attributes="0"/>
-                  <Component id="btnGuardar" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="campoTextoDia" alignment="0" min="-2" pref="158" max="-2" attributes="0"/>
-                  <Component id="campoTextoDuracion1" min="-2" pref="158" max="-2" attributes="0"/>
+              <EmptySpace pref="45" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="lblHoraFinal" alignment="0" min="-2" pref="141" max="-2" attributes="0"/>
+                          <Component id="lblDia" alignment="0" min="-2" pref="141" max="-2" attributes="0"/>
+                          <Component id="btnGuardar" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="148" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="cbcDias" alignment="0" max="32767" attributes="0"/>
+                          <Component id="campoTextoDuracionFinal" alignment="0" pref="158" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="btnCalcularHoraFinal" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
           </Group>
           <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
       </Group>
@@ -69,10 +78,13 @@
                   <Component id="lblHoraFinal" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="campoTextoHoraInicio" alignment="3" min="-2" pref="45" max="-2" attributes="0"/>
-                  <Component id="cbcPelicula" alignment="3" min="-2" pref="45" max="-2" attributes="0"/>
-                  <Component id="campoTextoDuracion1" alignment="3" min="-2" pref="45" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="timePickerHoraInicio" alignment="1" min="-2" pref="46" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="cbcPelicula" alignment="3" min="-2" pref="45" max="-2" attributes="0"/>
+                      <Component id="campoTextoDuracionFinal" alignment="3" min="-2" pref="45" max="-2" attributes="0"/>
+                      <Component id="btnCalcularHoraFinal" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -81,12 +93,14 @@
                   <Component id="lblDia" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="cbcSala" alignment="3" min="-2" pref="45" max="-2" attributes="0"/>
-                  <Component id="campoTextoDia" alignment="3" min="-2" pref="45" max="-2" attributes="0"/>
-                  <Component id="campoTextoPrecio" alignment="3" min="-2" pref="45" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="cbcDias" alignment="1" min="-2" pref="43" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="cbcSala" alignment="3" min="-2" pref="45" max="-2" attributes="0"/>
+                      <Component id="campoTextoPrecio" alignment="3" min="-2" pref="45" max="-2" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace pref="148" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="148" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnRegresar" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnGuardar" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -99,33 +113,26 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="lblPrecio">
       <Properties>
+        <Property name="text" type="java.lang.String" value="Precio"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="20" style="0"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Precio"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="campoTextoDia">
-      <Properties>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ef" green="c9" red="88" type="rgb"/>
         </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblSala">
       <Properties>
+        <Property name="text" type="java.lang.String" value="Sala"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="20" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Sala"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblDia">
       <Properties>
+        <Property name="text" type="java.lang.String" value="Dia"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="20" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Dia"/>
       </Properties>
     </Component>
     <Container class="javax.swing.JPanel" name="jPanel2">
@@ -153,11 +160,11 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="lblFuncion">
           <Properties>
+            <Property name="horizontalAlignment" type="int" value="0"/>
+            <Property name="text" type="java.lang.String" value="Agregar Funci&#xf3;n"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="36" style="0"/>
             </Property>
-            <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="Agregar Funci&#xf3;n"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -205,47 +212,43 @@
     </Component>
     <Component class="javax.swing.JComboBox" name="cbcPelicula">
       <Properties>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ef" green="c9" red="88" type="rgb"/>
-        </Property>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="0"/>
         </Property>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ef" green="c9" red="88" type="rgb"/>
+        </Property>
       </Properties>
+      <Events>
+        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cbcPeliculaItemStateChanged"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="lblPelicula">
       <Properties>
+        <Property name="text" type="java.lang.String" value="Pelicula"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="20" style="0"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Pelicula"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="campoTextoHoraInicio">
-      <Properties>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ef" green="c9" red="88" type="rgb"/>
         </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblHoraInicio">
       <Properties>
+        <Property name="text" type="java.lang.String" value="Hora Inicio"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="20" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Hora Inicio"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JComboBox" name="cbcSala">
       <Properties>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ef" green="c9" red="88" type="rgb"/>
-        </Property>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="0"/>
+        </Property>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ef" green="c9" red="88" type="rgb"/>
         </Property>
       </Properties>
       <AuxValues>
@@ -254,18 +257,55 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblHoraFinal">
       <Properties>
+        <Property name="text" type="java.lang.String" value="Hora Final"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="20" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Hora Final"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="campoTextoDuracion1">
+    <Component class="javax.swing.JTextField" name="campoTextoDuracionFinal">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ef" green="c9" red="88" type="rgb"/>
         </Property>
       </Properties>
+    </Component>
+    <Component class="com.github.lgooddatepicker.components.TimePicker" name="timePickerHoraInicio">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ef" green="c9" red="88" type="rgb"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnCalcularHoraFinal">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Calcular"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCalcularHoraFinalActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="cbcDias">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="7">
+            <StringItem index="0" value="Lunes"/>
+            <StringItem index="1" value="Martes"/>
+            <StringItem index="2" value="Miercoles"/>
+            <StringItem index="3" value="Jueves"/>
+            <StringItem index="4" value="Viernes"/>
+            <StringItem index="5" value="Sabado"/>
+            <StringItem index="6" value="Domingo"/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>
