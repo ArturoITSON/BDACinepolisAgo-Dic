@@ -5,6 +5,7 @@
 package Presentacion;
 
 import DTOs.FuncionGuardarDTO;
+import DTOs.SalaDTO;
 import Negocio.IFuncionNegocio;
 import Negocio.IPeliculaNegocio;
 import Negocio.ISalaNegocio;
@@ -317,12 +318,14 @@ public class FrmNuevaFuncion extends javax.swing.JFrame {
             LocalTime empezarFuncion = timePickerHoraInicio.getTime();
             LocalTime terminoFuncion = empezarFuncion.plusMinutes((long) duracionPelicula);
             
-        
+            List<SalaDTO> listaSalas = salaNegocio.obtenerIdSalasPorSucursal(cbcSucursal.getSelectedIndex() + 1);
+            int salaId = listaSalas.get(cbcSala.getSelectedIndex()).getId();
+            
             funcionGuardar.setDiaFuncion((String) cbcDias.getSelectedItem());
             funcionGuardar.setEmpezaFuncion(java.sql.Time.valueOf(timePickerHoraInicio.getTime()));
             funcionGuardar.setPelicula_id(cbcPelicula.getSelectedIndex() + 1);
             funcionGuardar.setPrecio(Float.valueOf(campoTextoPrecio.getText()));
-            funcionGuardar.setSala_id(1);
+            funcionGuardar.setSala_id(salaId);
             
             
             funcionGuardar.setTerminoFuncion(java.sql.Time.valueOf(terminoFuncion));
