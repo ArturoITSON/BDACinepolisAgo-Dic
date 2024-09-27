@@ -1,0 +1,116 @@
+-- Crear base de datos
+CREATE DATABASE cinepolis;
+USE cinepolis;
+
+-- drop database Cinepolis;
+
+-- Nueva tabla para los generos
+CREATE TABLE Genero(
+	id INT auto_increment PRIMARY KEY,
+    nombre varchar(50)
+);
+
+-- Nueva tabla para las clasificaciones
+CREATE TABLE Clasificacion(
+	id INT auto_increment PRIMARY KEY,
+    nombre varchar(50)
+);
+
+-- Nueva tabla para Pais
+CREATE TABLE Pais(
+	id INT auto_increment PRIMARY KEY,
+    nombre varchar(50)
+);
+
+-- Tabla Ciudad
+CREATE TABLE Ciudad (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL
+);
+
+-- Tabla Sucursal
+CREATE TABLE Sucursal (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    ciudad_id INT,
+    localizacion point,
+    FOREIGN KEY (ciudad_id) REFERENCES Ciudad(id) ON DELETE CASCADE
+);
+
+-- Tabla Cliente
+CREATE TABLE Cliente (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombres VARCHAR(100) NOT NULL,
+    apellido_paterno VARCHAR(100) NOT NULL,
+    apellido_materno VARCHAR(100),
+    correo VARCHAR(100) NOT NULL,
+    fecha_nacimiento DATE NOT NULL,
+    contrasena VARCHAR(255) NOT NULL, -- Almacenada en formato hash
+    ciudad_id INT,
+    FOREIGN KEY (ciudad_id) REFERENCES Ciudad(id) ON DELETE CASCADE
+);
+
+-- Tabla Película
+CREATE TABLE Pelicula (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(200) NOT NULL,
+    clasificacion_id int, -- Nuevo campo para la clasificacion
+    duracion INT, -- Duración en minutos
+    sinopsis TEXT,
+    genero_id int, -- Nuevo campo para el genero
+    trailer VARCHAR(255),
+    link_imagen VARCHAR(255),-- Nuevo campo para imagen
+    pais_id int, -- nuevo campo para pais
+    FOREIGN KEY (clasificacion_id) REFERENCES Clasificacion(id), -- Nuevo campo para la clasificacion
+    FOREIGN KEY (genero_id) REFERENCES Genero(id), -- Nuevo campo para el genero
+	FOREIGN KEY (pais_id) REFERENCES Pais(id) -- Nuevo campo para el genero
+
+);
+
+-- Tabla Sala
+CREATE TABLE Sala (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    asientos_disponibles INT NOT NULL,
+    precio float,
+    minutosLimpieza int,
+    sucursal_id INT,
+    FOREIGN KEY (sucursal_id) REFERENCES Sucursal(id) ON DELETE CASCADE
+);
+
+-- Tabla Horario (relaciona Película con Sala)
+CREATE TABLE Horario (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pelicula_id INT,
+    sala_id INT,
+    hora TIME,
+    FOREIGN KEY (pelicula_id) REFERENCES Pelicula(id) ON DELETE CASCADE,
+    FOREIGN KEY (sala_id) REFERENCES Sala(id) ON DELETE CASCADE
+);
+
+
+-- Nueva Tabla Funcion (relaciona Cliente con Sala)
+CREATE TABLE Funcion(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    precio float,
+    empezarFuncion time,
+    terminarFuncion time,
+    dia_funcion varchar(25),
+	pelicula_id INT,
+    sala_id INT,
+    FOREIGN KEY (pelicula_id) REFERENCES Pelicula(id) ON DELETE CASCADE,
+    FOREIGN KEY (sala_id) REFERENCES Sala(id) ON DELETE CASCADE
+);
+
+
+-- Nueva Tabla Ticket
+CREATE TABLE TICKET(
+	id int primary key auto_increment,
+	QR BLOB,
+    metodoPago varchar(25),
+	cliente_id int,
+	funcion_id int,
+	
+  FOREIGN KEY (cliente_id) REFERENCES Cliente(id) ON DELETE CASCADE,
+  FOREIGN KEY (funcion_id) REFERENCES Funcion(id) ON DELETE CASCADE
+);
