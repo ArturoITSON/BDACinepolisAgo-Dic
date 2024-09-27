@@ -4,6 +4,8 @@
  */
 package DTOs;
 
+import java.sql.Time;
+
 /**
  *
  * @author Arturo ITSON
@@ -11,6 +13,8 @@ package DTOs;
 public class FuncionGuardarDTO {
     
     private float precio;
+    private Time empezaFuncion;
+    private Time terminoFuncion;
     private String diaFuncion;
     private int pelicula_id;
     private int sala_id;
@@ -18,18 +22,17 @@ public class FuncionGuardarDTO {
     
     
     public FuncionGuardarDTO() {
+        
     }
- 
-    
-    public FuncionGuardarDTO(float precio, String diaFuncion, int pelicula_id, int sala_id) {
+
+    public FuncionGuardarDTO(float precio, Time empezaFuncion, Time terminoFuncion, String diaFuncion, int pelicula_id, int sala_id) {
         this.precio = precio;
+        this.empezaFuncion = empezaFuncion;
+        this.terminoFuncion = terminoFuncion;
         this.diaFuncion = diaFuncion;
         this.pelicula_id = pelicula_id;
         this.sala_id = sala_id;
     }
-
-    
-    
 
     public float getPrecio() {
         return precio;
@@ -37,6 +40,22 @@ public class FuncionGuardarDTO {
 
     public void setPrecio(float precio) {
         this.precio = precio;
+    }
+
+    public Time getEmpezaFuncion() {
+        return empezaFuncion;
+    }
+
+    public void setEmpezaFuncion(Time empezaFuncion) {
+        this.empezaFuncion = empezaFuncion;
+    }
+
+    public Time getTerminoFuncion() {
+        return terminoFuncion;
+    }
+
+    public void setTerminoFuncion(Time terminoFuncion) {
+        this.terminoFuncion = terminoFuncion;
     }
 
     public String getDiaFuncion() {
@@ -63,12 +82,12 @@ public class FuncionGuardarDTO {
         this.sala_id = sala_id;
     }
 
+    
+    
     @Override
     public String toString() {
-        return "FuncionGuardarDTO{" + "precio=" + precio + ", diaFuncion=" + diaFuncion + ", pelicula_id=" + pelicula_id + ", sala_id=" + sala_id + '}';
+        return "FuncionGuardarDTO{" + "precio=" + precio + ", empezaFuncion=" + empezaFuncion + ", terminoFuncion=" + terminoFuncion + ", diaFuncion=" + diaFuncion + ", pelicula_id=" + pelicula_id + ", sala_id=" + sala_id + '}';
     }
-
-
-    
+     
     
 }

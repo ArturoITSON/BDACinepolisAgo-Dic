@@ -24,5 +24,9 @@ public interface IPeliculaNegocio {
     PeliculaDTO modificar(PeliculaModificarDTO pelicula) throws NegocioException;
     
     PeliculaDTO eliminar(int idPelicula) throws NegocioException;
+    
+    PeliculaDTO buscarPorId(int id) throws NegocioException;
+    
+    List<String> obtenerPeliculas() throws NegocioException;
             
 }

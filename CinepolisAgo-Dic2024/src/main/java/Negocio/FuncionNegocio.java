@@ -82,6 +82,8 @@ public class FuncionNegocio implements IFuncionNegocio {
         return new FuncionDTO(
                 funcion.getId(),
                 funcion.getPrecio(),
+                funcion.getEmpezaFuncion(),
+                funcion.getTerminoFuncion(),
                 funcion.getDiaFuncion(),
                 funcion.getPelicula_id(),
                 funcion.getSala_id()

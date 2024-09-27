@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +46,8 @@ public class FuncionDAO implements IFuncionDAO{
                                      id,
                                      precio,
                                      dia_funcion,
+                                     empezarFuncion,
+                                     terminarFuncion,
                                      pelicula_id,
                                      sala_id
                                 FROM Funcion
@@ -85,17 +88,21 @@ public class FuncionDAO implements IFuncionDAO{
             String insertCliente = """
                                     INSERT INTO Funcion (precio,
                                                           dia_funcion,
+                                                          empezarFuncion,
+                                                          terminarFuncion,
                                                           pelicula_id,
                                                           sala_id
                                    ) 
-                                                 VALUES (?, ?, ?, ?, ?)
+                                                 VALUES (?, ?, ?, ?, ?, ?)
                                     """;
 
             PreparedStatement preparedStatement = conexion.prepareStatement(insertCliente, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setFloat(1, funcion.getPrecio());
             preparedStatement.setString(2, funcion.getDiaFuncion());
-            preparedStatement.setInt(3, funcion.getPelicula_id());
-            preparedStatement.setInt(4, funcion.getSala_id());
+            preparedStatement.setTime(3, funcion.getEmpezaFuncion());
+            preparedStatement.setTime(4, funcion.getTerminoFuncion());
+            preparedStatement.setInt(5, funcion.getPelicula_id());
+            preparedStatement.setInt(6, funcion.getSala_id());
 
             int filasAfectadas = preparedStatement.executeUpdate();
             if (filasAfectadas == 0) {
@@ -131,6 +138,8 @@ public class FuncionDAO implements IFuncionDAO{
                                SELECT
                                     id,
                                     precio,
+                                    empezarFuncion,
+                                    terminarFuncion,
                                     dia_funcion,
                                     pelicula_id,
                                     sala_id
@@ -193,26 +202,32 @@ public class FuncionDAO implements IFuncionDAO{
     
     
     
+    
+    
         
     private FuncionEntidad funcionEntidad(ResultSet resultado) throws SQLException {
         int id = resultado.getInt("id");
         float precio = resultado.getFloat("precio");
+        Time empezarFuncion = resultado.getTime("empezarFuncion");
+        Time terminarFuncion = resultado.getTime("terminarFuncion");
         String dia_funcion = resultado.getString("dia_funcion");
         int pelicula_id = resultado.getInt("pelicula_id");
         int sala_id = resultado.getInt("sala_id");
 
-        return new FuncionEntidad(id, precio, dia_funcion, pelicula_id, sala_id);
+        return new FuncionEntidad(id, precio, empezarFuncion, terminarFuncion, dia_funcion, pelicula_id, sala_id);
     }  
 
     
     private FuncionTablaDTO funcionTablaDTO(ResultSet resultado) throws SQLException {
         int id = resultado.getInt("id");
         float precio = resultado.getFloat("precio");
+        Time empezarFuncion = resultado.getTime("empezarFuncion");
+        Time terminarFuncion = resultado.getTime("terminarFuncion");
         String dia_funcion = resultado.getString("dia_funcion");
         int pelicula_id = resultado.getInt("pelicula_id");
         int sala_id = resultado.getInt("sala_id");
 
-        return new FuncionTablaDTO(id, precio, dia_funcion, pelicula_id, sala_id);
+        return new FuncionTablaDTO(id, precio, empezarFuncion, terminarFuncion, dia_funcion, pelicula_id, sala_id);
     }
     
 }
