@@ -6,10 +6,10 @@ package Entidades;
 
 /**
  *
- * @author eduar
+ * @author Arturo ITSON
  */
 public class CiudadEntidad {
-
+    
     private int id;
     private String nombre;
 
@@ -39,6 +39,7 @@ public class CiudadEntidad {
 
     @Override
     public String toString() {
-        return "CiudadDTO{" + "id=" + id + ", nombre=" + nombre + '}';
+        return "CiudadEntidad{" + "id=" + id + ", nombre=" + nombre + '}';
     }
+    
 }

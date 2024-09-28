@@ -6,13 +6,15 @@ package DTOs;
 
 /**
  *
- * @author eduar
+ * @author Arturo ITSON
  */
 public class CiudadDTO {
-
+    
     private int id;
     private String nombre;
 
+    
+    
     public CiudadDTO() {
     }
 
@@ -41,4 +43,5 @@ public class CiudadDTO {
     public String toString() {
         return "CiudadDTO{" + "id=" + id + ", nombre=" + nombre + '}';
     }
+
 }

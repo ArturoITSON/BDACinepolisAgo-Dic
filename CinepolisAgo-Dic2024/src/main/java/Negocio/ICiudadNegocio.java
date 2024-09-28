@@ -17,4 +17,7 @@ public interface ICiudadNegocio {
     
     public List<CiudadDTO> obtenerCiudadesDTO() throws NegocioException;
 
+    List<CiudadDTO> obtenerCiudadesDTO() throws NegocioException;
+    
+    CiudadDTO buscarPorId(int id) throws NegocioException;
 }

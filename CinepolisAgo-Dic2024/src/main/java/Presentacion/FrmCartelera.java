@@ -4,10 +4,13 @@
  */
 package Presentacion;
 
+import DTOs.CiudadDTO;
+import DTOs.ClienteBuscarDTO;
 import DTOs.FuncionFiltroTablaDTO;
 import DTOs.FuncionTablaDTO;
 import DTOs.PeliculaFiltroTablaDTO;
 import DTOs.PeliculaTablaDTO;
+import Negocio.ICiudadNegocio;
 import Negocio.IFuncionNegocio;
 import Negocio.IPeliculaNegocio;
 import Negocio.NegocioException;
@@ -15,7 +18,9 @@ import java.awt.Image;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
@@ -40,14 +45,34 @@ public class FrmCartelera extends javax.swing.JFrame {
     
     IPeliculaNegocio peliculaNegocio;
     IFuncionNegocio funcionNegocio;
+    ICiudadNegocio ciudadNegocio;
     
     String rutaReloj = "src/main/java/utilerias/Imagenes/reloj.png";
+    
+    private Map<Integer, Integer> ciudadesIds;
+    private Map<String, Integer> ciudadMap;
+    
+    ClienteBuscarDTO cliente;
     
     /**
      * Creates new form FrmCartelera
      */
-    public FrmCartelera(IPeliculaNegocio peliculaNegocio) {
+    public FrmCartelera(IPeliculaNegocio peliculaNegocio, ICiudadNegocio ciudadNegocio, ClienteBuscarDTO cliente) {
         initComponents();
+        
+        this.ciudadNegocio = ciudadNegocio;
+        this.cliente = cliente;
+        
+        
+        
+        
+        
+        try {
+            cargarCiudades();
+        } catch (NegocioException ex) {
+            Logger.getLogger(FrmCartelera.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         
         PeliculaFiltroTablaDTO filtro = this.obtenerFiltrosTabla();
 //        FuncionFiltroTablaDTO filtroFuncion = this.obtenerFiltrosTablaFuncion();
@@ -96,6 +121,36 @@ public class FrmCartelera extends javax.swing.JFrame {
         
     
     }
+    
+    
+    private void cargarCiudades() throws NegocioException {
+            
+        try {
+            List<CiudadDTO> ciudades = ciudadNegocio.obtenerCiudadesDTO();
+            
+            ciudadMap = new HashMap<>();
+            
+            cbcCiudades.removeAllItems();
+            
+            for (CiudadDTO ciudad : ciudades) {
+                String nombre = ciudad.getNombre();
+                int ciudad_id = ciudad.getId();
+                
+                
+                cbcCiudades.addItem(ciudad.getNombre());
+                ciudadMap.put(nombre, ciudad_id);
+                
+            }
+            
+            
+            cbcCiudades.setSelectedIndex(ciudadMap.get(ciudadNegocio.buscarPorId(cliente.getCiudad()).getNombre()) -1);
+            
+            
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(this, "Error al cargar las ciudades: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
     
     
         /**
@@ -185,7 +240,6 @@ public class FrmCartelera extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jblCinepolisLogo = new javax.swing.JLabel();
-        btnUbicacion = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
         cbcFunciones = new javax.swing.JComboBox<>();
         btnTickets = new javax.swing.JButton();
@@ -202,21 +256,12 @@ public class FrmCartelera extends javax.swing.JFrame {
         lblGenero = new javax.swing.JLabel();
         btnComprar = new javax.swing.JButton();
         lblImagenPelicula = new javax.swing.JLabel();
+        cbcCiudades = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Cartelera");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-
-        btnUbicacion.setBackground(new java.awt.Color(8, 148, 249));
-        btnUbicacion.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-        btnUbicacion.setText("Ubicación");
-        btnUbicacion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUbicacion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUbicacionActionPerformed(evt);
-            }
-        });
 
         btnVolver.setBackground(new java.awt.Color(8, 148, 249));
         btnVolver.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -369,11 +414,14 @@ public class FrmCartelera extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(160, Short.MAX_VALUE)
+                .addContainerGap(176, Short.MAX_VALUE)
                 .addComponent(jblCinepolisLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(144, 144, 144))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(61, 61, 61)
+                        .addComponent(lblImagenPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(44, 44, 44)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -381,11 +429,8 @@ public class FrmCartelera extends javax.swing.JFrame {
                                 .addComponent(btnVolver)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 340, Short.MAX_VALUE)
                                 .addComponent(btnTickets))
-                            .addComponent(btnUbicacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cbcFunciones, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(61, 61, 61)
-                        .addComponent(lblImagenPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(cbcFunciones, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cbcCiudades, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -398,13 +443,13 @@ public class FrmCartelera extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addComponent(jblCinepolisLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38)
-                .addComponent(btnUbicacion, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38)
+                .addGap(49, 49, 49)
+                .addComponent(cbcCiudades, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(cbcFunciones, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(55, 55, 55)
                 .addComponent(lblImagenPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVolver)
                     .addComponent(btnTickets))
@@ -430,10 +475,6 @@ public class FrmCartelera extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnUbicacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbicacionActionPerformed
-
-    }//GEN-LAST:event_btnUbicacionActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
 
@@ -493,8 +534,8 @@ public class FrmCartelera extends javax.swing.JFrame {
     private javax.swing.JButton btnComprar;
     private javax.swing.JButton btnRetroceso;
     private javax.swing.JButton btnTickets;
-    private javax.swing.JButton btnUbicacion;
     private javax.swing.JButton btnVolver;
+    private javax.swing.JComboBox<String> cbcCiudades;
     private javax.swing.JComboBox<String> cbcFunciones;
     private javax.swing.JComboBox<String> cbcFunciones1;
     private javax.swing.JPanel jPanel1;
