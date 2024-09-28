@@ -218,7 +218,7 @@ public class FrmIniciarSesion extends javax.swing.JFrame {
 
         if (campoTextoCorreo.getText().equals("admin")){
                 FrmPantallaAdmin admin = new FrmPantallaAdmin(this, peliculaNegocio, (ClienteNegocio) clienteNegocio, generoNegocio, clasificacionNegocio, paisNegocio, funcionNegocio,
-                                                              salaNegocio, sucursalNegocio);
+                                                              salaNegocio, sucursalNegocio, ciudadNegocio);
                 admin.setVisible(true);
                 this.setVisible(false);
 

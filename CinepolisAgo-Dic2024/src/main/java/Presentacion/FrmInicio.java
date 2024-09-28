@@ -38,6 +38,7 @@ public class FrmInicio extends javax.swing.JFrame {
     private ISalaNegocio salaNegocio;
     private ISucursalNegocio sucursalNegocio;
     
+    
     /**
      * Creates new form Inicio
      */
@@ -54,6 +55,7 @@ public class FrmInicio extends javax.swing.JFrame {
         this.funcionNegocio = funcionNegocio;
         this.salaNegocio = salaNegocio;
         this.sucursalNegocio = sucursalNegocio;
+        this.ciudadNegocio = ciudadNegocio;
 
         
         setImagenLabel(jblCinepolisLogo, rutaCinepolisLogo);

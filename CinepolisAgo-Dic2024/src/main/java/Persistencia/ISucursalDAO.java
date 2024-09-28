@@ -4,6 +4,7 @@
  */
 package Persistencia;
 
+import Entidades.SucursalEntidad;
 import java.util.List;
 
 /**
@@ -13,4 +14,8 @@ import java.util.List;
 public interface ISucursalDAO {
     
     List<String> obtenerSucursal() throws PersistenciaException;
+    
+    public List<String> obtenerSucursalesPorCiudad(String ciudad) throws PersistenciaException;
+    
+    public List<SucursalEntidad> buscarSucursalesPorIdCiudad(int idCiudad) throws PersistenciaException;
 }
