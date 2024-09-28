@@ -5,6 +5,10 @@
 package Negocio;
 
 import DTOs.SalaDTO;
+import DTOs.SalaFiltroTablaDTO;
+import DTOs.SalaGuardarDTO;
+import DTOs.SalaModificarDTO;
+import DTOs.SalaTablaDTO;
 import java.util.List;
 
 /**
@@ -18,5 +22,13 @@ public interface ISalaNegocio {
     List<String> obtenerSalasPorSucursal(int idSucursal) throws NegocioException;
     
     List<SalaDTO> obtenerIdSalasPorSucursal(int idSucursal) throws NegocioException;
+    
+    List<SalaTablaDTO> buscarSalasTabla(SalaFiltroTablaDTO filtro) throws NegocioException;
+    
+    public SalaDTO guardar(SalaGuardarDTO sala) throws NegocioException;
+    
+    public SalaDTO eliminar(int idSala) throws NegocioException;
+    
+    public SalaDTO modificar(SalaModificarDTO sala) throws NegocioException;
     
 }

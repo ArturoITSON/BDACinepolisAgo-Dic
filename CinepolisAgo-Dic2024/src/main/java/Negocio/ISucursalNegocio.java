@@ -4,6 +4,7 @@
  */
 package Negocio;
 
+import DTOs.SucursalDTO;
 import java.util.List;
 
 /**
@@ -13,5 +14,9 @@ import java.util.List;
 public interface ISucursalNegocio {
     
     List<String> obtenerSucursales() throws NegocioException;
+    
+    List<String> obtenerSucursalesPorCiudad(String ciudad) throws NegocioException;
+    
+    public List<SucursalDTO> buscarSucursalPorIdCiudad(int idCiudad) throws NegocioException;
     
 }

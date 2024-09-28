@@ -4,6 +4,7 @@
  */
 package Persistencia;
 
+import DTOs.CiudadDTO;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -63,5 +64,44 @@ public class CiudadDAO implements ICiudadDAO {
      }
     }
     
-    
+    @Override
+    public List<CiudadDTO> obtenerCiudadesDTO() throws PersistenciaException {
+    List<CiudadDTO> ciudades = new ArrayList<>();
+    Connection conexion = null;
+    Statement comandoSQL = null;
+    ResultSet resultado = null;
+
+    try {
+        conexion = this.conexionBD.crearConexion();
+        String codigoSQL = "SELECT id, nombre FROM Ciudad"; // Ahora seleccionamos el ID también
+        comandoSQL = conexion.createStatement();
+        resultado = comandoSQL.executeQuery(codigoSQL);
+
+        while (resultado.next()) {
+            int id = resultado.getInt("id");
+            String nombre = resultado.getString("nombre");
+            CiudadDTO ciudadDTO = new CiudadDTO(id, nombre); // Crear una instancia de CiudadDTO
+            ciudades.add(ciudadDTO);
+        }
+        return ciudades;
+    } catch (SQLException ex) {
+        System.out.println(ex.getMessage());
+        throw new PersistenciaException("Ocurrió un error al leer la base de datos de ciudades, inténtelo de nuevo.");
+    } finally {
+        try {
+            if (resultado != null) {
+                resultado.close();
+            }
+            if (comandoSQL != null) {
+                comandoSQL.close();
+            }
+            if (conexion != null) {
+                conexion.close();
+            }
+        } catch (SQLException e) {
+            throw new PersistenciaException("Error al cerrar los recursos: " + e.getMessage());
+        }
+    }
+}
+
 }

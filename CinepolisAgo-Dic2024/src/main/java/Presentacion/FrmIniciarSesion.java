@@ -8,6 +8,7 @@ import DTOs.ClienteBuscarDTO;
 import DTOs.ClienteDTO;
 import Entidades.ClienteEntidad;
 import Negocio.ClienteNegocio;
+import Negocio.ICiudadNegocio;
 import Negocio.IClasificacionNegocio;
 import Negocio.IClienteNegocio;
 import Negocio.IFuncionNegocio;
@@ -43,13 +44,14 @@ public class FrmIniciarSesion extends javax.swing.JFrame {
     IFuncionNegocio funcionNegocio;
     ISalaNegocio salaNegocio;
     ISucursalNegocio sucursalNegocio;
+    ICiudadNegocio ciudadNegocio;
     
     
     /**
      * Creates new form FrmIniciarSesion
      */
     public FrmIniciarSesion(ClienteNegocio clienteNegocio, FrmInicio inicio, IPeliculaNegocio peliculaNegocio, IGeneroNegocio generoNegocio, IClasificacionNegocio clasificacionNegocio, IPaisNegocio paisNegocio,
-                            IFuncionNegocio funcionNegocio, ISalaNegocio salaNegocio, ISucursalNegocio sucursalNegocio) {
+                            IFuncionNegocio funcionNegocio, ISalaNegocio salaNegocio, ISucursalNegocio sucursalNegocio, ICiudadNegocio ciudadNegocio) {
         initComponents();
         
         
@@ -62,6 +64,7 @@ public class FrmIniciarSesion extends javax.swing.JFrame {
         this.funcionNegocio = funcionNegocio;
         this.salaNegocio = salaNegocio;
         this.sucursalNegocio = sucursalNegocio;
+        this.ciudadNegocio = ciudadNegocio;
         
         setImagenLabel(jblCinepolisLogo, rutaCinepolisLogo);
         
@@ -215,7 +218,7 @@ public class FrmIniciarSesion extends javax.swing.JFrame {
 
         if (campoTextoCorreo.getText().equals("admin")){
                 FrmPantallaAdmin admin = new FrmPantallaAdmin(this, peliculaNegocio, (ClienteNegocio) clienteNegocio, generoNegocio, clasificacionNegocio, paisNegocio, funcionNegocio,
-                                                              salaNegocio, sucursalNegocio);
+                                                              salaNegocio, sucursalNegocio, ciudadNegocio);
                 admin.setVisible(true);
                 this.setVisible(false);
 

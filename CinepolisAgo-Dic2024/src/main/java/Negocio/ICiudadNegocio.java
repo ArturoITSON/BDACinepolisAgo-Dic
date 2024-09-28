@@ -4,6 +4,7 @@
  */
 package Negocio;
 
+import DTOs.CiudadDTO;
 import java.util.List;
 
 /**
@@ -13,5 +14,7 @@ import java.util.List;
 public interface ICiudadNegocio {
     
     List<String> obtenerCiudades() throws NegocioException;
+    
+    public List<CiudadDTO> obtenerCiudadesDTO() throws NegocioException;
 
 }

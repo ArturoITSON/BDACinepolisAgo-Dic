@@ -38,6 +38,7 @@ public class FrmInicio extends javax.swing.JFrame {
     private ISalaNegocio salaNegocio;
     private ISucursalNegocio sucursalNegocio;
     
+    
     /**
      * Creates new form Inicio
      */
@@ -54,6 +55,7 @@ public class FrmInicio extends javax.swing.JFrame {
         this.funcionNegocio = funcionNegocio;
         this.salaNegocio = salaNegocio;
         this.sucursalNegocio = sucursalNegocio;
+        this.ciudadNegocio = ciudadNegocio;
 
         
         setImagenLabel(jblCinepolisLogo, rutaCinepolisLogo);
@@ -178,7 +180,7 @@ public class FrmInicio extends javax.swing.JFrame {
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
         // TODO add your handling code here:
         FrmIniciarSesion iniciarSesion = new FrmIniciarSesion((ClienteNegocio) clienteNegocio, this, peliculaNegocio, generoNegocio, clasificacionNegocio, paisNegocio, funcionNegocio
-                                                                , salaNegocio, sucursalNegocio);
+                                                                , salaNegocio, sucursalNegocio, ciudadNegocio);
         iniciarSesion.setVisible(true);
         this.setVisible(false);
 

@@ -5,6 +5,7 @@
 package Presentacion;
 
 import Negocio.ClienteNegocio;
+import Negocio.ICiudadNegocio;
 import Negocio.IClasificacionNegocio;
 import Negocio.IClienteNegocio;
 import Negocio.IFuncionNegocio;
@@ -38,6 +39,7 @@ public class FrmPantallaAdmin extends javax.swing.JFrame {
     IFuncionNegocio funcionNegocio;
     ISalaNegocio salaNegocio;
     ISucursalNegocio sucursalNegocio;
+    ICiudadNegocio ciudadNegocio;
     
     /**
      * Creates new form FrmPantallaAdmin
@@ -47,7 +49,7 @@ public class FrmPantallaAdmin extends javax.swing.JFrame {
      * @param clasificacionNegocio
      */
     public FrmPantallaAdmin(FrmIniciarSesion iniciarSesion, IPeliculaNegocio peliculaNegocio, IClienteNegocio clienteNegocio, IGeneroNegocio generoNegocio, IClasificacionNegocio clasificacionNegocio, IPaisNegocio paisNegocio,
-                            IFuncionNegocio funcionNegocio, ISalaNegocio salaNegocio, ISucursalNegocio sucursalNegocio) {
+                            IFuncionNegocio funcionNegocio, ISalaNegocio salaNegocio, ISucursalNegocio sucursalNegocio, ICiudadNegocio ciudadNegocio) {
         initComponents();
         
         this.iniciarSesion = iniciarSesion;
@@ -58,6 +60,7 @@ public class FrmPantallaAdmin extends javax.swing.JFrame {
         this.funcionNegocio = funcionNegocio;
         this.salaNegocio = salaNegocio;
         this.sucursalNegocio = sucursalNegocio;
+        this.ciudadNegocio = ciudadNegocio;
         
         setImagenLabel(jblCinepolisLogo, rutaCinepolisLogo);
         this.peliculaNegocio = peliculaNegocio;
@@ -102,6 +105,7 @@ public class FrmPantallaAdmin extends javax.swing.JFrame {
         btnRegresar = new javax.swing.JButton();
         btnReportes = new javax.swing.JButton();
         btnModificarCliente = new javax.swing.JButton();
+        btnModificarSala = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Pantalla Administrador");
@@ -174,6 +178,16 @@ public class FrmPantallaAdmin extends javax.swing.JFrame {
             }
         });
 
+        btnModificarSala.setBackground(new java.awt.Color(8, 148, 249));
+        btnModificarSala.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnModificarSala.setText("Modificar Sala");
+        btnModificarSala.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnModificarSala.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarSalaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -182,17 +196,18 @@ public class FrmPantallaAdmin extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(66, 66, 66)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnModificarFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnModificarPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnModificarPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnModificarSala, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(62, 62, 62)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnModificarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -207,9 +222,11 @@ public class FrmPantallaAdmin extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnModificarFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(112, 112, 112)
-                .addComponent(btnRegresar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(19, 19, 19))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                .addComponent(btnModificarSala, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(46, 46, 46)
+                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -263,14 +280,24 @@ public class FrmPantallaAdmin extends javax.swing.JFrame {
 
         editarCliente.setVisible(true);
 
-        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btnModificarClienteActionPerformed
+
+    private void btnModificarSalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarSalaActionPerformed
+        // TODO add your handling code here:
+        FrmModificarSala modificarSala = new FrmModificarSala(this, salaNegocio, sucursalNegocio, ciudadNegocio);
+        
+        modificarSala.setVisible(true);
+        
+        this.dispose();
+    }//GEN-LAST:event_btnModificarSalaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnModificarCliente;
     private javax.swing.JButton btnModificarFuncion;
     private javax.swing.JButton btnModificarPelicula;
+    private javax.swing.JButton btnModificarSala;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JButton btnReportes;
     private javax.swing.JPanel jPanel1;

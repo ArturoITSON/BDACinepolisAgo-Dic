@@ -4,6 +4,7 @@
  */
 package Negocio;
 
+import DTOs.CiudadDTO;
 import Persistencia.ICiudadDAO;
 import Persistencia.PersistenciaException;
 import java.util.List;
@@ -14,20 +15,17 @@ import java.util.logging.Logger;
  *
  * @author Arturo ITSON
  */
-public class CiudadNegocio implements ICiudadNegocio{
-    
-    
+public class CiudadNegocio implements ICiudadNegocio {
+
     ICiudadDAO ciudadDAO;
 
-    
     public CiudadNegocio(ICiudadDAO ciudadDAO) {
         this.ciudadDAO = ciudadDAO;
     }
-    
-    
+
     @Override
     public List<String> obtenerCiudades() throws NegocioException {
-        
+
         List<String> ciudades;
         try {
             ciudades = ciudadDAO.obtenerCiudades();
@@ -36,6 +34,16 @@ public class CiudadNegocio implements ICiudadNegocio{
             Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    @Override
+    public List<CiudadDTO> obtenerCiudadesDTO() throws NegocioException {
+        try {
+            return ciudadDAO.obtenerCiudadesDTO();
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
+            throw new NegocioException("Error al obtener las ciudades.");
+        }
     }
 
 }
