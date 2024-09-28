@@ -32,5 +32,7 @@ public interface IPeliculaNegocio {
     List<PeliculaDTO> obtenerPeliculasDTO() throws NegocioException;
     
     List<String> obtenerPeliculas() throws NegocioException;
+    
+    PeliculaDTO obtenerPeliculasPorId(int idPelicula) throws NegocioException;
             
 }

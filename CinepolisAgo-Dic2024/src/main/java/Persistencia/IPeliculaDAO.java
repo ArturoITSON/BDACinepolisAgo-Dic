@@ -4,6 +4,7 @@
  */
 package Persistencia;
 
+import DTOs.PeliculaDTO;
 import DTOs.PeliculaFiltroTablaDTO;
 import DTOs.PeliculaGuardarDTO;
 import DTOs.PeliculaModificarDTO;
@@ -32,5 +33,8 @@ public interface IPeliculaDAO {
     PeliculaEntidad eliminarPelicula(int idPelicula) throws PersistenciaException;
     
     List<String> obtenerPeliculas() throws PersistenciaException;
+    
+    PeliculaEntidad obtenerPeliculas(int idPelicula) throws PersistenciaException;   
+    
     
 }
