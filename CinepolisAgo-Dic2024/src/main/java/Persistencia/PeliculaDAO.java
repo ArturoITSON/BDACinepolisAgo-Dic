@@ -21,22 +21,18 @@ import java.util.List;
  *
  * @author Arturo ITSON
  */
-public class PeliculaDAO implements IPeliculaDAO{
+public class PeliculaDAO implements IPeliculaDAO {
 
-    
-    
     private IConexionBD conexionBD;
     private Connection conexionGeneral;
-    
-    
+
     public PeliculaDAO(IConexionBD conexionBD) {
         this.conexionBD = conexionBD;
     }
-    
-    
+
     @Override
     public List<PeliculaTablaDTO> buscarPeliculasTabla(PeliculaFiltroTablaDTO filtro) throws PersistenciaException {
-                try {
+        try {
             List<PeliculaTablaDTO> peliculaLista = null;
             Connection conexion = this.conexionBD.crearConexion();
 
@@ -80,12 +76,10 @@ public class PeliculaDAO implements IPeliculaDAO{
             throw new PersistenciaException("Ocurrió un error al leer la base de datos, inténtelo de nuevo y si el error persiste comuníquese con el encargado del sistema.");
         }
     }
- 
-    
+
     @Override
-    public PeliculaEntidad guardar(PeliculaGuardarDTO pelicula) throws PersistenciaException{
-    
-           
+    public PeliculaEntidad guardar(PeliculaGuardarDTO pelicula) throws PersistenciaException {
+
         try {
             Connection conexion = this.conexionBD.crearConexion();
             String insertCliente = """
@@ -131,10 +125,9 @@ public class PeliculaDAO implements IPeliculaDAO{
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             throw new PersistenciaException("Ocurrió un error al leer la base de datos, inténtelo de nuevo y si el error persiste comuníquese con el encargado del sistema.");
-        }    
-        
-    }
+        }
 
+    }
 
     @Override
     public PeliculaEntidad buscarPorId(int id) throws PersistenciaException {
@@ -176,13 +169,45 @@ public class PeliculaDAO implements IPeliculaDAO{
         }
     }
 
+    @Override
+public PeliculaEntidad buscarPorTitulo(String titulo) throws PersistenciaException {
+    try {
+        // Utilizar el método ya existente para obtener la conexión, siguiendo el mismo patrón que otros métodos
+        Connection connection = this.conexionBD.crearConexion();
+        
+        // Preparar la consulta
+        String query = "SELECT * FROM peliculas WHERE titulo = ?";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, titulo);
+
+        // Ejecutar la consulta
+        ResultSet resultSet = statement.executeQuery();
+
+        if (resultSet.next()) {
+            return new PeliculaEntidad(
+                resultSet.getInt("id"),
+                resultSet.getString("titulo"),
+                resultSet.getInt("clasificacion_id"),
+                resultSet.getInt("duracion"),
+                resultSet.getString("sinopsis"),
+                resultSet.getInt("genero_id"),
+                resultSet.getString("trailer"),
+                resultSet.getString("link_imagen"),
+                resultSet.getInt("pais_id")
+            );
+        }
+    } catch (SQLException e) {
+        throw new PersistenciaException("Error al buscar la película por título: " + titulo);
+    }
+    return null;
+}
 
     @Override
     public PeliculaEntidad modificarPelicula(PeliculaModificarDTO pelicula) throws PersistenciaException {
-        
+
         Connection conexion = null;
         PreparedStatement preparedStatement = null;
-        
+
         PeliculaEntidad peliculaEditada = new PeliculaEntidad();
         peliculaEditada.setClasificacion_id(pelicula.getClasificacion_id());
         peliculaEditada.setDuracion(pelicula.getDuracion());
@@ -190,8 +215,7 @@ public class PeliculaDAO implements IPeliculaDAO{
         peliculaEditada.setId(pelicula.getId());
         peliculaEditada.setPais_id(pelicula.getPais_id());
         peliculaEditada.setTitulo(pelicula.getTitulo());
-        
-        
+
         try {
             conexion = conexionBD.crearConexion();
             String sentenciaSql = "UPDATE Pelicula SET titulo = ?, clasificacion_id = ?, duracion = ?, genero_id = ?, pais_id = ? WHERE id = ?";
@@ -203,12 +227,10 @@ public class PeliculaDAO implements IPeliculaDAO{
             preparedStatement.setInt(5, peliculaEditada.getPais_id());
             preparedStatement.setInt(6, peliculaEditada.getId());
 
-            
-            
             preparedStatement.executeUpdate();
             System.out.println(peliculaEditada.toString() + "dao");
             return peliculaEditada;
-            
+
         } catch (SQLException ex) {
             throw new PersistenciaException("Error al editar la pelicula: " + ex.getMessage());
         } finally {
@@ -224,25 +246,24 @@ public class PeliculaDAO implements IPeliculaDAO{
             }
         }
     }
-    
-    
+
     @Override
     public PeliculaEntidad eliminarPelicula(int idPelicula) throws PersistenciaException {
-        
+
         Connection conexion = null;
         PreparedStatement preparedStatement = null;
         PeliculaEntidad peliculaEliminada = this.buscarPorId(idPelicula);
-        
-            try {
+
+        try {
             conexion = conexionBD.crearConexion();
             String sentenciaSql = "DELETE FROM Pelicula WHERE id = ?";
             preparedStatement = conexion.prepareStatement(sentenciaSql);
             preparedStatement.setInt(1, peliculaEliminada.getId());
 
             preparedStatement.executeUpdate();
-            
+
             return peliculaEliminada;
-            
+
         } catch (SQLException ex) {
             throw new PersistenciaException("Error al eliminar la pelicula: " + ex.getMessage());
         } finally {
@@ -258,48 +279,87 @@ public class PeliculaDAO implements IPeliculaDAO{
             }
         }
     }
-    
-    
+
     @Override
     public List<String> obtenerPeliculas() throws PersistenciaException {
-    List<String> peliculas = new ArrayList<>();
+        List<String> peliculas = new ArrayList<>();
+        Connection conexion = null;
+        Statement comandoSQL = null;
+        ResultSet resultado = null;
+
+        try {
+            conexion = this.conexionBD.crearConexion();
+            String codigoSQL = "SELECT titulo FROM Pelicula";
+            comandoSQL = conexion.createStatement();
+            resultado = comandoSQL.executeQuery(codigoSQL);
+
+            while (resultado.next()) {
+                peliculas.add(resultado.getString("titulo"));
+            }
+            return peliculas;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new PersistenciaException("Ocurrió un error al leer la base de datos de peliculas, inténtelo de nuevo.");
+        } finally {
+            try {
+                if (resultado != null) {
+                    resultado.close();
+                }
+                if (comandoSQL != null) {
+                    comandoSQL.close();
+                }
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (SQLException e) {
+                throw new PersistenciaException("Error al cerrar los recursos: " + e.getMessage());
+            }
+        }
+    }
+    
+    @Override
+public List<PeliculaEntidad> obtenerTodasLasPeliculas() throws PersistenciaException {
+    List<PeliculaEntidad> peliculas = new ArrayList<>();
     Connection conexion = null;
     Statement comandoSQL = null;
     ResultSet resultado = null;
 
     try {
         conexion = this.conexionBD.crearConexion();
-        String codigoSQL = "SELECT titulo FROM Pelicula";
+        String codigoSQL = "SELECT * FROM Pelicula";
         comandoSQL = conexion.createStatement();
         resultado = comandoSQL.executeQuery(codigoSQL);
 
         while (resultado.next()) {
-            peliculas.add(resultado.getString("titulo"));
+            PeliculaEntidad pelicula = new PeliculaEntidad(
+                resultado.getInt("id"),
+                resultado.getString("titulo"),
+                resultado.getInt("clasificacion_id"),
+                resultado.getInt("duracion"),
+                resultado.getString("sinopsis"),
+                resultado.getInt("genero_id"),
+                resultado.getString("trailer"),
+                resultado.getString("link_imagen"),
+                resultado.getInt("pais_id")
+            );
+            peliculas.add(pelicula);
         }
+
         return peliculas;
     } catch (SQLException ex) {
-        System.out.println(ex.getMessage());
         throw new PersistenciaException("Ocurrió un error al leer la base de datos de peliculas, inténtelo de nuevo.");
     } finally {
         try {
-            if (resultado != null) {
-                resultado.close();
-            }
-            if (comandoSQL != null) {
-                comandoSQL.close();
-            }
-            if (conexion != null) {
-                conexion.close();
-            }
+            if (resultado != null) resultado.close();
+            if (comandoSQL != null) comandoSQL.close();
+            if (conexion != null) conexion.close();
         } catch (SQLException e) {
             throw new PersistenciaException("Error al cerrar los recursos: " + e.getMessage());
         }
-     }
     }
-    
-    
-    
-    
+}
+
+
     private PeliculaEntidad peliculaEntidad(ResultSet resultado) throws SQLException {
         int id = resultado.getInt("id");
         String titulo = resultado.getString("titulo");
@@ -311,9 +371,8 @@ public class PeliculaDAO implements IPeliculaDAO{
         String linkImagen = resultado.getString("link_imagen");
         int pais = resultado.getInt("pais_id");
         return new PeliculaEntidad(id, titulo, clasificacion, duracion, sinopsis, genero, trailer, linkImagen, pais);
-    }  
+    }
 
-    
     private PeliculaTablaDTO peliculaTablaDTO(ResultSet resultado) throws SQLException {
         int id = resultado.getInt("id");
         String titulo = resultado.getString("titulo");

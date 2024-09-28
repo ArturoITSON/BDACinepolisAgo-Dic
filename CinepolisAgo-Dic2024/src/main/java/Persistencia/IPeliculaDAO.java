@@ -19,9 +19,13 @@ public interface IPeliculaDAO {
     
     List<PeliculaTablaDTO> buscarPeliculasTabla(PeliculaFiltroTablaDTO filtro) throws PersistenciaException;
     
+    List<PeliculaEntidad> obtenerTodasLasPeliculas() throws PersistenciaException;
+    
     PeliculaEntidad guardar(PeliculaGuardarDTO pelicula) throws PersistenciaException;
     
     PeliculaEntidad buscarPorId(int id) throws PersistenciaException;
+    
+    PeliculaEntidad buscarPorTitulo(String titulo) throws PersistenciaException;
     
     PeliculaEntidad modificarPelicula(PeliculaModificarDTO pelicula) throws PersistenciaException;
     
