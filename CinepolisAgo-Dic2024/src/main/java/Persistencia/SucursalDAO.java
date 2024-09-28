@@ -147,5 +147,47 @@ public List<String> obtenerSucursalesPorCiudad(String ciudad) throws Persistenci
         }
     }
     
+    @Override
+    public List<SucursalEntidad> buscarSucursalesPorNombre(String nombreSucursal) throws PersistenciaException {
 
+        List<SucursalEntidad> sucursales = new ArrayList<>();
+
+        try {
+            SucursalEntidad sucursal = null;
+            Connection conexion = this.conexionBD.crearConexion();
+
+            String codigoSQL = """
+                               SELECT
+                                    id,
+                                    nombre,
+                                    ciudad_id
+                               FROM Sucursal
+                               WHERE nombre = ?
+                               """;
+
+            PreparedStatement preparedStatement = conexion.prepareStatement(codigoSQL);
+            preparedStatement.setString(1, nombreSucursal);
+
+            ResultSet resultado = preparedStatement.executeQuery();
+            while (resultado.next()) {
+                sucursal = new SucursalEntidad(
+                    resultado.getInt("id"),
+                    resultado.getString("nombre"),
+                    resultado.getInt("ciudad_id")
+                );
+                sucursales.add(sucursal);
+            }
+
+            resultado.close();
+            preparedStatement.close();
+            conexion.close();
+
+            return sucursales;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new PersistenciaException("Ocurrió un error al leer la base de datos, inténtelo de nuevo y si el error persiste comuníquese con el encargado del sistema.");
+        }
+    }
+    
+    
 }

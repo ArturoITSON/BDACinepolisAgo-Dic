@@ -16,10 +16,12 @@ import DTOs.SalaDTO;
 import DTOs.SucursalDTO;
 import Negocio.ICiudadNegocio;
 import Negocio.IFuncionNegocio;
+import Negocio.IGeneroNegocio;
 import Negocio.IPeliculaNegocio;
 import Negocio.ISalaNegocio;
 import Negocio.ISucursalNegocio;
 import Negocio.NegocioException;
+import Persistencia.PersistenciaException;
 import java.awt.Image;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -54,6 +56,7 @@ public class FrmCartelera extends javax.swing.JFrame {
     ISucursalNegocio sucursalNegocio;
     ISalaNegocio salaNegocio;
     FrmIniciarSesion iniciarSesion;
+    IGeneroNegocio generoNegocio;
     
     String rutaReloj = "src/main/java/utilerias/Imagenes/reloj.png";
     String rutaCinepolisLogo = "src/main/java/utilerias/Imagenes/CinepolisLogo.png";
@@ -67,11 +70,16 @@ public class FrmCartelera extends javax.swing.JFrame {
     
     ClienteBuscarDTO cliente;
     
+    static int cont = 1;
+    static String nombreCiudad;
+    static String nombreSucursal;
+    static String nombreSala;
+    
     /**
      * Creates new form FrmCartelera
      */
     public FrmCartelera(IPeliculaNegocio peliculaNegocio, ICiudadNegocio ciudadNegocio, ClienteBuscarDTO cliente, ISucursalNegocio sucursalNegocio,
-                        FrmIniciarSesion iniciarSesion, ISalaNegocio salaNegocio, IFuncionNegocio funcionNegocio) {
+                        FrmIniciarSesion iniciarSesion, ISalaNegocio salaNegocio, IFuncionNegocio funcionNegocio, IGeneroNegocio generoNegocio) {
         initComponents();
         
         this.ciudadNegocio = ciudadNegocio;
@@ -81,8 +89,19 @@ public class FrmCartelera extends javax.swing.JFrame {
         this.salaNegocio = salaNegocio;
         this.funcionNegocio = funcionNegocio;
         this.peliculaNegocio = peliculaNegocio;
+        this.generoNegocio = generoNegocio;
+        nombreSucursal = null;
+        nombreCiudad = null;
+        
+        PeliculaFiltroTablaDTO filtro = this.obtenerFiltrosTabla();
         
         setCinepolisLogo(jblCinepolis, rutaCinepolisLogo);
+
+        btnRetroceso.setEnabled(false);
+
+        
+        
+        
         
         
         try {
@@ -90,30 +109,17 @@ public class FrmCartelera extends javax.swing.JFrame {
         } catch (NegocioException ex) {
             Logger.getLogger(FrmCartelera.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        PeliculaFiltroTablaDTO filtro = this.obtenerFiltrosTabla();
-//        FuncionFiltroTablaDTO filtroFuncion = this.obtenerFiltrosTablaFuncion();
-        
-            
-            //this.listaFuncion = funcionNegocio.buscarFuncionesTabla(filtroFuncion);
-//            
-//            for(int i = 0; i< listaFuncion.size(); i++){
-//                peliculasID.add(listaFuncion.get(i).getPelicula_id());
-//            }
-            
-
-        btnRetroceso.setEnabled(false);
-
-        
-        cargarFunciones();
-        
         try {
-            cargarMetodosDatos();
+            cargarSucursales();
         } catch (NegocioException ex) {
             Logger.getLogger(FrmCartelera.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MalformedURLException ex) {
+        }
+        try {
+            cargarSalas();
+        } catch (NegocioException ex) {
             Logger.getLogger(FrmCartelera.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
 
 
     }
@@ -127,8 +133,8 @@ public class FrmCartelera extends javax.swing.JFrame {
        setDescripcion();
        setTituloPelicula();
        setDuracion();
-        
-        
+       setGenero();
+       setFunciones();
         
         
     
@@ -147,29 +153,35 @@ public class FrmCartelera extends javax.swing.JFrame {
             for (CiudadDTO ciudad : ciudades) {
                 String nombre = ciudad.getNombre();
                 int ciudad_id = ciudad.getId();
-                
-                System.out.println( "tamaño es: " + ciudades.size());
-                
+    
                 cbcCiudades.addItem(ciudad.getNombre());
                 ciudadMap.put(nombre, ciudad_id);
                 
             }
             
-//          if (cont == 1){
+          System.out.println( "tamano es: " + ciudades.size()); 
+       //   if (cont == 1){
+          System.out.println(" ciudad " + (ciudadMap.get(ciudadNegocio.buscarPorId(cliente.getCiudad()).getNombre())));  
+         // cbcCiudades.setSelectedItem(ciudadNegocio.buscarPorId(cliente.getCiudad()).getNombre());
          // cbcCiudades.setSelectedIndex(ciudadMap.get(ciudadNegocio.buscarPorId(cliente.getCiudad()).getNombre()) - 1);
+       //  cbcCiudades.setSelectedIndex(1);
 //            cont++;
-//            }
             
+            nombreCiudad = (String) cbcCiudades.getSelectedItem();
+            System.out.println("almcen temporal de ciudad " + nombreCiudad);
             
         } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(this, "Error al cargar las ciudades: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+
     }
     
     
     private void cargarSucursales() throws NegocioException {
         
         try {
+            
+            
             List<SucursalDTO> sucursales = sucursalNegocio.buscarSucursalPorIdCiudad(cbcCiudades.getSelectedIndex() + 1);
             
             //List<SucursalDTO> sucursales = (List<SucursalDTO>) sucursalNegocio.buscarSucursalPorIdCiudad(id);
@@ -189,22 +201,36 @@ public class FrmCartelera extends javax.swing.JFrame {
                 sucursalMap.put(nombre,ciudad_id);
                 
             }
-           
-
+            
             
         } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(this, "Error al cargar las sucursales: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+        
+        
     }
     
     
     
     private void cargarSalas() throws NegocioException {
         
+             nombreSucursal = (String) cbcSucursales.getSelectedItem();
+             System.out.println("almcen temporal de sucursal " + nombreSucursal);
+        
         try {
-            List<SalaDTO> salas = salaNegocio.obtenerIdSalasPorSucursal(cbcSucursales.getSelectedIndex() + 1);
+           
+            System.out.println(nombreSucursal);
+            List<SucursalDTO> sucursales = sucursalNegocio.buscarSucursalesPorNombre(nombreSucursal);
+            System.out.println("vacio " + sucursales.isEmpty());
+            
+            
+            List<SalaDTO> salas = salaNegocio.obtenerIdSalasPorSucursal(sucursales.get(0).getId());
             
             //List<SucursalDTO> sucursales = (List<SucursalDTO>) sucursalNegocio.buscarSucursalPorIdCiudad(id);
+            salas.clear();
+
+            
+            salas = salaNegocio.obtenerIdSalasPorSucursal(sucursalNegocio.buscarSucursalesPorNombre(nombreSucursal).get(0).getId());
             
             salaMap = new HashMap<>();
             
@@ -220,8 +246,8 @@ public class FrmCartelera extends javax.swing.JFrame {
                 salaMap.put(nombre,idSala);
                 
             }
-           
 
+            nombreSala = (String) cbcSalas.getSelectedItem();
             
         } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(this, "Error al cargar las sucursales: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -231,10 +257,12 @@ public class FrmCartelera extends javax.swing.JFrame {
     
     private void cargarFunciones(){
     
+             nombreSala = (String) cbcSalas.getSelectedItem();
+             System.out.println("almcen temporal de salas " + nombreSala);
+             peliculasID.clear();
+        
         try{
-            
-            List<FuncionDTO> funciones = funcionNegocio.buscarFuncionesPorIdSala(cbcSalas.getSelectedIndex() + 2);
-            
+            List<FuncionDTO> funciones = funcionNegocio.buscarFuncionesPorIdSala(salaNegocio.buscarSalasPorNombre(nombreSala).getId());
             
             for(int i = 0; i< funciones.size(); i++){
                 peliculasID.add(funciones.get(i).getPelicula_id());
@@ -247,13 +275,15 @@ public class FrmCartelera extends javax.swing.JFrame {
                 this.listaPelicula.add(peliculaNegocio.obtenerPeliculasPorId((int) peliculasID.get(i)));
             }
             
+            System.out.println("hay funciones " + funciones.size());
+
+            
             try {
                 cargarMetodosDatos();
             } catch (MalformedURLException ex) {
                 Logger.getLogger(FrmCartelera.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            System.out.println(listaPelicula.get(0).getTitulo());
         }
         catch(NegocioException ex){
             JOptionPane.showMessageDialog(this, "Error al cargar las funciones: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -273,7 +303,7 @@ public class FrmCartelera extends javax.swing.JFrame {
         ImageIcon image = new ImageIcon(ruta);
         
         Icon icon = new ImageIcon(
-       image.getImage().getScaledInstance(nombreJlb.getWidth(), nombreJlb.getHeight(), Image.SCALE_DEFAULT));
+        image.getImage().getScaledInstance(nombreJlb.getWidth(), nombreJlb.getHeight(), Image.SCALE_DEFAULT));
         
         nombreJlb.setIcon(icon);
         
@@ -304,7 +334,7 @@ public class FrmCartelera extends javax.swing.JFrame {
         String imagenLink = null;
         
             
-        imagenLink = this.listaPelicula.get(0).getLinkImagen();
+        imagenLink = this.listaPelicula.get(pagina).getLinkImagen();
         
         return imagenLink;
     }
@@ -327,17 +357,41 @@ public class FrmCartelera extends javax.swing.JFrame {
             
         String inicio = String.valueOf(this.listaPelicula.get(pagina).getDuracion());
         
-        lblHorario.setText("Duracion: "  + inicio + "m");
+        lblDuracion.setText("Duracion: "  + inicio + "m");
+    } 
+    
+    private void setGenero() throws NegocioException{
+            
+        int generoId = this.listaPelicula.get(pagina).getGenero_id();
+  
+        try {
+            lblGenero.setText(generoNegocio.buscarGeneroPorId(generoId).getNombre());
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(FrmCartelera.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    } 
+    
+    private void setFunciones() throws NegocioException{
+            
+        
+        cbcHorarios.removeAllItems();
+        List<FuncionDTO> funcionesPelicula = funcionNegocio.buscarFuncionesPorIdSalaYIdPelicula(salaNegocio.buscarSalasPorNombre(nombreSala).getId() , 
+                                                                                                this.listaPelicula.get(pagina).getId());
+        
+        for (int i = 0; i < funcionesPelicula.size(); i++) {
+            cbcHorarios.addItem(funcionesPelicula.get(i).getEmpezaFuncion().toString());
+            
+        }
+
+        
     } 
     
     
     private PeliculaFiltroTablaDTO obtenerFiltrosTabla() {
         return new PeliculaFiltroTablaDTO(this.LIMITE, this.pagina, "");
     }
+
     
-//    private FuncionFiltroTablaDTO obtenerFiltrosTablaFuncion() {
-//        return new FuncionFiltroTablaDTO(this.LIMITE, this.pagina, "");
-//    }
     
     
     
@@ -374,11 +428,11 @@ public class FrmCartelera extends javax.swing.JFrame {
         lblFuncion = new javax.swing.JLabel();
         btnRetroceso = new javax.swing.JButton();
         btnAvanzar = new javax.swing.JButton();
-        cbcFunciones1 = new javax.swing.JComboBox<>();
+        cbcHorarios = new javax.swing.JComboBox<>();
         lblFunciones = new javax.swing.JLabel();
         lblDescripcion = new javax.swing.JLabel();
         lblTitulo = new javax.swing.JLabel();
-        lblHorario = new javax.swing.JLabel();
+        lblDuracion = new javax.swing.JLabel();
         lblGenero = new javax.swing.JLabel();
         btnComprar = new javax.swing.JButton();
         lblImagenPelicula = new javax.swing.JLabel();
@@ -406,6 +460,11 @@ public class FrmCartelera extends javax.swing.JFrame {
         });
 
         cbcSucursales.setBackground(new java.awt.Color(136, 201, 239));
+        cbcSucursales.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbcSucursalesItemStateChanged(evt);
+            }
+        });
         cbcSucursales.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbcSucursalesActionPerformed(evt);
@@ -444,19 +503,20 @@ public class FrmCartelera extends javax.swing.JFrame {
             }
         });
 
-        cbcFunciones1.setBackground(new java.awt.Color(136, 201, 239));
+        cbcHorarios.setBackground(new java.awt.Color(136, 201, 239));
 
+        lblFunciones.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblFunciones.setText("Funciones");
 
         lblDescripcion.setText("Descripcion");
 
-        lblTitulo.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblTitulo.setText("Titulo");
 
-        lblHorario.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblHorario.setText("Horario");
+        lblDuracion.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblDuracion.setText("Horario");
 
-        lblGenero.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblGenero.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblGenero.setText("Genero");
         lblGenero.setToolTipText("");
 
@@ -484,29 +544,25 @@ public class FrmCartelera extends javax.swing.JFrame {
                             .addGroup(panel2Layout.createSequentialGroup()
                                 .addComponent(lblTitulo)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(lblHorario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(lblDuracion, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE))
                         .addGap(12, 12, 12)
                         .addComponent(lblGenero)
                         .addGap(45, 45, 45)
                         .addComponent(btnRetroceso)
                         .addGap(18, 18, 18)
-                        .addComponent(btnAvanzar)
-                        .addGap(18, 18, 18))
+                        .addComponent(btnAvanzar))
                     .addGroup(panel2Layout.createSequentialGroup()
-                        .addGap(119, 119, 119)
-                        .addComponent(cbcFunciones1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cbcHorarios, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnComprar, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(42, Short.MAX_VALUE))))
+                        .addComponent(btnComprar)))
+                .addGap(18, 18, 18))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panel2Layout.createSequentialGroup()
-                        .addComponent(lblFunciones, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel2Layout.createSequentialGroup()
-                        .addComponent(lblDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(160, 160, 160))))
+                    .addComponent(lblFunciones)
+                    .addComponent(lblDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(160, 160, 160))
             .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panel2Layout.createSequentialGroup()
                     .addContainerGap()
@@ -525,18 +581,18 @@ public class FrmCartelera extends javax.swing.JFrame {
                             .addComponent(lblReloj, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(lblGenero, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
-                                .addComponent(lblHorario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(lblDuracion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cbcFunciones1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblFunciones)
-                            .addComponent(btnComprar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btnComprar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbcHorarios, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)))
                     .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnAvanzar)
                         .addComponent(btnRetroceso)))
                 .addGap(18, 18, 18)
                 .addComponent(lblDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addGap(19, 19, 19))
             .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panel2Layout.createSequentialGroup()
                     .addContainerGap()
@@ -680,6 +736,8 @@ public class FrmCartelera extends javax.swing.JFrame {
 
     private void cbcCiudadesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbcCiudadesActionPerformed
 
+        nombreCiudad = (String) cbcCiudades.getSelectedItem();
+        
         try {
             cargarSucursales();
         } catch (NegocioException ex) {
@@ -701,10 +759,13 @@ public class FrmCartelera extends javax.swing.JFrame {
 
     private void btnAvanzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAvanzarActionPerformed
         // TODO add your handling code here:
+        System.out.println(this.pagina);
+        System.out.println(listaPelicula.get(pagina).getTitulo());
         this.pagina++;
-        btnRetroceso.setEnabled(true);
+ 
         try {
             this.cargarMetodosDatos();
+            btnRetroceso.setEnabled(true);
         } catch (NegocioException ex) {
             Logger.getLogger(FrmCartelera.class.getName()).log(Level.SEVERE, null, ex);
 
@@ -712,7 +773,7 @@ public class FrmCartelera extends javax.swing.JFrame {
             Logger.getLogger(FrmCartelera.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IndexOutOfBoundsException ex){
             JOptionPane.showMessageDialog(this, "Ya no hay mas peliculas");
-            btnAvanzar.setEnabled(false);
+         //   btnAvanzar.setEnabled(false);
             this.pagina--;
         }
 
@@ -721,20 +782,27 @@ public class FrmCartelera extends javax.swing.JFrame {
 
     private void btnRetrocesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetrocesoActionPerformed
         // TODO add your handling code here:
-
-        if (this.pagina == 0) {
-            this.pagina = 1;
-            btnRetroceso.setEnabled(false);
+        System.out.println(this.pagina);
+        if (this.pagina < 0) {
+            this.pagina = 0;
+            JOptionPane.showMessageDialog(this, "ha llegado al principio");
+            btnAvanzar.setEnabled(true);
             return;
         }
-        btnAvanzar.setEnabled(true);
+      
+        
         try {
             this.pagina--;
             this.cargarMetodosDatos();
+            btnAvanzar.setEnabled(true);
         } catch (NegocioException ex) {
             Logger.getLogger(FrmCartelera.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MalformedURLException ex) {
             Logger.getLogger(FrmCartelera.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IndexOutOfBoundsException ex){
+            JOptionPane.showMessageDialog(this, "Ya no hay mas peliculas");
+           btnRetroceso.setEnabled(false);
+            this.pagina++;
         }
     }//GEN-LAST:event_btnRetrocesoActionPerformed
 
@@ -743,12 +811,16 @@ public class FrmCartelera extends javax.swing.JFrame {
     }//GEN-LAST:event_btnTicketsActionPerformed
 
     private void cbcSucursalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbcSucursalesActionPerformed
-        // TODO add your handling code here:
-
-        try {
+       
+        nombreSucursal = (String)cbcSucursales.getSelectedItem();
+        
+        if(nombreSucursal != null){    
+            try {
+            // TODO add your handling code here:
             cargarSalas();
-        } catch (NegocioException ex) {
+         } catch (NegocioException ex) {
             Logger.getLogger(FrmCartelera.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_cbcSucursalesActionPerformed
 
@@ -759,9 +831,16 @@ public class FrmCartelera extends javax.swing.JFrame {
 
     private void cbcSalasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbcSalasActionPerformed
         // TODO add your handling code here:
-        cargarFunciones();
+        nombreSala = (String) cbcSalas.getSelectedItem();
         
+        if(nombreSala != null){
+        cargarFunciones();
+        }
     }//GEN-LAST:event_cbcSalasActionPerformed
+
+    private void cbcSucursalesItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbcSucursalesItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbcSucursalesItemStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -771,7 +850,7 @@ public class FrmCartelera extends javax.swing.JFrame {
     private javax.swing.JButton btnTickets;
     private javax.swing.JButton btnVolver;
     private javax.swing.JComboBox<String> cbcCiudades;
-    private javax.swing.JComboBox<String> cbcFunciones1;
+    private javax.swing.JComboBox<String> cbcHorarios;
     private javax.swing.JComboBox<String> cbcSalas;
     private javax.swing.JComboBox<String> cbcSucursales;
     private javax.swing.JPanel jPanel1;
@@ -781,10 +860,10 @@ public class FrmCartelera extends javax.swing.JFrame {
     private javax.swing.JLabel jlbSalas;
     private javax.swing.JLabel jlbSucursal;
     private javax.swing.JLabel lblDescripcion;
+    private javax.swing.JLabel lblDuracion;
     private javax.swing.JLabel lblFuncion;
     private javax.swing.JLabel lblFunciones;
     private javax.swing.JLabel lblGenero;
-    private javax.swing.JLabel lblHorario;
     private javax.swing.JLabel lblImagenPelicula;
     private javax.swing.JLabel lblReloj;
     private javax.swing.JLabel lblTitulo;

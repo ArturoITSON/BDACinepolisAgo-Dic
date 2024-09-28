@@ -387,6 +387,43 @@ public class SalaDAO implements ISalaDAO {
         }
     }
     
+    @Override
+    public SalaEntidad buscarSalasPorNombre(String nombreSala) throws PersistenciaException{
+        try {
+            SalaEntidad sala = null;
+            Connection conexion = this.conexionBD.crearConexion();
+
+            String codigoSQL = """
+                               SELECT
+                                    id,
+                                    nombre,
+                                    asientos_disponibles,
+                                    precio,
+                                    minutosLimpieza,
+                                    sucursal_id
+                               FROM Sala
+                               WHERE nombre = ?
+                               """;
+
+            PreparedStatement preparedStatement = conexion.prepareStatement(codigoSQL);
+            preparedStatement.setString(1, nombreSala);
+
+            ResultSet resultado = preparedStatement.executeQuery();
+            while (resultado.next()) {
+                sala = this.salaEntidad(resultado);
+            }
+
+            resultado.close();
+            preparedStatement.close();
+            conexion.close();
+
+            return sala;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new PersistenciaException("Ocurrió un error al leer la base de datos, inténtelo de nuevo y si el error persiste comuníquese con el encargado del sistema.");
+        }
+    }    
+    
     private SalaEntidad salaEntidad(ResultSet resultado) throws SQLException {
         int id = resultado.getInt("id");
         String nombre = resultado.getString("nombre");

@@ -4,6 +4,8 @@
  */
 package Negocio;
 
+import DTOs.GeneroDTO;
+import Entidades.GeneroEntidad;
 import Persistencia.IGeneroDAO;
 import Persistencia.PersistenciaException;
 import java.util.List;
@@ -35,6 +37,29 @@ public class GeneroNegocio implements IGeneroNegocio {
             Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    
+    public GeneroDTO buscarGeneroPorId(int idGenero) throws PersistenciaException{
+        
+        GeneroDTO genero;
+        try {
+            genero = this.convertirAGeneroDTO(generoDAO.buscarGeneroPorId(idGenero));
+            
+            return genero;
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    
+    }
+    
+    
+        private GeneroDTO convertirAGeneroDTO(GeneroEntidad genero) {
+        return new GeneroDTO(
+                genero.getId(),
+                genero.getNombre()
+        );
     }
     
 }

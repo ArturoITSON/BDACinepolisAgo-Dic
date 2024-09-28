@@ -4,7 +4,9 @@
  */
 package Persistencia;
 
+import Entidades.GeneroEntidad;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -61,6 +63,49 @@ public class GeneroDAO implements IGeneroDAO{
                 throw new PersistenciaException("Error al cerrar los recursos: " + e.getMessage());
             }
         }
+    }
+    
+    
+    @Override
+    public GeneroEntidad buscarGeneroPorId(int idGenero) throws PersistenciaException{
+        try {
+            GeneroEntidad genero = null;
+            Connection conexion = this.conexionBD.crearConexion();
+
+            String codigoSQL = """
+                               SELECT
+                                    id,
+                                    nombre
+                               FROM Genero
+                               WHERE id = ?
+                               """;
+
+            PreparedStatement preparedStatement = conexion.prepareStatement(codigoSQL);
+            preparedStatement.setInt(1, idGenero);
+
+            ResultSet resultado = preparedStatement.executeQuery();
+            while (resultado.next()) {
+                genero = this.generoEntidad(resultado);
+            }
+
+            resultado.close();
+            preparedStatement.close();
+            conexion.close();
+
+            return genero;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new PersistenciaException("Ocurrió un error al leer la base de datos, inténtelo de nuevo y si el error persiste comuníquese con el encargado del sistema.");
+        }
+    }  
+    
+    
+    
+    
+        private GeneroEntidad generoEntidad(ResultSet resultado) throws SQLException {
+        int id = resultado.getInt("id");
+        String nombre = resultado.getString("nombre");
+        return new GeneroEntidad(id, nombre);
     }
     
 }

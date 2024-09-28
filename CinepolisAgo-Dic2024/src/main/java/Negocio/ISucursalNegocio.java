@@ -19,4 +19,6 @@ public interface ISucursalNegocio {
     
     public List<SucursalDTO> buscarSucursalPorIdCiudad(int idCiudad) throws NegocioException;
     
+    List<SucursalDTO> buscarSucursalesPorNombre(String nombreSucursal) throws NegocioException;
+    
 }

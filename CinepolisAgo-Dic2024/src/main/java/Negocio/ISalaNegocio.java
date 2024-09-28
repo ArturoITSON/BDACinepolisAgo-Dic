@@ -31,4 +31,6 @@ public interface ISalaNegocio {
     
     public SalaDTO modificar(SalaModificarDTO sala) throws NegocioException;
     
+    SalaDTO buscarSalasPorNombre(String nombreSucursal) throws NegocioException;
+    
 }

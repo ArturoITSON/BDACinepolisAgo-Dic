@@ -4,6 +4,8 @@
  */
 package Negocio;
 
+import DTOs.GeneroDTO;
+import Persistencia.PersistenciaException;
 import java.util.List;
 
 /**
@@ -13,5 +15,7 @@ import java.util.List;
 public interface IGeneroNegocio {
     
     List<String> obtenerGeneros() throws NegocioException;
+    
+    GeneroDTO buscarGeneroPorId(int idGenero) throws PersistenciaException;
     
 }

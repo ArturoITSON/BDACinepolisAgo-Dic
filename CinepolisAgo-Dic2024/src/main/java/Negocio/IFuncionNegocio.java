@@ -23,5 +23,7 @@ public interface IFuncionNegocio {
     FuncionDTO eliminar(int idFuncion) throws NegocioException;
     
     List<FuncionDTO> buscarFuncionesPorIdSala(int idSala) throws NegocioException;
+    
+    List<FuncionDTO> buscarFuncionesPorIdSalaYIdPelicula(int idSala, int idPelilcula) throws NegocioException;
             
 }

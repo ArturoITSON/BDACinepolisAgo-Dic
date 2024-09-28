@@ -101,6 +101,28 @@ public class FuncionNegocio implements IFuncionNegocio {
         }
     
     
+    @Override
+    public List<FuncionDTO> buscarFuncionesPorIdSalaYIdPelicula(int idSala, int idPelilcula) throws NegocioException {
+        
+        try{
+            
+            List<FuncionEntidad> funcionesEntidad = funcionDAO.buscarFuncionesPorIdSalaYIdPelicula(idSala, idPelilcula);
+            List<FuncionDTO> funcionesDTO = new ArrayList<>();
+
+            for (FuncionEntidad entidad : funcionesEntidad) {
+            funcionesDTO.add(convertirAFuncionDTO(entidad));
+        }
+          return funcionesDTO;
+        }    
+             
+         catch(PersistenciaException ex){
+            Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+            return null;
+        }
+    
+    
     private FuncionDTO convertirAFuncionDTO(FuncionEntidad funcion) {
         return new FuncionDTO(
                 funcion.getId(),

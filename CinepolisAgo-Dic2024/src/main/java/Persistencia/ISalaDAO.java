@@ -32,4 +32,6 @@ public interface ISalaDAO {
     
     public SalaEntidad eliminarSala(int idSala) throws PersistenciaException;
     
+    SalaEntidad buscarSalasPorNombre(String nombreSala) throws PersistenciaException;
+    
 }

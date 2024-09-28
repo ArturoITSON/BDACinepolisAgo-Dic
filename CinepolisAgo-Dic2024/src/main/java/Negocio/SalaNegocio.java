@@ -78,6 +78,21 @@ public class SalaNegocio implements ISalaNegocio {
         }
         return null;
     }
+    
+    
+    @Override
+    public SalaDTO buscarSalasPorNombre(String nombreSucursal) throws NegocioException {
+
+        SalaDTO salas;
+        try {
+            salas = this.convertirASalaDTO(salaDAO.buscarSalasPorNombre(nombreSucursal));
+            return salas;
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
 
     @Override
     public List<SalaTablaDTO> buscarSalasTabla(SalaFiltroTablaDTO filtro) throws NegocioException {

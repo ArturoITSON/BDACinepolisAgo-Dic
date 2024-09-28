@@ -69,6 +69,29 @@ public class SucursalNegocio implements ISucursalNegocio {
         return null;
     }
     
+    
+    @Override
+    public List<SucursalDTO> buscarSucursalesPorNombre(String nombreSucursal) throws NegocioException {
+
+        try{
+
+            List<SucursalEntidad> sucursalesEntidad = sucursalDAO.buscarSucursalesPorNombre(nombreSucursal);
+            List<SucursalDTO> sucursalesDTO = new ArrayList<>();
+
+        for (SucursalEntidad entidad : sucursalesEntidad) {
+            sucursalesDTO.add(convertirASucursalDTO(entidad));
+        }
+             return sucursalesDTO;
+ 
+        }
+
+        catch(PersistenciaException ex){
+            Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+    
     private SucursalDTO convertirASucursalDTO(SucursalEntidad sucursal) {
         return new SucursalDTO(
                 sucursal.getId(),

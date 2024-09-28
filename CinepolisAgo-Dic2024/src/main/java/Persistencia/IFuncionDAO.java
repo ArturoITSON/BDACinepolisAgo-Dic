@@ -27,4 +27,6 @@ public interface IFuncionDAO {
     
     List<FuncionEntidad> buscarFuncionesPorIdSala(int idSala) throws PersistenciaException;
     
+    List<FuncionEntidad> buscarFuncionesPorIdSalaYIdPelicula(int idSala, int idPelicula) throws PersistenciaException;
+    
 }

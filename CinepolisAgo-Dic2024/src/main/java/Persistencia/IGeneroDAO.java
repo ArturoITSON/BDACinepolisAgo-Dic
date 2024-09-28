@@ -4,6 +4,7 @@
  */
 package Persistencia;
 
+import Entidades.GeneroEntidad;
 import java.util.List;
 
 /**
@@ -13,5 +14,7 @@ import java.util.List;
 public interface IGeneroDAO {
     
     List<String> obtenerGeneros() throws PersistenciaException;
+    
+    GeneroEntidad buscarGeneroPorId(int idGenero) throws PersistenciaException;
     
 }
