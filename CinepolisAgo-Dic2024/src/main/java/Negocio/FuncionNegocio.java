@@ -11,6 +11,7 @@ import DTOs.FuncionTablaDTO;
 import Entidades.FuncionEntidad;
 import Persistencia.IFuncionDAO;
 import Persistencia.PersistenciaException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -76,6 +77,28 @@ public class FuncionNegocio implements IFuncionNegocio {
         }
     }
     
+    
+    
+    @Override
+    public List<FuncionDTO> buscarFuncionesPorIdSala(int idSala) throws NegocioException {
+        
+        try{
+            
+            List<FuncionEntidad> funcionesEntidad = funcionDAO.buscarFuncionesPorIdSala(idSala);
+            List<FuncionDTO> funcionesDTO = new ArrayList<>();
+
+            for (FuncionEntidad entidad : funcionesEntidad) {
+            funcionesDTO.add(convertirAFuncionDTO(entidad));
+        }
+          return funcionesDTO;
+        }    
+             
+         catch(PersistenciaException ex){
+            Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+            return null;
+        }
     
     
     private FuncionDTO convertirAFuncionDTO(FuncionEntidad funcion) {

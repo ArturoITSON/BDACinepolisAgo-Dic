@@ -160,6 +160,19 @@ public class PeliculaNegocio implements IPeliculaNegocio{
     
     
     
+    @Override
+    public PeliculaDTO obtenerPeliculasPorId(int idPelicula) throws NegocioException {
+        
+        PeliculaDTO peliculas;
+        try {
+            peliculas = this.convertirAPeliculaDTO(peliculaDAO.obtenerPeliculas(idPelicula));
+            return peliculas;
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;    }
+    
+    
     private PeliculaDTO convertirAPeliculaDTO(PeliculaEntidad pelicula) {
         return new PeliculaDTO(
                 pelicula.getId(),

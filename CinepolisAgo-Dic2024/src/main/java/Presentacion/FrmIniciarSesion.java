@@ -256,7 +256,7 @@ public class FrmIniciarSesion extends javax.swing.JFrame {
                 if(campoTextoCorreo.getText().equals(clienteBuscado.getCorreo()) && pwdContrasena.getText().equals(clienteBuscado.getContrasena())){
 
                     System.out.println(clienteBuscado.getIdCliente());
-                    FrmCartelera cartelera = new FrmCartelera(peliculaNegocio, ciudadNegocio, clienteBuscado);
+                    FrmCartelera cartelera = new FrmCartelera(peliculaNegocio, ciudadNegocio, clienteBuscado, sucursalNegocio, this, salaNegocio, funcionNegocio);
 
                     cartelera.setVisible(true);
 

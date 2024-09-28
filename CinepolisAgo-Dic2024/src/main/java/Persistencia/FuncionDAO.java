@@ -202,6 +202,57 @@ public class FuncionDAO implements IFuncionDAO{
     
     
     
+    @Override
+    public List<FuncionEntidad> buscarFuncionesPorIdSala(int idSala) throws PersistenciaException {
+        
+        List<FuncionEntidad> funciones = new ArrayList<>();
+        
+        try {
+            FuncionEntidad funcion = null;
+            Connection conexion = this.conexionBD.crearConexion();
+
+            String codigoSQL = """
+                               SELECT
+                                    id,
+                                    precio,
+                                    empezarFuncion,
+                                    terminarFuncion,
+                                    dia_funcion,
+                                    pelicula_id,
+                                    sala_id
+                               FROM Funcion
+                               WHERE sala_id = ?
+                               """;
+
+            PreparedStatement preparedStatement = conexion.prepareStatement(codigoSQL);
+            preparedStatement.setInt(1, idSala);
+
+            ResultSet resultado = preparedStatement.executeQuery();
+            while (resultado.next()) {
+                funcion = new FuncionEntidad(
+                    resultado.getInt("id"),
+                    resultado.getFloat("precio"),
+                    resultado.getTime("empezarFuncion"),
+                    resultado.getTime("terminarFuncion"),
+                    resultado.getString("dia_funcion"),
+                    resultado.getInt("pelicula_id"),
+                    resultado.getInt("sala_id")
+                );
+                funciones.add(funcion);
+            }
+
+            resultado.close();
+            preparedStatement.close();
+            conexion.close();
+
+            return funciones;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new PersistenciaException("Ocurrió un error al leer la base de datos, inténtelo de nuevo y si el error persiste comuníquese con el encargado del sistema.");
+        }
+    } 
+    
+    
     
     
         

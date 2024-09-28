@@ -25,4 +25,6 @@ public interface IFuncionDAO {
     
     FuncionEntidad eliminarFuncion(int idFuncion) throws PersistenciaException;
     
+    List<FuncionEntidad> buscarFuncionesPorIdSala(int idSala) throws PersistenciaException;
+    
 }
