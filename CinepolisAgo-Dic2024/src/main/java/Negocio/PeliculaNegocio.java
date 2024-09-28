@@ -108,7 +108,7 @@ public class PeliculaNegocio implements IPeliculaNegocio{
     }
     
     @Override
-public List<PeliculaDTO> obtenerPeliculasDTO() throws NegocioException {
+    public List<PeliculaDTO> obtenerPeliculasDTO() throws NegocioException {
     try {
         List<PeliculaEntidad> peliculasEntidad = peliculaDAO.obtenerTodasLasPeliculas();
         List<PeliculaDTO> peliculasDTO = new ArrayList<>();
@@ -142,7 +142,7 @@ public List<PeliculaDTO> obtenerPeliculasDTO() throws NegocioException {
     }
     
     @Override
-public PeliculaDTO buscarPorNombre(String titulo) throws NegocioException {
+    public PeliculaDTO buscarPorNombre(String titulo) throws NegocioException {
     try {
         PeliculaEntidad peliculaEntidad = peliculaDAO.buscarPorTitulo(titulo);
         

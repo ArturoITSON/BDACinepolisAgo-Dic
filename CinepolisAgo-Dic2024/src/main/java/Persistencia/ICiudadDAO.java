@@ -4,6 +4,7 @@
  */
 package Persistencia;
 
+import Entidades.CiudadEntidad;
 import java.util.List;
 
 /**
@@ -14,4 +15,7 @@ public interface ICiudadDAO {
     
     List<String> obtenerCiudades() throws PersistenciaException;
 
+    List<CiudadEntidad> obtenerTodasLasCiudades() throws PersistenciaException;
+    
+    CiudadEntidad buscarPorId(int id) throws PersistenciaException;
 }
