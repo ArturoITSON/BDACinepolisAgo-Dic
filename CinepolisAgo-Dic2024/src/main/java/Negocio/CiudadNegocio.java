@@ -4,8 +4,11 @@
  */
 package Negocio;
 
+import DTOs.CiudadDTO;
+import Entidades.CiudadEntidad;
 import Persistencia.ICiudadDAO;
 import Persistencia.PersistenciaException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,5 +40,52 @@ public class CiudadNegocio implements ICiudadNegocio{
         }
         return null;
     }
+    
+    
+    @Override
+    public List<CiudadDTO> obtenerCiudadesDTO() throws NegocioException {
+    try {
+        List<CiudadEntidad> ciudadesEntidad = ciudadDAO.obtenerTodasLasCiudades();
+        List<CiudadDTO> ciudadesDTO = new ArrayList<>();
+
+        for (CiudadEntidad entidad : ciudadesEntidad) {
+            ciudadesDTO.add(convertirACiudadDTO(entidad));
+        }
+
+        return ciudadesDTO;
+    } catch (PersistenciaException ex) {
+        Logger.getLogger(PeliculaNegocio.class.getName()).log(Level.SEVERE, null, ex);
+        throw new NegocioException("Error al obtener la lista de ciudades");
+    }
+    
+    }
+    
+    
+    @Override
+    public CiudadDTO buscarPorId(int id) throws NegocioException {
+        
+        try{
+             return this.convertirACiudadDTO(ciudadDAO.buscarPorId(id));
+ 
+        }
+        
+        catch(PersistenciaException ex){
+            Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
+    }
+    
+    
+    
+    private CiudadDTO convertirACiudadDTO(CiudadEntidad ciudad) {
+        return new CiudadDTO(
+                ciudad.getId(),
+                ciudad.getNombre()
+        );
+    }
+    
+    
+    
 
 }

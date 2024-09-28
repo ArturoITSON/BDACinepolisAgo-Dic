@@ -178,7 +178,7 @@ public class FrmInicio extends javax.swing.JFrame {
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
         // TODO add your handling code here:
         FrmIniciarSesion iniciarSesion = new FrmIniciarSesion((ClienteNegocio) clienteNegocio, this, peliculaNegocio, generoNegocio, clasificacionNegocio, paisNegocio, funcionNegocio
-                                                                , salaNegocio, sucursalNegocio);
+                                                                , salaNegocio, sucursalNegocio, ciudadNegocio);
         iniciarSesion.setVisible(true);
         this.setVisible(false);
 
