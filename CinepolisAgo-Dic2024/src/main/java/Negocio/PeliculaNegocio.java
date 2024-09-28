@@ -12,6 +12,7 @@ import DTOs.PeliculaTablaDTO;
 import Entidades.PeliculaEntidad;
 import Persistencia.IPeliculaDAO;
 import Persistencia.PersistenciaException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -106,6 +107,24 @@ public class PeliculaNegocio implements IPeliculaNegocio{
         return null;
     }
     
+    @Override
+public List<PeliculaDTO> obtenerPeliculasDTO() throws NegocioException {
+    try {
+        List<PeliculaEntidad> peliculasEntidad = peliculaDAO.obtenerTodasLasPeliculas();
+        List<PeliculaDTO> peliculasDTO = new ArrayList<>();
+
+        for (PeliculaEntidad entidad : peliculasEntidad) {
+            peliculasDTO.add(convertirAPeliculaDTO(entidad));
+        }
+
+        return peliculasDTO;
+    } catch (PersistenciaException ex) {
+        Logger.getLogger(PeliculaNegocio.class.getName()).log(Level.SEVERE, null, ex);
+        throw new NegocioException("Error al obtener la lista de películas");
+    }
+}
+
+    
     
     @Override
     public PeliculaDTO buscarPorId(int id) throws NegocioException {
@@ -121,6 +140,23 @@ public class PeliculaNegocio implements IPeliculaNegocio{
         
         return null;
     }
+    
+    @Override
+public PeliculaDTO buscarPorNombre(String titulo) throws NegocioException {
+    try {
+        PeliculaEntidad peliculaEntidad = peliculaDAO.buscarPorTitulo(titulo);
+        
+        if (peliculaEntidad == null) {
+            throw new NegocioException("La película con título \"" + titulo + "\" no fue encontrada.");
+        }
+        
+        return this.convertirAPeliculaDTO(peliculaEntidad);
+        
+    } catch (PersistenciaException ex) {
+        Logger.getLogger(PeliculaNegocio.class.getName()).log(Level.SEVERE, null, ex);
+        throw new NegocioException(ex.getMessage());
+    }
+}
     
     
     

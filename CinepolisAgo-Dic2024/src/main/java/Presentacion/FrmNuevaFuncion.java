@@ -5,6 +5,7 @@
 package Presentacion;
 
 import DTOs.FuncionGuardarDTO;
+import DTOs.PeliculaDTO;
 import DTOs.SalaDTO;
 import Negocio.IFuncionNegocio;
 import Negocio.IPeliculaNegocio;
@@ -15,7 +16,9 @@ import Negocio.PeliculaNegocio;
 import com.github.lgooddatepicker.components.DatePicker;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -31,53 +34,62 @@ public class FrmNuevaFuncion extends javax.swing.JFrame {
     IPeliculaNegocio peliculaNegocio;
     ISalaNegocio salaNegocio;
     ISucursalNegocio sucursalNegocio;
-    
+
+    // Mapa para almacenar el índice y el ID de la película
+    private Map<Integer, Integer> peliculaIds;
+    private Map<String, Integer> peliculaMap;
+
     /**
      * Creates new form FrmAgregarFuncion
      */
     public FrmNuevaFuncion(FrmModificarFuncion modificarFuncion, IFuncionNegocio funcionNegocio, IPeliculaNegocio peliculaNegocio, ISalaNegocio salaNegocio, ISucursalNegocio sucursalNegocio) {
         initComponents();
-        
+
         this.funcionNegocio = funcionNegocio;
         this.modificarFuncion = modificarFuncion;
         this.peliculaNegocio = peliculaNegocio;
         this.salaNegocio = salaNegocio;
         this.sucursalNegocio = sucursalNegocio;
-        
+
+        this.peliculaIds = new HashMap<>();
+
         try {
             cargarPeliculas();
         } catch (NegocioException ex) {
             Logger.getLogger(FrmNuevaFuncion.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
         try {
             cargarSucursales();
         } catch (NegocioException ex) {
             Logger.getLogger(FrmNuevaFuncion.class.getName()).log(Level.SEVERE, null, ex);
         }
-                
+
     }
 
-    
     private void cargarPeliculas() throws NegocioException {
-            
+
         try {
-            List<String> peliculas = peliculaNegocio.obtenerPeliculas();
-            for (String pelicula : peliculas) {
-                cbcPelicula.addItem(pelicula);
+            List<PeliculaDTO> peliculas = peliculaNegocio.obtenerPeliculasDTO(); // Nuevo método que devuelve una lista de PeliculaDTO
+            peliculaMap = new HashMap<>(); // Inicializamos el mapa
+
+            cbcPelicula.removeAllItems(); // Limpiamos el comboBox
+
+            for (PeliculaDTO pelicula : peliculas) {
+                String titulo = pelicula.getTitulo();
+                int peliculaId = pelicula.getId();
+
+                // Agregamos el título al comboBox y al mapa
+                cbcPelicula.addItem(titulo);
+                peliculaMap.put(titulo, peliculaId);
             }
         } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(this, "Error al cargar las peliculas: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
 
-    
-    
-    
     private void cargarSucursales() throws NegocioException {
-            
+
         try {
             List<String> sucursales = sucursalNegocio.obtenerSucursales();
             for (String sucursal : sucursales) {
@@ -86,7 +98,8 @@ public class FrmNuevaFuncion extends javax.swing.JFrame {
         } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(this, "Error al cargar las sucursales: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }    
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -307,100 +320,103 @@ public class FrmNuevaFuncion extends javax.swing.JFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
 
-        float duracionPelicula;
-        
-        
         try {
-                    
-            FuncionGuardarDTO funcionGuardar = new FuncionGuardarDTO();
-            duracionPelicula = peliculaNegocio.buscarPorId(cbcPelicula.getSelectedIndex() + 1).getDuracion();
-            
-            LocalTime empezarFuncion = timePickerHoraInicio.getTime();
-            LocalTime terminoFuncion = empezarFuncion.plusMinutes((long) duracionPelicula);
-            
-            List<SalaDTO> listaSalas = salaNegocio.obtenerIdSalasPorSucursal(cbcSucursal.getSelectedIndex() + 1);
-            int salaId = listaSalas.get(cbcSala.getSelectedIndex()).getId();
-            
-            funcionGuardar.setDiaFuncion((String) cbcDias.getSelectedItem());
-            funcionGuardar.setEmpezaFuncion(java.sql.Time.valueOf(timePickerHoraInicio.getTime()));
-            funcionGuardar.setPelicula_id(cbcPelicula.getSelectedIndex() + 1);
-            funcionGuardar.setPrecio(Float.valueOf(campoTextoPrecio.getText()));
-            funcionGuardar.setSala_id(salaId);
-            
-            
-            funcionGuardar.setTerminoFuncion(java.sql.Time.valueOf(terminoFuncion));
-            
-            System.out.println(funcionGuardar.getEmpezaFuncion().toString());
-            System.out.println(funcionGuardar.getTerminoFuncion().toString());
-            
-            funcionNegocio.guardar(funcionGuardar);
-            JOptionPane.showMessageDialog(this, "Se añadio la funcion de " + (String) cbcPelicula.getSelectedItem() + " con horario de " + (String) cbcDias.getSelectedItem()+ " " + timePickerHoraInicio.toString() + " a " + campoTextoDuracionFinal.getText());
-            modificarFuncion.setVisible(true);
-            this.dispose();
-            
-        } catch (NegocioException ex) {
-            Logger.getLogger(FrmNuevaFuncion.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        // Obtén el título de la película seleccionada
+        String tituloSeleccionado = (String) cbcPelicula.getSelectedItem();
         
-       
+        // Usa el mapa para obtener el ID correcto de la película
+        int peliculaId = peliculaMap.get(tituloSeleccionado);
+
+        // Obtén la duración de la película usando el ID correcto
+        float duracionPelicula = peliculaNegocio.buscarPorId(peliculaId).getDuracion();
+
+        LocalTime empezarFuncion = timePickerHoraInicio.getTime();
+        LocalTime terminoFuncion = empezarFuncion.plusMinutes((long) duracionPelicula);
+
+        List<SalaDTO> listaSalas = salaNegocio.obtenerIdSalasPorSucursal(cbcSucursal.getSelectedIndex() + 1);
+        int salaId = listaSalas.get(cbcSala.getSelectedIndex()).getId();
+
+        FuncionGuardarDTO funcionGuardar = new FuncionGuardarDTO();
+        funcionGuardar.setDiaFuncion((String) cbcDias.getSelectedItem());
+        funcionGuardar.setEmpezaFuncion(java.sql.Time.valueOf(timePickerHoraInicio.getTime()));
+        funcionGuardar.setPelicula_id(peliculaId); // Establece el ID correcto de la película
+        funcionGuardar.setPrecio(Float.valueOf(campoTextoPrecio.getText()));
+        funcionGuardar.setSala_id(salaId);
+        funcionGuardar.setTerminoFuncion(java.sql.Time.valueOf(terminoFuncion));
+
+        System.out.println(funcionGuardar.getEmpezaFuncion().toString());
+        System.out.println(funcionGuardar.getTerminoFuncion().toString());
+
+        funcionNegocio.guardar(funcionGuardar);
+        JOptionPane.showMessageDialog(this, "Se añadió la función de " + tituloSeleccionado + " con horario de " + cbcDias.getSelectedItem() + " " + timePickerHoraInicio.toString() + " a " + campoTextoDuracionFinal.getText());
+        modificarFuncion.setVisible(true);
+        this.dispose();
+
+    } catch (NegocioException ex) {
+        Logger.getLogger(FrmNuevaFuncion.class.getName()).log(Level.SEVERE, null, ex);
+    }
+
 
     }//GEN-LAST:event_btnGuardarActionPerformed
 
-    
+
     private void cbcPeliculaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbcPeliculaItemStateChanged
         // TODO add your handling code here:
     }//GEN-LAST:event_cbcPeliculaItemStateChanged
 
     private void btnCalcularHoraFinalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularHoraFinalActionPerformed
         // TODO add your handling code here:
-        
-        float duracionPelicula;
         try {
-            duracionPelicula = peliculaNegocio.buscarPorId(cbcPelicula.getSelectedIndex() + 1).getDuracion();
-            
+            // Obtén el título de la película seleccionada
+            String tituloSeleccionado = (String) cbcPelicula.getSelectedItem();
+
+            // Usa el mapa para obtener el ID correcto de la película
+            int peliculaId = peliculaMap.get(tituloSeleccionado);
+
+            // Obtén la duración de la película usando el ID correcto
+            float duracionPelicula = peliculaNegocio.buscarPorId(peliculaId).getDuracion();
+
             LocalTime empezarFuncion = timePickerHoraInicio.getTime();
             LocalTime terminoFuncion = empezarFuncion.plusMinutes((long) duracionPelicula);
             System.out.println(terminoFuncion.toString());
-            
+
             campoTextoDuracionFinal.setText(terminoFuncion.toString());
-            
+
         } catch (NegocioException ex) {
             Logger.getLogger(FrmNuevaFuncion.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
+
     }//GEN-LAST:event_btnCalcularHoraFinalActionPerformed
 
     private void btnCargarSalasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarSalasActionPerformed
         // TODO add your handling code here:
-        
-        List<String> salas = new ArrayList<>();   
+
+        List<String> salas = new ArrayList<>();
         cbcSala.removeAllItems();
-        
+
         try {
-            if (salas.isEmpty()){
+            if (salas.isEmpty()) {
                 salas = salaNegocio.obtenerSalasPorSucursal(cbcSucursal.getSelectedIndex() + 1);
                 for (String sala : salas) {
-                cbcSala.addItem(sala);
+                    cbcSala.addItem(sala);
                 }
-            }
-                else{
-                    salas.clear();
-                    
+            } else {
+                salas.clear();
+
                 try {
                     salas = salaNegocio.obtenerSalasPorSucursal(cbcSucursal.getSelectedIndex() + 1);
                 } catch (NegocioException ex) {
                     Logger.getLogger(FrmNuevaFuncion.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                        for (String sala : salas) {
-                        cbcSala.addItem(sala);
-                   }
+                for (String sala : salas) {
+                    cbcSala.addItem(sala);
+                }
             }
-            }
-             catch (NegocioException ex) {
+        } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(this, "Error al cargar las salas: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
+
     }//GEN-LAST:event_btnCargarSalasActionPerformed
 
 
