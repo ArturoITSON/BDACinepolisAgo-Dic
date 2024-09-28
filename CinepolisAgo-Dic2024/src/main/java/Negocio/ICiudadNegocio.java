@@ -14,6 +14,8 @@ import java.util.List;
 public interface ICiudadNegocio {
     
     List<String> obtenerCiudades() throws NegocioException;
+    
+    public List<CiudadDTO> obtenerCiudadesDTO() throws NegocioException;
 
     List<CiudadDTO> obtenerCiudadesDTO() throws NegocioException;
     

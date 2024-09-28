@@ -13,8 +13,6 @@ public class CiudadEntidad {
     private int id;
     private String nombre;
 
-    
-    
     public CiudadEntidad() {
     }
 
@@ -43,6 +41,5 @@ public class CiudadEntidad {
     public String toString() {
         return "CiudadEntidad{" + "id=" + id + ", nombre=" + nombre + '}';
     }
-    
     
 }

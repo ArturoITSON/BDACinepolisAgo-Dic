@@ -5,6 +5,11 @@
 package Persistencia;
 
 import DTOs.SalaDTO;
+import DTOs.SalaFiltroTablaDTO;
+import DTOs.SalaGuardarDTO;
+import DTOs.SalaModificarDTO;
+import DTOs.SalaTablaDTO;
+import Entidades.SalaEntidad;
 import java.util.List;
 
 /**
@@ -18,5 +23,13 @@ public interface ISalaDAO {
     List<String> obtenerSalasPorSucursal(int idSucursal) throws PersistenciaException;
     
     List<SalaDTO> obtenerIdSalasPorSucursal(int idSucursal) throws PersistenciaException;
+    
+    List<SalaTablaDTO> buscarSalasTabla(SalaFiltroTablaDTO filtro) throws PersistenciaException;
+    
+    public SalaEntidad guardar(SalaGuardarDTO pelicula) throws PersistenciaException;
+    
+    public SalaEntidad modificarSala(SalaModificarDTO sala) throws PersistenciaException;
+    
+    public SalaEntidad eliminarSala(int idSala) throws PersistenciaException;
     
 }

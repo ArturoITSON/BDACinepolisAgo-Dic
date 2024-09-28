@@ -399,11 +399,23 @@ public class FrmEditarCliente extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPaginaAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaginaAnteriorActionPerformed
-
+        
+        this.pagina--;
+        if (this.pagina == 0) {
+            this.pagina = 1;
+            return;
+        }
+        btnPaginaSiguiente.setEnabled(true);
+        this.establecerTituloPaginacion();
+        this.cargarTablaClientes();
     }//GEN-LAST:event_btnPaginaAnteriorActionPerformed
 
     private void btnPaginaSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaginaSiguienteActionPerformed
-
+        
+        this.pagina++;
+        this.establecerTituloPaginacion();
+        this.cargarTablaClientes();
+        btnPaginaAnterior.setEnabled(true);
     }//GEN-LAST:event_btnPaginaSiguienteActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed

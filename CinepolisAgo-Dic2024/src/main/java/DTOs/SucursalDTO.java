@@ -6,21 +6,21 @@ package DTOs;
 
 /**
  *
- * @author Arturo ITSON
+ * @author eduar
  */
-public class CiudadDTO {
-    
+public class SucursalDTO {
+
     private int id;
     private String nombre;
+    private int ciudad_id;
 
-    
-    
-    public CiudadDTO() {
+    public SucursalDTO() {
     }
 
-    public CiudadDTO(int id, String nombre) {
+    public SucursalDTO(int id, String nombre, int ciudad_id) {
         this.id = id;
         this.nombre = nombre;
+        this.ciudad_id = ciudad_id;
     }
 
     public int getId() {
@@ -39,9 +39,16 @@ public class CiudadDTO {
         this.nombre = nombre;
     }
 
-    @Override
-    public String toString() {
-        return "CiudadDTO{" + "id=" + id + ", nombre=" + nombre + '}';
+    public int getCiudad_id() {
+        return ciudad_id;
     }
 
+    public void setCiudad_id(int ciudad_id) {
+        this.ciudad_id = ciudad_id;
+    }
+
+    @Override
+    public String toString() {
+        return "SucursalEntidad{" + "id=" + id + ", nombre=" + nombre + ", ciudad_id=" + ciudad_id + '}';
+    }
 }
