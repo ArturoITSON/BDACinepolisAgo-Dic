@@ -248,9 +248,9 @@ public class FrmTicketsCliente extends javax.swing.JFrame {
 
     private void btnVisualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVisualizarActionPerformed
         // TODO add your handling code here:
-        FrmResumenTicket res = new FrmResumenTicket();
-        res.setVisible(true);
-        this.dispose();
+//        FrmResumenTicket res = new FrmResumenTicket();
+//        res.setVisible(true);
+//        this.dispose();
     }//GEN-LAST:event_btnVisualizarActionPerformed
 
     private void btnPaginaAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaginaAnteriorActionPerformed

@@ -84,7 +84,6 @@ public class Main {
         ISucursalNegocio sucursalNegocio = new SucursalNegocio(sucursalDao);
 
         ITicketNegocio ticketNegocio = new TicketNegocio(ticketDao);
-        ITicketNegocio ticketNegocio = new TicketNegocio(ticketDAO);
                 
         
         FrmInicio inicio = new FrmInicio(clienteNegocio, peliculaNegocio, generoNegocio, clasificacionNegocio, paisNegocio, ciudadNegocio, funcionNegocio, salaNegocio,
