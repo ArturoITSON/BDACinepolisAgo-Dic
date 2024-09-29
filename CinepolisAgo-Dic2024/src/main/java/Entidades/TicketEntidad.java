@@ -12,6 +12,7 @@ public class TicketEntidad {
     
     private int id;
     private String QR;
+    private float precio;
     private String metodoPago;
     private int cliente_id;
     private int funcion_id;
@@ -19,7 +20,7 @@ public class TicketEntidad {
     public TicketEntidad() {
     }
 
-    public TicketEntidad(int id, String QR, String metodoPago, int cliente_id, int funcion_id) {
+    public TicketEntidad(int id, String QR, float precio, String metodoPago, int cliente_id, int funcion_id) {
         this.id = id;
         this.QR = QR;
         this.metodoPago = metodoPago;
@@ -41,6 +42,14 @@ public class TicketEntidad {
 
     public void setQR(String QR) {
         this.QR = QR;
+    }
+
+    public float getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(float precio) {
+        this.precio = precio;
     }
 
     public String getMetodoPago() {

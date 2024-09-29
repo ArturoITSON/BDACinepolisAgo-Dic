@@ -11,6 +11,7 @@ package DTOs;
 public class TicketGuardarDTO {
     private int id;
     private String QR;
+    private float precio;
     private String metodoPago;
     private int cliente_id;
     private int funcion_id;
@@ -40,6 +41,14 @@ public class TicketGuardarDTO {
 
     public void setQR(String QR) {
         this.QR = QR;
+    }
+
+    public float getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(float precio) {
+        this.precio = precio;
     }
 
     public String getMetodoPago() {

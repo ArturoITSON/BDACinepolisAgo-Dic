@@ -31,19 +31,21 @@ public class TicketDAO implements ITicketDAO{
             Connection conexion = this.conexionBD.crearConexion();
             String insertTicket = """
                                     INSERT INTO Ticket (QR,
+                                                          precio
                                                           metodoPago,
                                                           cliente_id,
                                                           funcion_id
                                                           
                                    ) 
-                                                 VALUES (?, ?, ?, ?)
+                                                 VALUES (?, ?, ?, ?, ?)
                                     """;
 
             PreparedStatement preparedStatement = conexion.prepareStatement(insertTicket, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, ticket.getQR());
             preparedStatement.setString(2, ticket.getMetodoPago());
-            preparedStatement.setInt(2, ticket.getCliente_id());
-            preparedStatement.setInt(3, ticket.getFuncion_id());
+            preparedStatement.setFloat(3, ticket.getPrecio());
+            preparedStatement.setInt(4, ticket.getCliente_id());
+            preparedStatement.setInt(5, ticket.getFuncion_id());
 
             int filasAfectadas = preparedStatement.executeUpdate();
             if (filasAfectadas == 0) {
@@ -78,6 +80,7 @@ public class TicketDAO implements ITicketDAO{
             String codigoSQL = """
                                SELECT
                                     QR,
+                                    precio,
                                     metodoPago,
                                     cliente_id,
                                     funcion_id
@@ -117,6 +120,7 @@ public class TicketDAO implements ITicketDAO{
                                SELECT
                                     id,
                                     QR,
+                                    precio,
                                     metodoPago,
                                     cliente_id,
                                     funcion_id
@@ -132,6 +136,7 @@ public class TicketDAO implements ITicketDAO{
                 ticket = new TicketEntidad(
                     resultado.getInt("id"),
                     resultado.getString("QR"),
+                    resultado.getFloat("precio"),
                     resultado.getString("metodoPago"),
                     resultado.getInt("pelicula_id"),
                     resultado.getInt("sala_id")
@@ -151,10 +156,12 @@ public class TicketDAO implements ITicketDAO{
     } 
     
     private TicketEntidad ticketEntidad(ResultSet resultado) throws SQLException {
+        int id = resultado.getInt("id");
         String qr = resultado.getString("QR");
         String metodoPago = resultado.getString("metodoPago");
+        float precio = resultado.getFloat("precio");
         int cliente_id = resultado.getInt("cliente_id");
         int funcion_id = resultado.getInt("funcion_id");
-        return new TicketEntidad(funcion_id, qr, metodoPago, cliente_id, funcion_id);
+        return new TicketEntidad(id, qr, precio, metodoPago, cliente_id, funcion_id);
     }
 }
