@@ -261,49 +261,34 @@
                   <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="120" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="lblTotal" min="-2" pref="148" max="-2" attributes="0"/>
+                              <Component id="jblTextoTotal" min="-2" pref="37" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace pref="316" max="32767" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="1" max="-2" attributes="0">
                               <Component id="lblMetodo" alignment="0" max="32767" attributes="0"/>
                               <Component id="lblBoleto1" alignment="0" pref="148" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                          <Component id="lblPrecio" min="-2" pref="148" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
-                          <Component id="btnMenos" min="-2" pref="43" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="lblCantidad" min="-2" pref="67" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="btnMas" min="-2" pref="55" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Component id="cbxEfectivo" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblImgTarjeta" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="lblLinea" min="-2" pref="87" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
-                                  <Component id="lblEfectivo" min="-2" pref="66" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="lblPrecio" min="-2" pref="148" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+                                  <Component id="btnMenos" min="-2" pref="43" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="cbxTarjeta" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblCantidad" min="-2" pref="67" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="lblImgEfectivo" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnMas" min="-2" pref="55" max="-2" attributes="0"/>
                               </Group>
+                              <Component id="cbcMetodoPago" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="lblTotal" min="-2" pref="148" max="-2" attributes="0"/>
-                              <Component id="jblTextoTotal" min="-2" pref="37" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                          <EmptySpace pref="37" max="32767" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace pref="37" max="32767" attributes="0"/>
               </Group>
               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
@@ -326,31 +311,14 @@
                       <Component id="btnMas" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
-                  <Component id="lblMetodo" min="-2" pref="30" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="cbxTarjeta" min="-2" max="-2" attributes="0"/>
-                              <Component id="cbxEfectivo" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      </Group>
-                      <Component id="lblImgTarjeta" alignment="0" max="32767" attributes="0"/>
-                      <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="lblImgEfectivo" alignment="1" min="-2" pref="40" max="-2" attributes="0"/>
-                              <Component id="jblTextoTotal" alignment="1" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblMetodo" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                      <Component id="cbcMetodoPago" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
+                  <EmptySpace pref="52" max="32767" attributes="0"/>
+                  <Component id="jblTextoTotal" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="lblTotal" min="-2" pref="27" max="-2" attributes="0"/>
-                      <Component id="lblLinea" min="-2" max="-2" attributes="0"/>
-                      <Component id="lblEfectivo" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="lblTotal" min="-2" pref="27" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
               </Group>
               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
@@ -372,16 +340,6 @@
               </Border>
             </Property>
           </Properties>
-        </Component>
-        <Component class="java.awt.Checkbox" name="cbxEfectivo">
-          <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="cbxEfectivoMouseClicked"/>
-          </Events>
-        </Component>
-        <Component class="java.awt.Checkbox" name="cbxTarjeta">
-          <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="cbxTarjetaMouseClicked"/>
-          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="lblMetodo">
           <Properties>
@@ -464,26 +422,6 @@
             <Property name="horizontalTextPosition" type="int" value="0"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="lblLinea">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="En linea"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="lblEfectivo">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Efectivo"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="lblImgEfectivo">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Imagen"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="lblImgTarjeta">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Imagen"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JLabel" name="jblTextoTotal">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -491,6 +429,19 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Total"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="cbcMetodoPago">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="2">
+                <StringItem index="0" value="En Linea"/>
+                <StringItem index="1" value="Efectivo"/>
+              </StringArray>
+            </Property>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>

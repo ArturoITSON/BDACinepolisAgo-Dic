@@ -20,13 +20,16 @@ public class TicketDTO {
     public TicketDTO() {
     }
 
-    public TicketDTO(int id, String QR, String metodoPago, int cliente_id, int funcion_id) {
+    public TicketDTO(int id, String QR, float precio, String metodoPago, int cliente_id, int funcion_id) {
         this.id = id;
         this.QR = QR;
+        this.precio = precio;
         this.metodoPago = metodoPago;
         this.cliente_id = cliente_id;
         this.funcion_id = funcion_id;
     }
+
+
 
     public int getId() {
         return id;

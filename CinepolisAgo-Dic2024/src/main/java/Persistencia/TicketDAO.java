@@ -40,7 +40,7 @@ public class TicketDAO implements ITicketDAO{
             Connection conexion = this.conexionBD.crearConexion();
             String insertTicket = """
                                     INSERT INTO Ticket (QR,
-                                                          precio
+                                                          precio,
                                                           metodoPago,
                                                           cliente_id,
                                                           funcion_id
@@ -51,8 +51,8 @@ public class TicketDAO implements ITicketDAO{
 
             PreparedStatement preparedStatement = conexion.prepareStatement(insertTicket, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, ticket.getQR());
-            preparedStatement.setString(2, ticket.getMetodoPago());
-            preparedStatement.setFloat(3, ticket.getPrecio());
+            preparedStatement.setFloat(2, ticket.getPrecio());
+            preparedStatement.setString(3, ticket.getMetodoPago());
             preparedStatement.setInt(4, ticket.getCliente_id());
             preparedStatement.setInt(5, ticket.getFuncion_id());
 
@@ -75,6 +75,7 @@ public class TicketDAO implements ITicketDAO{
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
+            System.out.println("aqui");
             throw new PersistenciaException("Ocurrió un error al leer la base de datos, inténtelo de nuevo y si el error persiste comuníquese con el encargado del sistema.");
         }
 
@@ -88,6 +89,7 @@ public class TicketDAO implements ITicketDAO{
 
             String codigoSQL = """
                                SELECT
+                                    id,
                                     QR,
                                     precio,
                                     metodoPago,
@@ -101,10 +103,13 @@ public class TicketDAO implements ITicketDAO{
             preparedStatement.setInt(1, id);
 
             ResultSet resultado = preparedStatement.executeQuery();
+            
             while (resultado.next()) {
                 ticket = this.ticketEntidad(resultado);
             }
-
+            
+            
+            
             resultado.close();
             preparedStatement.close();
             conexion.close();
