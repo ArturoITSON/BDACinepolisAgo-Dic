@@ -121,7 +121,10 @@ public class ClienteDAO implements IClienteDAO {
     public ClienteEntidad guardar(ClienteGuardarDTO cliente) throws PersistenciaException {
 
         try {
-            Connection conexion = this.conexionBD.crearConexion();
+            
+            this.conexionGeneral = this.conexionBD.crearConexion();
+            this.conexionGeneral.setAutoCommit(false);
+            
             String insertCliente = """
                                     INSERT INTO Cliente (nombres,
                                                           apellido_paterno,
@@ -134,7 +137,7 @@ public class ClienteDAO implements IClienteDAO {
                                                  VALUES (?, ?, ?, ?, ?, ?, ?)
                                     """;
 
-            PreparedStatement preparedStatement = conexion.prepareStatement(insertCliente, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = conexionGeneral.prepareStatement(insertCliente, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, cliente.getNombres());
             preparedStatement.setString(2, cliente.getApellidoPaterno());
             preparedStatement.setString(3, cliente.getApellidoMaterno());
@@ -154,15 +157,34 @@ public class ClienteDAO implements IClienteDAO {
                 idCliente = (resultado.getInt(1));
             }
 
+            // Confirmar la transacción
+            conexionGeneral.commit();
+            
             resultado.close();
             preparedStatement.close();
-            conexion.close();
+            conexionGeneral.close();
 
             return this.buscarPorId(idCliente);
 
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            throw new PersistenciaException("Ocurrió un error al leer la base de datos, inténtelo de nuevo y si el error persiste comuníquese con el encargado del sistema.");
+        } catch (SQLException | PersistenciaException ex) {
+            try {
+                // Deshacer cambios en caso de error
+                if (this.conexionGeneral != null) {
+                    this.conexionGeneral.rollback();
+                }
+            } catch (SQLException rollbackEx) {
+                System.out.println("Error al hacer rollback: " + rollbackEx.getMessage());
+            }
+            System.out.println("Error al querer hacer la transaccion " + ex.getMessage());
+            throw new PersistenciaException("Ocurrió un error al registrar la sala, inténtelo de nuevo y si el error persiste comuníquese con el encargado del sistema.");
+        } finally {
+            try {
+                if (this.conexionGeneral != null) {
+                    this.conexionGeneral.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println("Error al cerrar la conexion de la base de datos");
+            }
         }
 
     }
@@ -170,7 +192,6 @@ public class ClienteDAO implements IClienteDAO {
     @Override
     public ClienteEntidad modificarCliente(ClienteModificarDTO cliente) throws PersistenciaException {
         
-        Connection conexion = null;
         PreparedStatement preparedStatement = null;
         
         ClienteEntidad clienteEditada = new ClienteEntidad();
@@ -184,9 +205,13 @@ public class ClienteDAO implements IClienteDAO {
         clienteEditada.setCiudad(cliente.getCiudad());
         
         try {
-            conexion = conexionBD.crearConexion();
+            
+            this.conexionGeneral = this.conexionBD.crearConexion();
+            this.conexionGeneral.setAutoCommit(false);
+            
+            
             String sentenciaSql = "UPDATE Cliente SET nombres = ?, apellido_paterno = ?, apellido_materno = ?, correo = ?, fecha_nacimiento = ?, contrasena = ?, ciudad_id = ? WHERE id = ?";
-            preparedStatement = conexion.prepareStatement(sentenciaSql);
+            preparedStatement = conexionGeneral.prepareStatement(sentenciaSql);
             preparedStatement.setString(1, clienteEditada.getNombres());
             preparedStatement.setString(2, clienteEditada.getApellidoPaterno());
             preparedStatement.setString(3, clienteEditada.getApelldioMaterno());
@@ -199,21 +224,33 @@ public class ClienteDAO implements IClienteDAO {
             
             
             preparedStatement.executeUpdate();
+            
+            // Confirmar la transacción
+            conexionGeneral.commit();
+            
+            preparedStatement.close();
+            
             System.out.println(clienteEditada.toString() + "dao");
             return clienteEditada;
             
         } catch (SQLException ex) {
-            throw new PersistenciaException("Error al editar la pelicula: " + ex.getMessage());
+            try {
+                // Deshacer cambios en caso de error
+                if (this.conexionGeneral != null) {
+                    this.conexionGeneral.rollback();
+                }
+            } catch (SQLException rollbackEx) {
+                System.out.println("Error al hacer rollback: " + rollbackEx.getMessage());
+            }
+            System.out.println("Error al querer hacer la transaccion " + ex.getMessage());
+            throw new PersistenciaException("Ocurrió un error al registrar la sala, inténtelo de nuevo y si el error persiste comuníquese con el encargado del sistema.");
         } finally {
             try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
+                if (this.conexionGeneral != null) {
+                    this.conexionGeneral.close();
                 }
-                if (conexion != null) {
-                    conexion.close();
-                }
-            } catch (SQLException e) {
-                throw new PersistenciaException("Error al cerrar los recursos: " + e.getMessage());
+            } catch (SQLException ex) {
+                System.out.println("Error al cerrar la conexion de la base de datos");
             }
         }
     }
@@ -222,32 +259,45 @@ public class ClienteDAO implements IClienteDAO {
     @Override
     public ClienteEntidad eliminarCliente(int idCliente) throws PersistenciaException {
         
-        Connection conexion = null;
         PreparedStatement preparedStatement = null;
         ClienteEntidad clienteEliminada = this.buscarPorId(idCliente);
         
             try {
-            conexion = conexionBD.crearConexion();
+                
+            this.conexionGeneral = this.conexionBD.crearConexion();
+            this.conexionGeneral.setAutoCommit(false);    
+                
             String sentenciaSql = "DELETE FROM Cliente WHERE id = ?";
-            preparedStatement = conexion.prepareStatement(sentenciaSql);
+            preparedStatement = conexionGeneral.prepareStatement(sentenciaSql);
             preparedStatement.setInt(1, idCliente);
 
             preparedStatement.executeUpdate();
             
+            // Confirmar la transacción
+            conexionGeneral.commit();
+            
+            preparedStatement.close();
+            
             return clienteEliminada;
             
         } catch (SQLException ex) {
-            throw new PersistenciaException("Error al eliminar el cliente: " + ex.getMessage());
+            try {
+                // Deshacer cambios en caso de error
+                if (this.conexionGeneral != null) {
+                    this.conexionGeneral.rollback();
+                }
+            } catch (SQLException rollbackEx) {
+                System.out.println("Error al hacer rollback: " + rollbackEx.getMessage());
+            }
+            System.out.println("Error al querer hacer la transaccion " + ex.getMessage());
+            throw new PersistenciaException("Ocurrió un error al registrar la sala, inténtelo de nuevo y si el error persiste comuníquese con el encargado del sistema.");
         } finally {
             try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
+                if (this.conexionGeneral != null) {
+                    this.conexionGeneral.close();
                 }
-                if (conexion != null) {
-                    conexion.close();
-                }
-            } catch (SQLException e) {
-                throw new PersistenciaException("Error al cerrar los recursos: " + e.getMessage());
+            } catch (SQLException ex) {
+                System.out.println("Error al cerrar la conexion de la base de datos");
             }
         }
     }
