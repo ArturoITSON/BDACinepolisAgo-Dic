@@ -82,7 +82,8 @@ public class PeliculaDAO implements IPeliculaDAO {
     public PeliculaEntidad guardar(PeliculaGuardarDTO pelicula) throws PersistenciaException {
 
         try {
-            Connection conexion = this.conexionBD.crearConexion();
+            this.conexionGeneral = this.conexionBD.crearConexion();
+            this.conexionGeneral.setAutoCommit(false);
             String insertCliente = """
                                     INSERT INTO Pelicula (titulo,
                                                           clasificacion_id,
@@ -96,7 +97,7 @@ public class PeliculaDAO implements IPeliculaDAO {
                                                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                                     """;
 
-            PreparedStatement preparedStatement = conexion.prepareStatement(insertCliente, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = conexionGeneral.prepareStatement(insertCliente, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, pelicula.getTitulo());
             preparedStatement.setInt(2, pelicula.getClasificacion_id());
             preparedStatement.setInt(3, pelicula.getDuracion());
@@ -117,15 +118,34 @@ public class PeliculaDAO implements IPeliculaDAO {
                 idCliente = (resultado.getInt(1));
             }
 
+             // Confirmar la transacción
+            conexionGeneral.commit();
+            
             resultado.close();
             preparedStatement.close();
-            conexion.close();
+            conexionGeneral.close();
 
             return this.buscarPorId(idCliente);
 
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            throw new PersistenciaException("Ocurrió un error al leer la base de datos, inténtelo de nuevo y si el error persiste comuníquese con el encargado del sistema.");
+        } catch (SQLException | PersistenciaException ex) {
+            try {
+                // Deshacer cambios en caso de error
+                if (this.conexionGeneral != null) {
+                    this.conexionGeneral.rollback();
+                }
+            } catch (SQLException rollbackEx) {
+                System.out.println("Error al hacer rollback: " + rollbackEx.getMessage());
+            }
+            System.out.println("Error al querer hacer la transaccion " + ex.getMessage());
+            throw new PersistenciaException("Ocurrió un error al registrar el cliente, inténtelo de nuevo y si el error persiste comuníquese con el encargado del sistema.");
+        } finally {
+            try {
+                if (this.conexionGeneral != null) {
+                    this.conexionGeneral.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println("Error al cerrar la conexion de la base de datos");
+            }
         }
 
     }
@@ -206,7 +226,6 @@ public PeliculaEntidad buscarPorTitulo(String titulo) throws PersistenciaExcepti
     @Override
     public PeliculaEntidad modificarPelicula(PeliculaModificarDTO pelicula) throws PersistenciaException {
 
-        Connection conexion = null;
         PreparedStatement preparedStatement = null;
 
         PeliculaEntidad peliculaEditada = new PeliculaEntidad();
@@ -218,9 +237,12 @@ public PeliculaEntidad buscarPorTitulo(String titulo) throws PersistenciaExcepti
         peliculaEditada.setTitulo(pelicula.getTitulo());
 
         try {
-            conexion = conexionBD.crearConexion();
+            
+            this.conexionGeneral = this.conexionBD.crearConexion();
+            this.conexionGeneral.setAutoCommit(false);
+
             String sentenciaSql = "UPDATE Pelicula SET titulo = ?, clasificacion_id = ?, duracion = ?, genero_id = ?, pais_id = ? WHERE id = ?";
-            preparedStatement = conexion.prepareStatement(sentenciaSql);
+            preparedStatement = conexionGeneral.prepareStatement(sentenciaSql);
             preparedStatement.setString(1, peliculaEditada.getTitulo());
             preparedStatement.setInt(2, peliculaEditada.getClasificacion_id());
             preparedStatement.setInt(3, peliculaEditada.getDuracion());
@@ -230,20 +252,33 @@ public PeliculaEntidad buscarPorTitulo(String titulo) throws PersistenciaExcepti
 
             preparedStatement.executeUpdate();
             System.out.println(peliculaEditada.toString() + "dao");
+            
+            
+            // Confirmar la transacción
+            conexionGeneral.commit();
+            
+            preparedStatement.close();
+            
             return peliculaEditada;
 
         } catch (SQLException ex) {
-            throw new PersistenciaException("Error al editar la pelicula: " + ex.getMessage());
+            try {
+                // Deshacer cambios en caso de error
+                if (this.conexionGeneral != null) {
+                    this.conexionGeneral.rollback();
+                }
+            } catch (SQLException rollbackEx) {
+                System.out.println("Error al hacer rollback: " + rollbackEx.getMessage());
+            }
+            System.out.println("Error al querer hacer la transaccion " + ex.getMessage());
+            throw new PersistenciaException("Ocurrió un error al registrar la sala, inténtelo de nuevo y si el error persiste comuníquese con el encargado del sistema.");
         } finally {
             try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
+                if (this.conexionGeneral != null) {
+                    this.conexionGeneral.close();
                 }
-                if (conexion != null) {
-                    conexion.close();
-                }
-            } catch (SQLException e) {
-                throw new PersistenciaException("Error al cerrar los recursos: " + e.getMessage());
+            } catch (SQLException ex) {
+                System.out.println("Error al cerrar la conexion de la base de datos");
             }
         }
     }
@@ -251,32 +286,45 @@ public PeliculaEntidad buscarPorTitulo(String titulo) throws PersistenciaExcepti
     @Override
     public PeliculaEntidad eliminarPelicula(int idPelicula) throws PersistenciaException {
 
-        Connection conexion = null;
         PreparedStatement preparedStatement = null;
         PeliculaEntidad peliculaEliminada = this.buscarPorId(idPelicula);
 
         try {
-            conexion = conexionBD.crearConexion();
+
+            this.conexionGeneral = this.conexionBD.crearConexion();
+            this.conexionGeneral.setAutoCommit(false);
+            
             String sentenciaSql = "DELETE FROM Pelicula WHERE id = ?";
-            preparedStatement = conexion.prepareStatement(sentenciaSql);
+            preparedStatement = conexionGeneral.prepareStatement(sentenciaSql);
             preparedStatement.setInt(1, peliculaEliminada.getId());
 
             preparedStatement.executeUpdate();
 
+            preparedStatement.close();
+            
+            // Confirmar la transacción
+            conexionGeneral.commit();
+            
             return peliculaEliminada;
 
         } catch (SQLException ex) {
-            throw new PersistenciaException("Error al eliminar la pelicula: " + ex.getMessage());
+            try {
+                // Deshacer cambios en caso de error
+                if (this.conexionGeneral != null) {
+                    this.conexionGeneral.rollback();
+                }
+            } catch (SQLException rollbackEx) {
+                System.out.println("Error al hacer rollback: " + rollbackEx.getMessage());
+            }
+            System.out.println("Error al querer hacer la transaccion " + ex.getMessage());
+            throw new PersistenciaException("Ocurrió un error al registrar la sala, inténtelo de nuevo y si el error persiste comuníquese con el encargado del sistema.");
         } finally {
             try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
+                if (this.conexionGeneral != null) {
+                    this.conexionGeneral.close();
                 }
-                if (conexion != null) {
-                    conexion.close();
-                }
-            } catch (SQLException e) {
-                throw new PersistenciaException("Error al cerrar los recursos: " + e.getMessage());
+            } catch (SQLException ex) {
+                System.out.println("Error al cerrar la conexion de la base de datos");
             }
         }
     }
