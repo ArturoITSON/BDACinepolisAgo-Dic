@@ -94,7 +94,7 @@ public class TicketDAO implements ITicketDAO{
                                     cliente_id,
                                     funcion_id
                                FROM Ticket
-                               WHERE id = ?
+                               WHERE cliente_id = ?
                                """;
 
             PreparedStatement preparedStatement = conexion.prepareStatement(codigoSQL);

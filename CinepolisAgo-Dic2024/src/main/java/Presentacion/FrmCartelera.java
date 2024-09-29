@@ -836,6 +836,9 @@ public class FrmCartelera extends javax.swing.JFrame {
 
     private void btnTicketsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTicketsActionPerformed
         // TODO add your handling code here:
+        //FrmTicketsCliente ticketsCliente = new FrmTicketsCliente(this, ticketNegocio, clienteNegocio);
+       // ticketsCliente.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnTicketsActionPerformed
 
     private void cbcSucursalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbcSucursalesActionPerformed
