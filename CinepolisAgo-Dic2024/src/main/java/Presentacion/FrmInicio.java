@@ -15,6 +15,7 @@ import Negocio.IPaisNegocio;
 import Negocio.IPeliculaNegocio;
 import Negocio.ISalaNegocio;
 import Negocio.ISucursalNegocio;
+import Negocio.ITicketNegocio;
 import java.awt.Image;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -37,13 +38,14 @@ public class FrmInicio extends javax.swing.JFrame {
     private IFuncionNegocio funcionNegocio;
     private ISalaNegocio salaNegocio;
     private ISucursalNegocio sucursalNegocio;
+    private ITicketNegocio ticketNegocio;
     
     
     /**
      * Creates new form Inicio
      */
     public FrmInicio(IClienteNegocio clienteNegocio, IPeliculaNegocio peliculaNegocio, IGeneroNegocio generoNegocio, IClasificacionNegocio clasificacionNegocio, IPaisNegocio paisNegocio, ICiudadNegocio ciudadNegocio,
-                     IFuncionNegocio funcionNegocio, ISalaNegocio salaNegocio, ISucursalNegocio sucursalNegocio) {
+                     IFuncionNegocio funcionNegocio, ISalaNegocio salaNegocio, ISucursalNegocio sucursalNegocio, ITicketNegocio ticketNegocio) {
         initComponents();
         
         this.peliculaNegocio = peliculaNegocio;
@@ -56,6 +58,7 @@ public class FrmInicio extends javax.swing.JFrame {
         this.salaNegocio = salaNegocio;
         this.sucursalNegocio = sucursalNegocio;
         this.ciudadNegocio = ciudadNegocio;
+        this.ticketNegocio = ticketNegocio;
 
         
         setImagenLabel(jblCinepolisLogo, rutaCinepolisLogo);
@@ -180,7 +183,7 @@ public class FrmInicio extends javax.swing.JFrame {
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
         // TODO add your handling code here:
         FrmIniciarSesion iniciarSesion = new FrmIniciarSesion((ClienteNegocio) clienteNegocio, this, peliculaNegocio, generoNegocio, clasificacionNegocio, paisNegocio, funcionNegocio
-                                                                , salaNegocio, sucursalNegocio, ciudadNegocio);
+                                                                , salaNegocio, sucursalNegocio, ciudadNegocio, ticketNegocio);
         iniciarSesion.setVisible(true);
         this.setVisible(false);
 

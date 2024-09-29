@@ -159,9 +159,9 @@
                           <Component id="lblTitulo" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
-                              <Group type="103" groupAlignment="3" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="lblDuracion" alignment="1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblGenero" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblGenero" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Component id="lblReloj" min="-2" pref="39" max="-2" attributes="0"/>
                           </Group>
@@ -374,8 +374,14 @@
           </Properties>
         </Component>
         <Component class="java.awt.Checkbox" name="cbxEfectivo">
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="cbxEfectivoMouseClicked"/>
+          </Events>
         </Component>
         <Component class="java.awt.Checkbox" name="cbxTarjeta">
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="cbxTarjetaMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="lblMetodo">
           <Properties>

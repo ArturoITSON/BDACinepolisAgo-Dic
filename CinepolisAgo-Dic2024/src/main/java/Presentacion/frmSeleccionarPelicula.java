@@ -6,8 +6,10 @@ package Presentacion;
 
 import DTOs.DatosCarteleraDTO;
 import DTOs.FuncionDTO;
+import DTOs.TicketDTO;
 import Negocio.IFuncionNegocio;
 import Negocio.IGeneroNegocio;
+import Negocio.ITicketNegocio;
 import Negocio.NegocioException;
 import Persistencia.PersistenciaException;
 import static Presentacion.FrmCartelera.nombreSala;
@@ -31,10 +33,12 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
     DatosCarteleraDTO datos;
     IGeneroNegocio generoNegocio;
     IFuncionNegocio funcionNegocio;
+    ITicketNegocio ticketNegocio;
     
     String rutaReloj = "src/main/java/utilerias/Imagenes/reloj.png";
     String rutaPagoLinea = "src/main/java/utilerias/Imagenes/visa.png";
     String rutaPagoEfectivo = "src/main/java/utilerias/Imagenes/efectivo.png";
+    String rutaQR = "src/main/java/utilerias/Imagenes/QR.png";
     
     static int cantidad = 1;
     
@@ -42,7 +46,8 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
     /**
      * Creates new form frmSeleccionarPelicula
      */
-    public frmSeleccionarPelicula(FrmCartelera cartelera, DatosCarteleraDTO datos, IGeneroNegocio generoNegocio, IFuncionNegocio funcionNegocio) {
+    public frmSeleccionarPelicula(FrmCartelera cartelera, DatosCarteleraDTO datos, IGeneroNegocio generoNegocio, IFuncionNegocio funcionNegocio,
+                                  ITicketNegocio ticketNegocio) {
         initComponents();
         
         
@@ -50,6 +55,7 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
         this.cartelera = cartelera;
         this.generoNegocio = generoNegocio;
         this.funcionNegocio = funcionNegocio;
+        this.ticketNegocio = ticketNegocio;
         
         
         setImagenLabel(lblImgTarjeta, rutaPagoLinea);
@@ -334,8 +340,8 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
                         .addComponent(lblTitulo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(lblDuracion)
+                            .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(lblDuracion, javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(lblGenero))
                             .addComponent(lblReloj, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -353,6 +359,18 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 
         lblPago.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        cbxEfectivo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cbxEfectivoMouseClicked(evt);
+            }
+        });
+
+        cbxTarjeta.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cbxTarjetaMouseClicked(evt);
+            }
+        });
 
         lblMetodo.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblMetodo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -530,7 +548,19 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
 
     private void btnComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprarActionPerformed
         // TODO add your handling code here:
+        TicketDTO ticket = new TicketDTO();
+        ticket.setCliente_id(datos.getCliente().getIdCliente());
+        ticket.setFuncion_id(datos.getFuncion().getId());
         
+        if(cbxEfectivo.getState()){
+        ticket.setMetodoPago("Efectivo");
+        }
+        if(cbxTarjeta.getState()){
+            ticket.setMetodoPago("En Linea");
+        }
+        
+        ticket.setQR(rutaQR);
+        ticket.setPrecio(cantidad * datos.getFuncion().getPrecio());
         
         
         
@@ -551,6 +581,8 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
             calcularTotal(cantidad);
         }
         
+        
+        
     }//GEN-LAST:event_btnMenosActionPerformed
 
     private void btnMasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMasActionPerformed
@@ -561,6 +593,16 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
         btnMenos.setEnabled(true);
         calcularTotal(cantidad);
     }//GEN-LAST:event_btnMasActionPerformed
+
+    private void cbxTarjetaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbxTarjetaMouseClicked
+        // TODO add your handling code here:
+        cbxEfectivo.setState(false);
+    }//GEN-LAST:event_cbxTarjetaMouseClicked
+
+    private void cbxEfectivoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbxEfectivoMouseClicked
+        // TODO add your handling code here:
+        cbxTarjeta.setState(false);
+    }//GEN-LAST:event_cbxEfectivoMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -23,6 +23,15 @@ public class TicketDAO implements ITicketDAO{
     
     private IConexionBD conexionBD;
     private Connection conexionGeneral;
+
+    public TicketDAO(IConexionBD conexionBD) {
+        this.conexionBD = conexionBD;
+
+    }
+    
+    
+    
+    
     
     @Override
     public TicketEntidad guardar(TicketGuardarDTO ticket) throws PersistenciaException {

@@ -21,6 +21,7 @@ import Negocio.IGeneroNegocio;
 import Negocio.IPeliculaNegocio;
 import Negocio.ISalaNegocio;
 import Negocio.ISucursalNegocio;
+import Negocio.ITicketNegocio;
 import Negocio.NegocioException;
 import Persistencia.PersistenciaException;
 import java.awt.Image;
@@ -58,6 +59,7 @@ public class FrmCartelera extends javax.swing.JFrame {
     ISalaNegocio salaNegocio;
     FrmIniciarSesion iniciarSesion;
     IGeneroNegocio generoNegocio;
+    ITicketNegocio ticketNegocio;
     
     String rutaReloj = "src/main/java/utilerias/Imagenes/reloj.png";
     String rutaCinepolisLogo = "src/main/java/utilerias/Imagenes/CinepolisLogo.png";
@@ -80,7 +82,8 @@ public class FrmCartelera extends javax.swing.JFrame {
      * Creates new form FrmCartelera
      */
     public FrmCartelera(IPeliculaNegocio peliculaNegocio, ICiudadNegocio ciudadNegocio, ClienteBuscarDTO cliente, ISucursalNegocio sucursalNegocio,
-                        FrmIniciarSesion iniciarSesion, ISalaNegocio salaNegocio, IFuncionNegocio funcionNegocio, IGeneroNegocio generoNegocio) {
+                        FrmIniciarSesion iniciarSesion, ISalaNegocio salaNegocio, IFuncionNegocio funcionNegocio, IGeneroNegocio generoNegocio,
+                        ITicketNegocio ticketNegocio) {
         initComponents();
         
         this.ciudadNegocio = ciudadNegocio;
@@ -91,6 +94,7 @@ public class FrmCartelera extends javax.swing.JFrame {
         this.funcionNegocio = funcionNegocio;
         this.peliculaNegocio = peliculaNegocio;
         this.generoNegocio = generoNegocio;
+        this.ticketNegocio = ticketNegocio;
         nombreSucursal = null;
         nombreCiudad = null;
         
@@ -770,7 +774,7 @@ public class FrmCartelera extends javax.swing.JFrame {
             datos.setFuncion(funcion.get(cbcHorarios.getSelectedIndex()));
             datos.setCliente(cliente);
             
-            frmSeleccionarPelicula seleccionarPelicula = new frmSeleccionarPelicula(this, datos, generoNegocio, funcionNegocio);
+            frmSeleccionarPelicula seleccionarPelicula = new frmSeleccionarPelicula(this, datos, generoNegocio, funcionNegocio, ticketNegocio);
             seleccionarPelicula.setVisible(true);
             
         } catch (NegocioException ex) {
