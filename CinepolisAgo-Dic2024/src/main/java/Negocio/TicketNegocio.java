@@ -6,7 +6,9 @@ package Negocio;
 
 import DTOs.FuncionDTO;
 import DTOs.TicketDTO;
+import DTOs.TicketFiltroTablaDTO;
 import DTOs.TicketGuardarDTO;
+import DTOs.TicketTablaDTO;
 import Entidades.TicketEntidad;
 import Persistencia.ITicketDAO;
 import Persistencia.PersistenciaException;
@@ -23,9 +25,15 @@ import utilerias.Utilidades;
 public class TicketNegocio implements ITicketNegocio{
     
     ITicketDAO ticketDAO;
+    IFuncionNegocio funcionNegocio;
 
     public TicketNegocio(ITicketDAO ticketDAO) {
         this.ticketDAO = ticketDAO;
+    }
+    
+    public TicketNegocio(ITicketDAO ticketDAO, IFuncionNegocio funcionNegocio) {
+        this.ticketDAO = ticketDAO;
+        this.funcionNegocio = funcionNegocio;
     }
     
     private TicketDTO convertirATicketDTO(TicketEntidad ticket) {
@@ -73,6 +81,26 @@ public class TicketNegocio implements ITicketNegocio{
             throw new NegocioException(ex.getMessage());
         }
     }
+    
+    @Override
+public List<TicketTablaDTO> buscarTicketsTabla(TicketFiltroTablaDTO filtro) throws NegocioException {
+    try {
+        // La consulta ya trae el nombre de la película y la hora de la función
+        List<TicketTablaDTO> ticketsLista = this.ticketDAO.buscarTicketsTabla(filtro);
+        
+        if (ticketsLista == null || ticketsLista.isEmpty()) {
+            throw new NegocioException("No se encontraron registros con los filtros");
+        }
+
+        // No es necesario iterar y agregar nuevamente los datos de nombre y hora
+        return ticketsLista;
+        
+    } catch (PersistenciaException ex) {
+        System.out.println(ex.getMessage());
+        throw new NegocioException(ex.getMessage());
+    }
+}
+
     
     private int obtenerOFFSETMySQL(int limit, int pagina) {
         return new Utilidades().RegresarOFFSETMySQL(limit, pagina);

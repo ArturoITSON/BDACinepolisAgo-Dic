@@ -5,7 +5,9 @@
 package Negocio;
 
 import DTOs.TicketDTO;
+import DTOs.TicketFiltroTablaDTO;
 import DTOs.TicketGuardarDTO;
+import DTOs.TicketTablaDTO;
 import java.util.List;
 
 /**
@@ -17,4 +19,6 @@ public interface ITicketNegocio {
     List<TicketDTO> buscarTicketsPorId(int idTicket) throws NegocioException;
     
     TicketDTO guardar(TicketGuardarDTO ticket) throws NegocioException;
+    
+    List<TicketTablaDTO> buscarTicketsTabla(TicketFiltroTablaDTO filtro) throws NegocioException;
 }

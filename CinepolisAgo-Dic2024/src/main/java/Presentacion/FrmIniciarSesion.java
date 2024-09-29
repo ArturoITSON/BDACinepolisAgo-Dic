@@ -17,6 +17,7 @@ import Negocio.IPaisNegocio;
 import Negocio.IPeliculaNegocio;
 import Negocio.ISalaNegocio;
 import Negocio.ISucursalNegocio;
+import Negocio.ITicketNegocio;
 import Negocio.NegocioException;
 import java.awt.Image;
 import java.util.logging.Level;
@@ -45,13 +46,14 @@ public class FrmIniciarSesion extends javax.swing.JFrame {
     ISalaNegocio salaNegocio;
     ISucursalNegocio sucursalNegocio;
     ICiudadNegocio ciudadNegocio;
+    ITicketNegocio ticketNegocio;
     
     
     /**
      * Creates new form FrmIniciarSesion
      */
     public FrmIniciarSesion(ClienteNegocio clienteNegocio, FrmInicio inicio, IPeliculaNegocio peliculaNegocio, IGeneroNegocio generoNegocio, IClasificacionNegocio clasificacionNegocio, IPaisNegocio paisNegocio,
-                            IFuncionNegocio funcionNegocio, ISalaNegocio salaNegocio, ISucursalNegocio sucursalNegocio, ICiudadNegocio ciudadNegocio) {
+                            IFuncionNegocio funcionNegocio, ISalaNegocio salaNegocio, ISucursalNegocio sucursalNegocio, ICiudadNegocio ciudadNegocio, ITicketNegocio ticketNegocio) {
         initComponents();
         
         
@@ -65,6 +67,7 @@ public class FrmIniciarSesion extends javax.swing.JFrame {
         this.salaNegocio = salaNegocio;
         this.sucursalNegocio = sucursalNegocio;
         this.ciudadNegocio = ciudadNegocio;
+        this.ticketNegocio=ticketNegocio;
         
         setImagenLabel(jblCinepolisLogo, rutaCinepolisLogo);
         
@@ -257,7 +260,7 @@ public class FrmIniciarSesion extends javax.swing.JFrame {
 
                     System.out.println(clienteBuscado.getIdCliente());
                     FrmCartelera cartelera = new FrmCartelera(peliculaNegocio, ciudadNegocio, clienteBuscado, sucursalNegocio, this, salaNegocio, funcionNegocio,
-                                                              generoNegocio);
+                                                              generoNegocio, ticketNegocio);
 
                     cartelera.setVisible(true);
 

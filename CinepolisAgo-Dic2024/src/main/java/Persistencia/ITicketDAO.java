@@ -4,7 +4,9 @@
  */
 package Persistencia;
 
+import DTOs.TicketFiltroTablaDTO;
 import DTOs.TicketGuardarDTO;
+import DTOs.TicketTablaDTO;
 import Entidades.TicketEntidad;
 import java.util.List;
 
@@ -19,5 +21,7 @@ public interface ITicketDAO {
     public TicketEntidad buscarPorId(int id) throws PersistenciaException;
     
     public List<TicketEntidad> buscarTicketsPorId(int id) throws PersistenciaException;
+    
+    List<TicketTablaDTO> buscarTicketsTabla(TicketFiltroTablaDTO filtro) throws PersistenciaException;
     
 }

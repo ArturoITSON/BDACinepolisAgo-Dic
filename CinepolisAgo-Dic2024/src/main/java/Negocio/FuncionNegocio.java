@@ -23,22 +23,20 @@ import utilerias.Utilidades;
  */
 public class FuncionNegocio implements IFuncionNegocio {
 
-    
     private IFuncionDAO funcionDAO;
 
     public FuncionNegocio(IFuncionDAO funcionDAO) {
         this.funcionDAO = funcionDAO;
     }
-    
-    
+
     @Override
     public List<FuncionTablaDTO> buscarFuncionesTabla(FuncionFiltroTablaDTO filtro) throws NegocioException {
-        
-        try{
-        int offset = this.obtenerOFFSETMySQL(filtro.getLimit(), filtro.getOffset());
-        filtro.setOffset(offset);
-        
-        List<FuncionTablaDTO> funcionesLista = this.funcionDAO.buscarFuncionesTabla(filtro);
+
+        try {
+            int offset = this.obtenerOFFSETMySQL(filtro.getLimit(), filtro.getOffset());
+            filtro.setOffset(offset);
+
+            List<FuncionTablaDTO> funcionesLista = this.funcionDAO.buscarFuncionesTabla(filtro);
             if (funcionesLista == null) {
                 throw new NegocioException("No se encontraron registros con los filtros");
             }
@@ -46,10 +44,9 @@ public class FuncionNegocio implements IFuncionNegocio {
         } catch (PersistenciaException ex) {
             System.out.println(ex.getMessage());
             throw new NegocioException(ex.getMessage());
-        }    
+        }
     }
 
-    
     @Override
     public FuncionDTO guardar(FuncionGuardarDTO funcion) throws NegocioException {
 
@@ -57,7 +54,7 @@ public class FuncionNegocio implements IFuncionNegocio {
         try {
             funcionGuardar = this.convertirAFuncionDTO(funcionDAO.guardar(funcion));
             return funcionGuardar;
-            
+
         } catch (PersistenciaException ex) {
             Logger.getLogger(PeliculaNegocio.class.getName()).log(Level.SEVERE, null, ex);
             throw new NegocioException(ex.getMessage());
@@ -66,63 +63,69 @@ public class FuncionNegocio implements IFuncionNegocio {
 
     @Override
     public FuncionDTO eliminar(int idFuncion) throws NegocioException {
-        
+
         try {
             FuncionDTO funcionEliminar = this.convertirAFuncionDTO(funcionDAO.eliminarFuncion(idFuncion));
-            
+
             return funcionEliminar;
         } catch (PersistenciaException ex) {
             Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
             throw new NegocioException(ex.getMessage());
         }
     }
-    
-    
-    
+
     @Override
     public List<FuncionDTO> buscarFuncionesPorIdSala(int idSala) throws NegocioException {
-        
-        try{
-            
+
+        try {
+
             List<FuncionEntidad> funcionesEntidad = funcionDAO.buscarFuncionesPorIdSala(idSala);
             List<FuncionDTO> funcionesDTO = new ArrayList<>();
 
             for (FuncionEntidad entidad : funcionesEntidad) {
-            funcionesDTO.add(convertirAFuncionDTO(entidad));
-        }
-          return funcionesDTO;
-        }    
-             
-         catch(PersistenciaException ex){
+                funcionesDTO.add(convertirAFuncionDTO(entidad));
+            }
+            return funcionesDTO;
+        } catch (PersistenciaException ex) {
             Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-            return null;
-        }
-    
-    
+
+        return null;
+    }
+
     @Override
     public List<FuncionDTO> buscarFuncionesPorIdSalaYIdPelicula(int idSala, int idPelilcula) throws NegocioException {
-        
-        try{
-            
+
+        try {
+
             List<FuncionEntidad> funcionesEntidad = funcionDAO.buscarFuncionesPorIdSalaYIdPelicula(idSala, idPelilcula);
             List<FuncionDTO> funcionesDTO = new ArrayList<>();
 
             for (FuncionEntidad entidad : funcionesEntidad) {
-            funcionesDTO.add(convertirAFuncionDTO(entidad));
-        }
-          return funcionesDTO;
-        }    
-             
-         catch(PersistenciaException ex){
+                funcionesDTO.add(convertirAFuncionDTO(entidad));
+            }
+            return funcionesDTO;
+        } catch (PersistenciaException ex) {
             Logger.getLogger(ClienteNegocio.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-            return null;
+
+        return null;
+    }
+
+    @Override
+    public FuncionDTO buscarFuncionPorId(int idFuncion) throws NegocioException {
+        try {
+            FuncionEntidad funcionEntidad = this.funcionDAO.buscarPorId(idFuncion);
+            if (funcionEntidad == null) {
+                throw new NegocioException("No se encontró la función con el ID proporcionado.");
+            }
+            return convertirAFuncionDTO(funcionEntidad);
+        } catch (PersistenciaException ex) {
+            System.out.println(ex.getMessage());
+            throw new NegocioException(ex.getMessage());
         }
-    
-    
+    }
+
     private FuncionDTO convertirAFuncionDTO(FuncionEntidad funcion) {
         return new FuncionDTO(
                 funcion.getId(),
@@ -134,10 +137,9 @@ public class FuncionNegocio implements IFuncionNegocio {
                 funcion.getSala_id()
         );
     }
-        
-        
+
     private int obtenerOFFSETMySQL(int limit, int pagina) {
         return new Utilidades().RegresarOFFSETMySQL(limit, pagina);
     }
-    
+
 }

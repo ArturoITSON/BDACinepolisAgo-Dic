@@ -19,10 +19,12 @@ import Negocio.IPaisNegocio;
 import Negocio.IPeliculaNegocio;
 import Negocio.ISalaNegocio;
 import Negocio.ISucursalNegocio;
+import Negocio.ITicketNegocio;
 import Negocio.PaisNegocio;
 import Negocio.PeliculaNegocio;
 import Negocio.SalaNegocio;
 import Negocio.SucursalNegocio;
+import Negocio.TicketNegocio;
 import Persistencia.CiudadDAO;
 import Persistencia.ClasificacionDAO;
 import Persistencia.ClienteDAO;
@@ -40,10 +42,12 @@ import Persistencia.IPaisDAO;
 import Persistencia.IPeliculaDAO;
 import Persistencia.ISalaDAO;
 import Persistencia.ISucursalDAO;
+import Persistencia.ITicketDAO;
 import Persistencia.PaisDAO;
 import Persistencia.PeliculaDAO;
 import Persistencia.SalaDAO;
 import Persistencia.SucursalDAO;
+import Persistencia.TicketDAO;
 import Presentacion.FrmInicio;
 
 /**
@@ -65,6 +69,7 @@ public class Main {
         IFuncionDAO funcionDAO = new FuncionDAO(conexion);
         ISalaDAO SalaDAO = new SalaDAO(conexion);
         ISucursalDAO sucursalDao = new SucursalDAO(conexion);
+        ITicketDAO ticketDao = new TicketDAO(conexion);
         
         IClienteNegocio clienteNegocio = new ClienteNegocio(clienteDAO);
         IPeliculaNegocio peliculaNegocio = new PeliculaNegocio(peliculaDAO);
@@ -75,10 +80,11 @@ public class Main {
         IFuncionNegocio funcionNegocio = new FuncionNegocio(funcionDAO);
         ISalaNegocio salaNegocio = new SalaNegocio(SalaDAO);
         ISucursalNegocio sucursalNegocio = new SucursalNegocio(sucursalDao);
+        ITicketNegocio ticketNegocio = new TicketNegocio(ticketDao);
                 
         
         FrmInicio inicio = new FrmInicio(clienteNegocio, peliculaNegocio, generoNegocio, clasificacionNegocio, paisNegocio, ciudadNegocio, funcionNegocio, salaNegocio,
-                                        sucursalNegocio);
+                                        sucursalNegocio, ticketNegocio);
         inicio.setVisible(true);
     
     }

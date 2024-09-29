@@ -16,11 +16,13 @@ import DTOs.PeliculaTablaDTO;
 import DTOs.SalaDTO;
 import DTOs.SucursalDTO;
 import Negocio.ICiudadNegocio;
+import Negocio.IClienteNegocio;
 import Negocio.IFuncionNegocio;
 import Negocio.IGeneroNegocio;
 import Negocio.IPeliculaNegocio;
 import Negocio.ISalaNegocio;
 import Negocio.ISucursalNegocio;
+import Negocio.ITicketNegocio;
 import Negocio.NegocioException;
 import Persistencia.PersistenciaException;
 import java.awt.Image;
@@ -58,6 +60,8 @@ public class FrmCartelera extends javax.swing.JFrame {
     ISalaNegocio salaNegocio;
     FrmIniciarSesion iniciarSesion;
     IGeneroNegocio generoNegocio;
+    ITicketNegocio ticketNegocio;
+    IClienteNegocio clienteNegocio;
     
     String rutaReloj = "src/main/java/utilerias/Imagenes/reloj.png";
     String rutaCinepolisLogo = "src/main/java/utilerias/Imagenes/CinepolisLogo.png";
@@ -80,7 +84,7 @@ public class FrmCartelera extends javax.swing.JFrame {
      * Creates new form FrmCartelera
      */
     public FrmCartelera(IPeliculaNegocio peliculaNegocio, ICiudadNegocio ciudadNegocio, ClienteBuscarDTO cliente, ISucursalNegocio sucursalNegocio,
-                        FrmIniciarSesion iniciarSesion, ISalaNegocio salaNegocio, IFuncionNegocio funcionNegocio, IGeneroNegocio generoNegocio) {
+                        FrmIniciarSesion iniciarSesion, ISalaNegocio salaNegocio, IFuncionNegocio funcionNegocio, IGeneroNegocio generoNegocio, ITicketNegocio ticketNegocio) {
         initComponents();
         
         this.ciudadNegocio = ciudadNegocio;
@@ -91,6 +95,7 @@ public class FrmCartelera extends javax.swing.JFrame {
         this.funcionNegocio = funcionNegocio;
         this.peliculaNegocio = peliculaNegocio;
         this.generoNegocio = generoNegocio;
+        this.ticketNegocio = ticketNegocio;
         nombreSucursal = null;
         nombreCiudad = null;
         
@@ -831,9 +836,9 @@ public class FrmCartelera extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRetrocesoActionPerformed
 
     private void btnTicketsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTicketsActionPerformed
-        // TODO add your handling code here:
-        //FrmTicketsCliente ticketsCliente = new FrmTicketsCliente(this, ticketNegocio, clienteNegocio);
-       // ticketsCliente.setVisible(true);
+        //TODO add your handling code here:
+        FrmTicketsCliente ticketsCliente = new FrmTicketsCliente(this, ticketNegocio, clienteNegocio);
+        ticketsCliente.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnTicketsActionPerformed
 
