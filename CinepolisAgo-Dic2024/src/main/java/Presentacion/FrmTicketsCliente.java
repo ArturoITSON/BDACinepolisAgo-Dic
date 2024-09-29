@@ -4,16 +4,26 @@
  */
 package Presentacion;
 
+import Negocio.IClienteNegocio;
+import Negocio.ITicketNegocio;
+
 /**
  *
  * @author eduar
  */
 public class FrmTicketsCliente extends javax.swing.JFrame {
+    
+    FrmCartelera cartelera;
+    ITicketNegocio ticketNegocio;
+    IClienteNegocio clienteNegocio;
 
     /**
      * Creates new form FrmTicketsCliente
      */
-    public FrmTicketsCliente() {
+    public FrmTicketsCliente(FrmCartelera cartelera, ITicketNegocio ticketNegocio, IClienteNegocio clienteNegocio) {
+        this.cartelera=cartelera;
+        this.ticketNegocio=ticketNegocio;
+        this.clienteNegocio=clienteNegocio;
         initComponents();
     }
 
@@ -114,41 +124,6 @@ public class FrmTicketsCliente extends javax.swing.JFrame {
     private void btnVisualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVisualizarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnVisualizarActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmTicketsCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmTicketsCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmTicketsCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmTicketsCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrmTicketsCliente().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnVisualizar;
