@@ -68,6 +68,7 @@ public class FrmIniciarSesion extends javax.swing.JFrame {
         this.sucursalNegocio = sucursalNegocio;
         this.ciudadNegocio = ciudadNegocio;
         this.ticketNegocio = ticketNegocio;
+
         
         setImagenLabel(jblCinepolisLogo, rutaCinepolisLogo);
         

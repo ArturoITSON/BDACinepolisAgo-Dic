@@ -60,6 +60,7 @@ public class FrmInicio extends javax.swing.JFrame {
         this.ciudadNegocio = ciudadNegocio;
         this.ticketNegocio = ticketNegocio;
 
+
         
         setImagenLabel(jblCinepolisLogo, rutaCinepolisLogo);
     }

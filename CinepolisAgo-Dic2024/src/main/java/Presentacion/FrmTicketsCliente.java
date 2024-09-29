@@ -4,16 +4,26 @@
  */
 package Presentacion;
 
+import DTOs.TicketFiltroTablaDTO;
+import DTOs.TicketTablaDTO;
 import Negocio.IClienteNegocio;
+import Negocio.IFuncionNegocio;
 import Negocio.ITicketNegocio;
+import Negocio.NegocioException;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author eduar
  */
 public class FrmTicketsCliente extends javax.swing.JFrame {
-    
+
+    private int pagina = 1;
+    private final int LIMITE = 5;
     FrmCartelera cartelera;
+    IFuncionNegocio funcionNegocio;
     ITicketNegocio ticketNegocio;
     IClienteNegocio clienteNegocio;
 
@@ -21,10 +31,71 @@ public class FrmTicketsCliente extends javax.swing.JFrame {
      * Creates new form FrmTicketsCliente
      */
     public FrmTicketsCliente(FrmCartelera cartelera, ITicketNegocio ticketNegocio, IClienteNegocio clienteNegocio) {
-        this.cartelera=cartelera;
-        this.ticketNegocio=ticketNegocio;
-        this.clienteNegocio=clienteNegocio;
+        this.cartelera = cartelera;
+        this.ticketNegocio = ticketNegocio;
+        this.clienteNegocio = clienteNegocio;
         initComponents();
+
+        metodosIniciales();
+    }
+
+    private void metodosIniciales() {
+        this.cargarTablaTickets();
+
+        btnPaginaAnterior.setEnabled(false);
+    }
+
+    private void BorrarRegistrosTablaTickets() {
+        DefaultTableModel modeloTabla = (DefaultTableModel) this.tblTickets.getModel();
+        if (modeloTabla.getRowCount() > 0) {
+            for (int row = modeloTabla.getRowCount() - 1; row > -1; row--) {
+                modeloTabla.removeRow(row);
+            }
+        }
+    }
+
+    private void AgregarRegistrosTablaTicket(List<TicketTablaDTO> ticketsLista) {
+        if (ticketsLista == null) {
+            return;
+        }
+
+        DefaultTableModel modeloTabla = (DefaultTableModel) this.tblTickets.getModel();
+        modeloTabla.setRowCount(0); // Limpia las filas existentes antes de agregar nuevas
+
+         ticketsLista.forEach(ticket -> {
+            Object[] fila = new Object[3]; // Asegúrate de que hay 3 columnas: ID, Nombre de Función, Hora
+            fila[0] = ticket.getId(); // ID del Ticket
+            fila[1] = ticket.getFuncionNombre(); // Nombre de la función (Nombre de la película)
+            fila[2] = ticket.getHoraFuncion(); // Hora de la función
+            modeloTabla.addRow(fila);
+        });
+    }
+
+    private void cargarTablaTickets() {
+        try {
+            TicketFiltroTablaDTO filtro = this.obtenerFiltrosTabla();
+            List<TicketTablaDTO> ticketsLista = this.ticketNegocio.buscarTicketsTabla(filtro);
+            this.BorrarRegistrosTablaTickets();
+            this.AgregarRegistrosTablaTicket(ticketsLista);
+
+            // Imprimir IDs cargados
+            for (TicketTablaDTO ticket : ticketsLista) {
+                System.out.println("Sala cargada: ID = " + ticket.getId());
+            }
+        } catch (NegocioException ex) {
+            this.BorrarRegistrosTablaTickets();
+            this.pagina--;
+            this.establecerTituloPaginacion();
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Información", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void establecerTituloPaginacion() {
+        lblNumeroPagina.setText("Página " + this.pagina);
+    }
+
+    private TicketFiltroTablaDTO obtenerFiltrosTabla() {
+        return new TicketFiltroTablaDTO(this.LIMITE, this.pagina, campoTextoFiltro.getText());
     }
 
     /**
@@ -37,10 +108,16 @@ public class FrmTicketsCliente extends javax.swing.JFrame {
     private void initComponents() {
 
         btnVolver = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        lblTickets = new javax.swing.JLabel();
         btnVisualizar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblTickets = new javax.swing.JTable();
+        lblNumeroPagina = new javax.swing.JLabel();
+        btnPaginaAnterior = new javax.swing.JButton();
+        btnPaginaSiguiente = new javax.swing.JButton();
+        campoTextoFiltro = new javax.swing.JTextField();
+        btnBuscar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -54,8 +131,8 @@ public class FrmTicketsCliente extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-        jLabel1.setText("Mis Tickets");
+        lblTickets.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        lblTickets.setText("Mis Tickets");
 
         btnVisualizar.setBackground(new java.awt.Color(8, 148, 249));
         btnVisualizar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -67,18 +144,44 @@ public class FrmTicketsCliente extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblTickets.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Id", "Funcion"
+                "Id", "Funcion", "Hora"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblTickets);
+
+        lblNumeroPagina.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblNumeroPagina.setText("Pagina 1");
+
+        btnPaginaAnterior.setText("Anterior");
+        btnPaginaAnterior.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPaginaAnteriorActionPerformed(evt);
+            }
+        });
+
+        btnPaginaSiguiente.setText("Siguiente");
+        btnPaginaSiguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPaginaSiguienteActionPerformed(evt);
+            }
+        });
+
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Filtro de busqueda:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -87,30 +190,51 @@ public class FrmTicketsCliente extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(42, 42, 42)
-                        .addComponent(btnVolver))
+                        .addGap(243, 243, 243)
+                        .addComponent(lblTickets))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(183, 183, 183)
-                        .addComponent(jLabel1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 65, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnVisualizar))
-                .addGap(70, 70, 70))
+                        .addGap(52, 52, 52)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnPaginaAnterior, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblNumeroPagina, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnPaginaSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnVolver)
+                                .addGap(388, 388, 388)
+                                .addComponent(btnVisualizar))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 496, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(campoTextoFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 496, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnBuscar))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 575, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(100, 100, 100)
-                .addComponent(jLabel1)
+                .addGap(30, 30, 30)
+                .addComponent(lblTickets)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
-                .addComponent(btnVisualizar)
-                .addGap(14, 14, 14)
-                .addComponent(btnVolver)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(campoTextoFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBuscar))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnPaginaAnterior)
+                    .addComponent(lblNumeroPagina)
+                    .addComponent(btnPaginaSiguiente))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnVolver)
+                    .addComponent(btnVisualizar))
                 .addGap(36, 36, 36))
         );
 
@@ -118,18 +242,51 @@ public class FrmTicketsCliente extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-
+        cartelera.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnVisualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVisualizarActionPerformed
         // TODO add your handling code here:
+        FrmResumenTicket res = new FrmResumenTicket();
+        res.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnVisualizarActionPerformed
 
+    private void btnPaginaAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaginaAnteriorActionPerformed
+        this.pagina--;
+        if (this.pagina == 0) {
+            this.pagina = 1;
+            return;
+        }
+        btnPaginaSiguiente.setEnabled(true);
+        this.establecerTituloPaginacion();
+        this.cargarTablaTickets();
+    }//GEN-LAST:event_btnPaginaAnteriorActionPerformed
+
+    private void btnPaginaSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaginaSiguienteActionPerformed
+        this.pagina++;
+        this.establecerTituloPaginacion();
+        this.cargarTablaTickets();
+        btnPaginaAnterior.setEnabled(true);
+    }//GEN-LAST:event_btnPaginaSiguienteActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+
+        this.cargarTablaTickets();
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnPaginaAnterior;
+    private javax.swing.JButton btnPaginaSiguiente;
     private javax.swing.JButton btnVisualizar;
     private javax.swing.JButton btnVolver;
+    private javax.swing.JTextField campoTextoFiltro;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lblNumeroPagina;
+    private javax.swing.JLabel lblTickets;
+    private javax.swing.JTable tblTickets;
     // End of variables declaration//GEN-END:variables
 }

@@ -69,6 +69,8 @@ public class Main {
         IFuncionDAO funcionDAO = new FuncionDAO(conexion);
         ISalaDAO SalaDAO = new SalaDAO(conexion);
         ISucursalDAO sucursalDao = new SucursalDAO(conexion);
+
+        ITicketDAO ticketDao = new TicketDAO(conexion);
         ITicketDAO ticketDAO = new TicketDAO(conexion);
         
         IClienteNegocio clienteNegocio = new ClienteNegocio(clienteDAO);
@@ -80,6 +82,8 @@ public class Main {
         IFuncionNegocio funcionNegocio = new FuncionNegocio(funcionDAO);
         ISalaNegocio salaNegocio = new SalaNegocio(SalaDAO);
         ISucursalNegocio sucursalNegocio = new SucursalNegocio(sucursalDao);
+
+        ITicketNegocio ticketNegocio = new TicketNegocio(ticketDao);
         ITicketNegocio ticketNegocio = new TicketNegocio(ticketDAO);
                 
         
