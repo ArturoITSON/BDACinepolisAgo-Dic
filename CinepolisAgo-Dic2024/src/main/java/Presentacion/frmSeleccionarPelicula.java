@@ -4,18 +4,209 @@
  */
 package Presentacion;
 
+import DTOs.DatosCarteleraDTO;
+import DTOs.FuncionDTO;
+import Negocio.IFuncionNegocio;
+import Negocio.IGeneroNegocio;
+import Negocio.NegocioException;
+import Persistencia.PersistenciaException;
+import static Presentacion.FrmCartelera.nombreSala;
+import java.awt.Image;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
 /**
  *
  * @author eduar
  */
 public class frmSeleccionarPelicula extends javax.swing.JFrame {
 
+    FrmCartelera cartelera;
+    DatosCarteleraDTO datos;
+    IGeneroNegocio generoNegocio;
+    IFuncionNegocio funcionNegocio;
+    
+    String rutaReloj = "src/main/java/utilerias/Imagenes/reloj.png";
+    String rutaPagoLinea = "src/main/java/utilerias/Imagenes/visa.png";
+    String rutaPagoEfectivo = "src/main/java/utilerias/Imagenes/efectivo.png";
+    
+    static int cantidad = 1;
+    
+    
     /**
      * Creates new form frmSeleccionarPelicula
      */
-    public frmSeleccionarPelicula() {
+    public frmSeleccionarPelicula(FrmCartelera cartelera, DatosCarteleraDTO datos, IGeneroNegocio generoNegocio, IFuncionNegocio funcionNegocio) {
         initComponents();
+        
+        
+        this.datos = datos;
+        this.cartelera = cartelera;
+        this.generoNegocio = generoNegocio;
+        this.funcionNegocio = funcionNegocio;
+        
+        
+        setImagenLabel(lblImgTarjeta, rutaPagoLinea);
+        setImagenLabel(lblImgEfectivo, rutaPagoEfectivo);
+        btnMenos.setEnabled(false);
+        lblCantidad.setText(String.valueOf(cantidad));
+        calcularTotal(cantidad);
+        
+        try {
+            cargarMetodosDatos();
+        } catch (NegocioException ex) {
+            Logger.getLogger(frmSeleccionarPelicula.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(frmSeleccionarPelicula.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
+    
+    
+    
+    
+    private void cargarMetodosDatos() throws NegocioException, MalformedURLException{
+    
+
+       setImagen(jblImagenPelicula, getImagenPelicula());
+       setImagenLabel(lblReloj, rutaReloj);
+       setDescripcion();
+       setTituloPelicula();
+       setDuracion();
+       setGenero();
+       setFunciones();
+       setPrecio();
+        
+    
+    }
+    
+    
+    
+    
+    
+            /**
+        * Metodo que coloca una imagen de el logo de reloj en la interfaz
+        * @param nombreJlb el jlabel que sera reemplazado por una imagen
+        * @param ruta la direccion donde se encuentra la imagen
+        */
+        private void setImagenLabel(JLabel nombreJlb, String ruta){
+    
+        ImageIcon image = new ImageIcon(ruta);
+        
+        Icon icon = new ImageIcon(
+        image.getImage().getScaledInstance(nombreJlb.getWidth(), nombreJlb.getHeight(), Image.SCALE_DEFAULT));
+        
+        nombreJlb.setIcon(icon);
+        
+        this.repaint();
+   
+    }
+
+        private void setImagen(JLabel nombreJlb, String ruta) throws MalformedURLException{
+    
+        URL url;
+        url = new URL(ruta);
+        
+            
+        ImageIcon image = new ImageIcon(url);
+        
+        Icon icon = new ImageIcon(
+        image.getImage().getScaledInstance(nombreJlb.getWidth(), nombreJlb.getHeight(), Image.SCALE_DEFAULT));
+        
+        nombreJlb.setIcon(icon);
+        
+        this.repaint();
+   
+    }
+    
+    
+    private String getImagenPelicula() throws NegocioException{
+    
+        String imagenLink = null;
+        
+            
+        
+        
+        return datos.getPelicula().getLinkImagen();
+    }
+    
+    private void setTituloPelicula() throws NegocioException{
+        
+
+        
+        lblTitulo.setText(datos.getPelicula().getTitulo());
+    }  
+    
+    private void setDescripcion() throws NegocioException{
+            
+        
+        lblDescripcion.setText(datos.getPelicula().getSinopsis());
+    }  
+    
+    private void setDuracion() throws NegocioException{
+            
+        
+        lblDuracion.setText("Duracion: "  + datos.getPelicula().getDuracion() + "m");
+    } 
+    
+    private void setGenero() throws NegocioException{
+            
+  
+        try {
+            lblGenero.setText(generoNegocio.buscarGeneroPorId(datos.getPelicula().getGenero_id()).getNombre());
+        } catch (PersistenciaException ex) {
+            Logger.getLogger(FrmCartelera.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    } 
+    
+    private void setFunciones() throws NegocioException{
+            
+        
+        cbcHorario.removeAllItems();
+        
+        cbcHorario.addItem(datos.getFuncion().getEmpezaFuncion().toString());
+
+        
+    } 
+    
+    private void setPrecio(){
+        
+        lblPrecio.setText(String.valueOf(datos.getFuncion().getPrecio()));
+    }
+    
+    
+    private void calcularTotal(int cantidadBoletos){
+    
+        String total = String.valueOf(cantidad * datos.getFuncion().getPrecio());
+        
+        lblTotal.setText(total);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -30,15 +221,14 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
         btnComprar = new javax.swing.JButton();
         panel2 = new java.awt.Panel();
         lblFuncion = new javax.swing.JLabel();
-        btnRetroceso = new javax.swing.JButton();
-        btnAvanzar = new javax.swing.JButton();
-        lblImagenFuncion = new java.awt.Label();
         lblDescripcion = new javax.swing.JLabel();
         lblTitulo = new javax.swing.JLabel();
         lblReloj = new javax.swing.JLabel();
-        lblHorario = new javax.swing.JLabel();
+        lblDuracion = new javax.swing.JLabel();
         lblGenero = new javax.swing.JLabel();
-        btnHoraFuncion = new javax.swing.JButton();
+        cbcHorario = new javax.swing.JComboBox<>();
+        jblImagenPelicula = new javax.swing.JLabel();
+        jblHorarios = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         lblPago = new javax.swing.JLabel();
         cbxEfectivo = new java.awt.Checkbox();
@@ -47,15 +237,18 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
         lblPrecio = new javax.swing.JLabel();
         lblBoleto1 = new javax.swing.JLabel();
         lblCantidad = new javax.swing.JLabel();
-        btnMas = new javax.swing.JButton();
         btnMenos = new javax.swing.JButton();
+        btnMas = new javax.swing.JButton();
         lblTotal = new javax.swing.JLabel();
         lblLinea = new javax.swing.JLabel();
         lblEfectivo = new javax.swing.JLabel();
         lblImgEfectivo = new javax.swing.JLabel();
         lblImgTarjeta = new javax.swing.JLabel();
+        jblTextoTotal = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("SeleccionarPelicula");
+        setBackground(new java.awt.Color(255, 255, 255));
 
         btnVolver.setBackground(new java.awt.Color(8, 148, 249));
         btnVolver.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -79,73 +272,58 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
 
         lblFuncion.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        btnRetroceso.setBackground(new java.awt.Color(8, 148, 249));
-        btnRetroceso.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        btnRetroceso.setText("<");
-        btnRetroceso.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnRetroceso.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRetrocesoActionPerformed(evt);
-            }
-        });
-
-        btnAvanzar.setBackground(new java.awt.Color(8, 148, 249));
-        btnAvanzar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        btnAvanzar.setText(">");
-        btnAvanzar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnAvanzar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAvanzarActionPerformed(evt);
-            }
-        });
-
-        lblImagenFuncion.setText("Logo");
-
         lblDescripcion.setText("Descripcion");
 
+        lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblTitulo.setText("Titulo");
 
-        lblReloj.setText("Reloj");
+        lblDuracion.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblDuracion.setText("Duracion");
 
-        lblHorario.setText("Horario");
-
+        lblGenero.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblGenero.setText("Genero");
         lblGenero.setToolTipText("");
 
-        btnHoraFuncion.setText("Hora Funcion");
+        jblHorarios.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jblHorarios.setText("Horario");
 
         javax.swing.GroupLayout panel2Layout = new javax.swing.GroupLayout(panel2);
         panel2.setLayout(panel2Layout);
         panel2Layout.setHorizontalGroup(
             panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel2Layout.createSequentialGroup()
-                .addGap(39, 39, 39)
-                .addComponent(lblImagenFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
+                .addComponent(jblImagenPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panel2Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(lblDescripcion)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(panel2Layout.createSequentialGroup()
                         .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblTitulo)
                             .addGroup(panel2Layout.createSequentialGroup()
-                                .addComponent(lblReloj)
-                                .addGap(18, 18, 18)
-                                .addComponent(lblHorario)
-                                .addGap(18, 18, 18)
-                                .addComponent(lblGenero)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRetroceso)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnAvanzar)
-                        .addGap(18, 18, 18))
+                                .addGap(24, 24, 24)
+                                .addComponent(lblTitulo))
+                            .addGroup(panel2Layout.createSequentialGroup()
+                                .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panel2Layout.createSequentialGroup()
+                                        .addGap(24, 24, 24)
+                                        .addComponent(jblHorarios))
+                                    .addGroup(panel2Layout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addComponent(lblReloj, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panel2Layout.createSequentialGroup()
+                                        .addGap(40, 40, 40)
+                                        .addComponent(cbcHorario, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(panel2Layout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addComponent(lblDuracion)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(lblGenero)))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(panel2Layout.createSequentialGroup()
-                        .addComponent(btnHoraFuncion)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(18, 18, 18)
+                        .addComponent(lblDescripcion)
+                        .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(lblFuncion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE))
+                .addComponent(lblFuncion, javax.swing.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE))
         );
         panel2Layout.setVerticalGroup(
             panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -155,25 +333,29 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
                     .addGroup(panel2Layout.createSequentialGroup()
                         .addComponent(lblTitulo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblReloj)
-                            .addComponent(lblHorario)
-                            .addComponent(lblGenero))
-                        .addGap(37, 37, 37)
-                        .addComponent(btnHoraFuncion)
+                        .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(lblDuracion)
+                                .addComponent(lblGenero))
+                            .addComponent(lblReloj, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cbcHorario, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jblHorarios))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                         .addComponent(lblDescripcion))
-                    .addComponent(lblImagenFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnAvanzar)
-                        .addComponent(btnRetroceso)))
-                .addContainerGap(25, Short.MAX_VALUE))
+                    .addComponent(jblImagenPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
             .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(lblFuncion, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE))
         );
 
+        jPanel1.setBackground(new java.awt.Color(153, 153, 153));
+
         lblPago.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        lblMetodo.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblMetodo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblMetodo.setText("Método de pago");
         lblMetodo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -185,13 +367,26 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
         lblBoleto1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblBoleto1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
+        lblCantidad.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblCantidad.setText("Cantidad");
         lblCantidad.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblCantidad.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
-        btnMas.setText("+");
-
+        btnMenos.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnMenos.setText("-");
+        btnMenos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMenosActionPerformed(evt);
+            }
+        });
+
+        btnMas.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnMas.setText("+");
+        btnMas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMasActionPerformed(evt);
+            }
+        });
 
         lblTotal.setText("Total");
         lblTotal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -205,13 +400,16 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
 
         lblImgTarjeta.setText("Imagen");
 
+        jblTextoTotal.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jblTextoTotal.setText("Total");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(32, 32, 32)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(lblMetodo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -219,37 +417,37 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
                         .addGap(40, 40, 40)
                         .addComponent(lblPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(34, 34, 34)
-                        .addComponent(btnMas, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnMenos, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnMenos, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnMas, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(lblLinea)
-                                .addGap(42, 42, 42))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(cbxEfectivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblImgTarjeta)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(lblEfectivo)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(3, 3, 3))
+                                .addComponent(cbxEfectivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblImgTarjeta))
+                            .addComponent(lblLinea, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(33, 33, 33)
+                                .addComponent(lblEfectivo, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(cbxTarjeta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblImgEfectivo)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
-                .addContainerGap(28, Short.MAX_VALUE))
+                                .addComponent(lblImgEfectivo)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jblTextoTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(3, 3, 3)))
+                .addContainerGap(37, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(lblPago, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblPago, javax.swing.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE)
                     .addContainerGap()))
         );
         jPanel1Layout.setVerticalGroup(
@@ -259,19 +457,25 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblBoleto1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnMas, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnMenos, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnMenos, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnMas, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
                 .addComponent(lblMetodo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(cbxTarjeta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(cbxEfectivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblImgEfectivo)
-                    .addComponent(lblImgTarjeta))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cbxTarjeta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbxEfectivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(lblImgTarjeta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblImgEfectivo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jblTextoTotal, javax.swing.GroupLayout.Alignment.TRAILING))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblLinea)
@@ -281,7 +485,7 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addContainerGap()
                     .addComponent(lblPago, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addContainerGap(11, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -308,7 +512,7 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
                 .addComponent(panel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVolver)
                     .addComponent(btnComprar))
@@ -316,78 +520,68 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
 
+        this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprarActionPerformed
         // TODO add your handling code here:
+        
+        
+        
+        
     }//GEN-LAST:event_btnComprarActionPerformed
 
-    private void btnRetrocesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetrocesoActionPerformed
+    private void btnMenosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenosActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnRetrocesoActionPerformed
-
-    private void btnAvanzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAvanzarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAvanzarActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmSeleccionarPelicula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmSeleccionarPelicula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmSeleccionarPelicula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmSeleccionarPelicula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        if (cantidad < 1){
+            cantidad = 1;
+            btnMenos.setEnabled(false);
+            lblCantidad.setText(String.valueOf(cantidad));
+            calcularTotal(cantidad);
+            
         }
-        //</editor-fold>
+        else{
+            cantidad--;
+            lblCantidad.setText(String.valueOf(cantidad));
+            calcularTotal(cantidad);
+        }
+        
+    }//GEN-LAST:event_btnMenosActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new frmSeleccionarPelicula().setVisible(true);
-            }
-        });
-    }
+    private void btnMasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMasActionPerformed
+        // TODO add your handling code here:
+        
+        cantidad++;
+        lblCantidad.setText(String.valueOf(cantidad));
+        btnMenos.setEnabled(true);
+        calcularTotal(cantidad);
+    }//GEN-LAST:event_btnMasActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAvanzar;
     private javax.swing.JButton btnComprar;
-    private javax.swing.JButton btnHoraFuncion;
     private javax.swing.JButton btnMas;
     private javax.swing.JButton btnMenos;
-    private javax.swing.JButton btnRetroceso;
     private javax.swing.JButton btnVolver;
+    private javax.swing.JComboBox<String> cbcHorario;
     private java.awt.Checkbox cbxEfectivo;
     private java.awt.Checkbox cbxTarjeta;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel jblHorarios;
+    private javax.swing.JLabel jblImagenPelicula;
+    private javax.swing.JLabel jblTextoTotal;
     private javax.swing.JLabel lblBoleto1;
     private javax.swing.JLabel lblCantidad;
     private javax.swing.JLabel lblDescripcion;
+    private javax.swing.JLabel lblDuracion;
     private javax.swing.JLabel lblEfectivo;
     private javax.swing.JLabel lblFuncion;
     private javax.swing.JLabel lblGenero;
-    private javax.swing.JLabel lblHorario;
-    private java.awt.Label lblImagenFuncion;
     private javax.swing.JLabel lblImgEfectivo;
     private javax.swing.JLabel lblImgTarjeta;
     private javax.swing.JLabel lblLinea;

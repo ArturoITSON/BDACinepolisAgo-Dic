@@ -6,6 +6,7 @@ package Presentacion;
 
 import DTOs.CiudadDTO;
 import DTOs.ClienteBuscarDTO;
+import DTOs.DatosCarteleraDTO;
 import DTOs.FuncionDTO;
 import DTOs.FuncionFiltroTablaDTO;
 import DTOs.FuncionTablaDTO;
@@ -536,33 +537,32 @@ public class FrmCartelera extends javax.swing.JFrame {
             panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel2Layout.createSequentialGroup()
                 .addGap(147, 147, 147)
+                .addComponent(lblReloj, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panel2Layout.createSequentialGroup()
-                        .addComponent(lblReloj, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panel2Layout.createSequentialGroup()
                                 .addComponent(lblTitulo)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(lblDuracion, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE))
-                        .addGap(12, 12, 12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblGenero)
                         .addGap(45, 45, 45)
                         .addComponent(btnRetroceso)
                         .addGap(18, 18, 18)
                         .addComponent(btnAvanzar))
                     .addGroup(panel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cbcHorarios, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnComprar)))
+                        .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panel2Layout.createSequentialGroup()
+                                .addComponent(lblFunciones)
+                                .addGap(31, 31, 31)
+                                .addComponent(cbcHorarios, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnComprar)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(18, 18, 18))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblFunciones)
-                    .addComponent(lblDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(160, 160, 160))
             .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panel2Layout.createSequentialGroup()
                     .addContainerGap()
@@ -590,7 +590,7 @@ public class FrmCartelera extends javax.swing.JFrame {
                     .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnAvanzar)
                         .addComponent(btnRetroceso)))
-                .addGap(18, 18, 18)
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(lblDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(19, 19, 19))
             .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -755,6 +755,30 @@ public class FrmCartelera extends javax.swing.JFrame {
 
     private void btnComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprarActionPerformed
         // TODO add your handling code here:
+        
+        DatosCarteleraDTO datos = new DatosCarteleraDTO();
+        
+        
+        List<FuncionDTO> funcion;
+        try {
+            
+            datos.setPelicula(this.listaPelicula.get(pagina));
+            datos.setSala(salaNegocio.buscarSalasPorNombre((String)cbcSalas.getSelectedItem()));
+            funcion = funcionNegocio.buscarFuncionesPorIdSalaYIdPelicula(salaNegocio.buscarSalasPorNombre(nombreSala).getId() , 
+                    this.listaPelicula.get(pagina).getId());
+            
+            datos.setFuncion(funcion.get(cbcHorarios.getSelectedIndex()));
+            datos.setCliente(cliente);
+            
+            frmSeleccionarPelicula seleccionarPelicula = new frmSeleccionarPelicula(this, datos, generoNegocio, funcionNegocio);
+            seleccionarPelicula.setVisible(true);
+            
+        } catch (NegocioException ex) {
+            Logger.getLogger(FrmCartelera.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+
+        
     }//GEN-LAST:event_btnComprarActionPerformed
 
     private void btnAvanzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAvanzarActionPerformed
