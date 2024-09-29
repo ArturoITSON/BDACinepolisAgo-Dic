@@ -62,6 +62,7 @@ public class FrmCartelera extends javax.swing.JFrame {
     IGeneroNegocio generoNegocio;
     ITicketNegocio ticketNegocio;
     IClienteNegocio clienteNegocio;
+
     
     String rutaReloj = "src/main/java/utilerias/Imagenes/reloj.png";
     String rutaCinepolisLogo = "src/main/java/utilerias/Imagenes/CinepolisLogo.png";
@@ -85,6 +86,7 @@ public class FrmCartelera extends javax.swing.JFrame {
      */
     public FrmCartelera(IPeliculaNegocio peliculaNegocio, ICiudadNegocio ciudadNegocio, ClienteBuscarDTO cliente, ISucursalNegocio sucursalNegocio,
                         FrmIniciarSesion iniciarSesion, ISalaNegocio salaNegocio, IFuncionNegocio funcionNegocio, IGeneroNegocio generoNegocio, ITicketNegocio ticketNegocio) {
+
         initComponents();
         
         this.ciudadNegocio = ciudadNegocio;
@@ -775,7 +777,7 @@ public class FrmCartelera extends javax.swing.JFrame {
             datos.setFuncion(funcion.get(cbcHorarios.getSelectedIndex()));
             datos.setCliente(cliente);
             
-            frmSeleccionarPelicula seleccionarPelicula = new frmSeleccionarPelicula(this, datos, generoNegocio, funcionNegocio);
+            frmSeleccionarPelicula seleccionarPelicula = new frmSeleccionarPelicula(this, datos, generoNegocio, funcionNegocio, ticketNegocio);
             seleccionarPelicula.setVisible(true);
             
         } catch (NegocioException ex) {

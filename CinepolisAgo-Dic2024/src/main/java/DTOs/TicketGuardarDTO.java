@@ -9,7 +9,8 @@ package DTOs;
  * @author eduar
  */
 public class TicketGuardarDTO {
-    private int id;
+    
+    
     private String QR;
     private float precio;
     private String metodoPago;
@@ -19,21 +20,13 @@ public class TicketGuardarDTO {
     public TicketGuardarDTO() {
     }
 
-    public TicketGuardarDTO(int id, String QR, String metodoPago, int cliente_id, int funcion_id) {
-        this.id = id;
+    public TicketGuardarDTO(String QR, String metodoPago, int cliente_id, int funcion_id) {
         this.QR = QR;
         this.metodoPago = metodoPago;
         this.cliente_id = cliente_id;
         this.funcion_id = funcion_id;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getQR() {
         return QR;
@@ -74,4 +67,13 @@ public class TicketGuardarDTO {
     public void setFuncion_id(int funcion_id) {
         this.funcion_id = funcion_id;
     }
+
+    @Override
+    public String toString() {
+        return "TicketGuardarDTO{" + "QR=" + QR + ", precio=" + precio + ", metodoPago=" + metodoPago + ", cliente_id=" + cliente_id + ", funcion_id=" + funcion_id + '}';
+    }
+
+
+    
+    
 }

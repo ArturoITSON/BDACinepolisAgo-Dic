@@ -105,12 +105,14 @@ CREATE TABLE Funcion(
 
 -- Nueva Tabla Ticket
 CREATE TABLE TICKET(
-	id int primary key auto_increment,
-	QR BLOB,
+    id int primary key auto_increment,
+    QR varchar(150),
+    precio float, 
     metodoPago varchar(25),
-	cliente_id int,
-	funcion_id int,
-	
+    cliente_id int,
+    funcion_id int,
+
   FOREIGN KEY (cliente_id) REFERENCES Cliente(id) ON DELETE CASCADE,
   FOREIGN KEY (funcion_id) REFERENCES Funcion(id) ON DELETE CASCADE
 );
+

@@ -40,6 +40,7 @@ public class TicketNegocio implements ITicketNegocio{
         return new TicketDTO(
                 ticket.getId(),
                 ticket.getQR(),
+                ticket.getPrecio(),
                 ticket.getMetodoPago(),
                 ticket.getCliente_id(),
                 ticket.getFuncion_id()

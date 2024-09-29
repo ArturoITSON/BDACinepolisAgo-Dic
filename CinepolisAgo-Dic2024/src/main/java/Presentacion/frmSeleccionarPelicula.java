@@ -6,8 +6,11 @@ package Presentacion;
 
 import DTOs.DatosCarteleraDTO;
 import DTOs.FuncionDTO;
+import DTOs.TicketDTO;
+import DTOs.TicketGuardarDTO;
 import Negocio.IFuncionNegocio;
 import Negocio.IGeneroNegocio;
+import Negocio.ITicketNegocio;
 import Negocio.NegocioException;
 import Persistencia.PersistenciaException;
 import static Presentacion.FrmCartelera.nombreSala;
@@ -20,6 +23,7 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -31,10 +35,12 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
     DatosCarteleraDTO datos;
     IGeneroNegocio generoNegocio;
     IFuncionNegocio funcionNegocio;
+    ITicketNegocio ticketNegocio;
     
     String rutaReloj = "src/main/java/utilerias/Imagenes/reloj.png";
     String rutaPagoLinea = "src/main/java/utilerias/Imagenes/visa.png";
     String rutaPagoEfectivo = "src/main/java/utilerias/Imagenes/efectivo.png";
+    String rutaQR = "src/main/java/utilerias/Imagenes/QR.png";
     
     static int cantidad = 1;
     
@@ -42,7 +48,8 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
     /**
      * Creates new form frmSeleccionarPelicula
      */
-    public frmSeleccionarPelicula(FrmCartelera cartelera, DatosCarteleraDTO datos, IGeneroNegocio generoNegocio, IFuncionNegocio funcionNegocio) {
+    public frmSeleccionarPelicula(FrmCartelera cartelera, DatosCarteleraDTO datos, IGeneroNegocio generoNegocio, IFuncionNegocio funcionNegocio,
+                                  ITicketNegocio ticketNegocio) {
         initComponents();
         
         
@@ -50,10 +57,9 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
         this.cartelera = cartelera;
         this.generoNegocio = generoNegocio;
         this.funcionNegocio = funcionNegocio;
+        this.ticketNegocio = ticketNegocio;
         
         
-        setImagenLabel(lblImgTarjeta, rutaPagoLinea);
-        setImagenLabel(lblImgEfectivo, rutaPagoEfectivo);
         btnMenos.setEnabled(false);
         lblCantidad.setText(String.valueOf(cantidad));
         calcularTotal(cantidad);
@@ -189,23 +195,7 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
     }
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+   
     
 
     /**
@@ -231,8 +221,6 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
         jblHorarios = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         lblPago = new javax.swing.JLabel();
-        cbxEfectivo = new java.awt.Checkbox();
-        cbxTarjeta = new java.awt.Checkbox();
         lblMetodo = new javax.swing.JLabel();
         lblPrecio = new javax.swing.JLabel();
         lblBoleto1 = new javax.swing.JLabel();
@@ -240,11 +228,8 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
         btnMenos = new javax.swing.JButton();
         btnMas = new javax.swing.JButton();
         lblTotal = new javax.swing.JLabel();
-        lblLinea = new javax.swing.JLabel();
-        lblEfectivo = new javax.swing.JLabel();
-        lblImgEfectivo = new javax.swing.JLabel();
-        lblImgTarjeta = new javax.swing.JLabel();
         jblTextoTotal = new javax.swing.JLabel();
+        cbcMetodoPago = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SeleccionarPelicula");
@@ -334,8 +319,8 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
                         .addComponent(lblTitulo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(lblDuracion)
+                            .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(lblDuracion, javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(lblGenero))
                             .addComponent(lblReloj, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -392,16 +377,10 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
         lblTotal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblTotal.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
-        lblLinea.setText("En linea");
-
-        lblEfectivo.setText("Efectivo");
-
-        lblImgEfectivo.setText("Imagen");
-
-        lblImgTarjeta.setText("Imagen");
-
         jblTextoTotal.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jblTextoTotal.setText("Total");
+
+        cbcMetodoPago.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "En Linea", "Efectivo" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -411,39 +390,27 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
                 .addGap(32, 32, 32)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(120, 120, 120)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jblTextoTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(316, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(lblMetodo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lblBoleto1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE))
                         .addGap(40, 40, 40)
-                        .addComponent(lblPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(34, 34, 34)
-                        .addComponent(btnMenos, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnMas, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(cbxEfectivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(34, 34, 34)
+                                .addComponent(btnMenos, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblImgTarjeta))
-                            .addComponent(lblLinea, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(33, 33, 33)
-                                .addComponent(lblEfectivo, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lblCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbxTarjeta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblImgEfectivo)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jblTextoTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(3, 3, 3)))
-                .addContainerGap(37, Short.MAX_VALUE))
+                                .addComponent(btnMas, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cbcMetodoPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(37, Short.MAX_VALUE))))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addContainerGap()
@@ -461,25 +428,13 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
                     .addComponent(lblCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnMas, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
-                .addComponent(lblMetodo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbxTarjeta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbxEfectivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(lblImgTarjeta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblImgEfectivo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jblTextoTotal, javax.swing.GroupLayout.Alignment.TRAILING))))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblMetodo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbcMetodoPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addComponent(jblTextoTotal)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblLinea)
-                    .addComponent(lblEfectivo))
+                .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
@@ -530,9 +485,26 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
 
     private void btnComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprarActionPerformed
         // TODO add your handling code here:
+
+        try {
+        TicketGuardarDTO ticket = new TicketGuardarDTO();
+        ticket.setCliente_id(datos.getCliente().getIdCliente());
+        ticket.setFuncion_id(datos.getFuncion().getId());
         
         
+        ticket.setMetodoPago((String) cbcMetodoPago.getSelectedItem());
         
+        ticket.setQR(rutaQR);
+        ticket.setPrecio(cantidad * datos.getFuncion().getPrecio());
+        
+            System.out.println(ticket.toString());
+            ticketNegocio.guardar(ticket);
+            JOptionPane.showMessageDialog(this, "Boleto comprado");
+            
+        } catch (NegocioException ex) {
+            Logger.getLogger(frmSeleccionarPelicula.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "no se pudo comprar el boleto");
+        }
         
     }//GEN-LAST:event_btnComprarActionPerformed
 
@@ -550,6 +522,8 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
             lblCantidad.setText(String.valueOf(cantidad));
             calcularTotal(cantidad);
         }
+        
+        
         
     }//GEN-LAST:event_btnMenosActionPerformed
 
@@ -569,8 +543,7 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
     private javax.swing.JButton btnMenos;
     private javax.swing.JButton btnVolver;
     private javax.swing.JComboBox<String> cbcHorario;
-    private java.awt.Checkbox cbxEfectivo;
-    private java.awt.Checkbox cbxTarjeta;
+    private javax.swing.JComboBox<String> cbcMetodoPago;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel jblHorarios;
     private javax.swing.JLabel jblImagenPelicula;
@@ -579,12 +552,8 @@ public class frmSeleccionarPelicula extends javax.swing.JFrame {
     private javax.swing.JLabel lblCantidad;
     private javax.swing.JLabel lblDescripcion;
     private javax.swing.JLabel lblDuracion;
-    private javax.swing.JLabel lblEfectivo;
     private javax.swing.JLabel lblFuncion;
     private javax.swing.JLabel lblGenero;
-    private javax.swing.JLabel lblImgEfectivo;
-    private javax.swing.JLabel lblImgTarjeta;
-    private javax.swing.JLabel lblLinea;
     private javax.swing.JLabel lblMetodo;
     private javax.swing.JLabel lblPago;
     private javax.swing.JLabel lblPrecio;
